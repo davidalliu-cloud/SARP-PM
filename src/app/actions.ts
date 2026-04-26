@@ -258,6 +258,30 @@ export async function createUser(formData: FormData) {
   revalidatePath("/users");
 }
 
+export async function updateUserPassword(formData: FormData) {
+  const currentUser = await requireUser();
+  if (currentUser.role !== UserRole.ADMIN) {
+    throw new Error("Only admins can update user passwords.");
+  }
+
+  const id = text(formData, "id");
+  const password = text(formData, "password");
+
+  if (password.length < 8) {
+    throw new Error("Password must be at least 8 characters.");
+  }
+
+  await prisma.user.update({
+    where: { id },
+    data: {
+      passwordHash: hashPassword(password),
+      sessions: { deleteMany: {} },
+    },
+  });
+
+  revalidatePath("/users");
+}
+
 export async function createDailyRecord(formData: FormData) {
   await requireUser();
 

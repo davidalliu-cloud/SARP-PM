@@ -1,5 +1,5 @@
 import { UserRole } from "@prisma/client";
-import { createUser } from "@/app/actions";
+import { createUser, updateUserPassword } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -38,7 +38,7 @@ export default async function UsersPage() {
         </form>
         <div className="panel table-wrap">
           <table>
-            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Created</th></tr></thead>
+            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Created</th><th>Password</th></tr></thead>
             <tbody>
               {users.map((user) => (
                 <tr key={user.id}>
@@ -46,6 +46,13 @@ export default async function UsersPage() {
                   <td>{user.email}</td>
                   <td>{user.role}</td>
                   <td>{user.createdAt.toLocaleDateString()}</td>
+                  <td>
+                    <form action={updateUserPassword} className="flex min-w-[260px] gap-2">
+                      <input type="hidden" name="id" value={user.id} />
+                      <input name="password" type="password" required minLength={8} placeholder="New password" aria-label={`New password for ${user.email}`} />
+                      <button className="btn btn-small btn-save" type="submit">Save</button>
+                    </form>
+                  </td>
                 </tr>
               ))}
             </tbody>

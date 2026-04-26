@@ -12,6 +12,7 @@
     "prisma:pg:generate": "prisma generate --schema prisma/schema.postgres.prisma",
     "prisma:pg:push": "prisma db push --schema prisma/schema.postgres.prisma",
     "prisma:pg:seed": "prisma generate --schema prisma/schema.postgres.prisma && tsx prisma/seed.ts",
+    "prisma:pg:reset-password": "prisma generate --schema prisma/schema.postgres.prisma && tsx prisma/reset-password.ts",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts"
   },
