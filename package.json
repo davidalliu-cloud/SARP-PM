@@ -13,6 +13,7 @@
     "prisma:pg:push": "prisma db push --schema prisma/schema.postgres.prisma",
     "prisma:pg:seed": "prisma generate --schema prisma/schema.postgres.prisma && tsx prisma/seed.ts",
     "prisma:pg:reset-password": "prisma generate --schema prisma/schema.postgres.prisma && tsx prisma/reset-password.ts",
+    "prisma:migrate-local-online": "DATABASE_URL=\"file:./dev.db\" prisma generate && DATABASE_URL=\"file:./dev.db\" tsx prisma/export-local-data.ts && prisma generate --schema prisma/schema.postgres.prisma && tsx prisma/import-online-data.ts && DATABASE_URL=\"file:./dev.db\" prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:seed": "tsx prisma/seed.ts"
   },
