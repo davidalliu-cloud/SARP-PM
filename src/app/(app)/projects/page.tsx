@@ -9,15 +9,24 @@ import { projectTotals } from "@/lib/totals";
 export default async function ProjectsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ deleted?: string }>;
+  searchParams: Promise<{ deleted?: string; q?: string; status?: string }>;
 }) {
   const params = await searchParams;
+  const query = (params.q || "").trim().toLowerCase();
+  const status = params.status || "ALL";
   const projects = await prisma.project.findMany({
     include: {
       dailyRecords: { include: { productItems: true, labourItems: true, expenseItems: true } },
       invoices: true,
     },
     orderBy: { startDate: "desc" },
+  });
+  const filteredProjects = projects.filter((project) => {
+    const matchesSearch = !query ||
+      project.name.toLowerCase().includes(query) ||
+      (project.clientName || "").toLowerCase().includes(query);
+    const matchesStatus = status === "ALL" || project.status === status;
+    return matchesSearch && matchesStatus;
   });
 
   return (
@@ -30,6 +39,26 @@ export default async function ProjectsPage({
           Project deleted.
         </div>
       ) : null}
+      <form className="panel mb-5 grid gap-3 p-4 md:grid-cols-[1fr_220px_auto] md:items-end">
+        <label>
+          Search projects
+          <input name="q" defaultValue={params.q || ""} placeholder="Project or client name" />
+        </label>
+        <label>
+          Status
+          <select name="status" defaultValue={status}>
+            <option value="ALL">All statuses</option>
+            <option value="NOT_STARTED">Not Started</option>
+            <option value="ACTIVE">Active</option>
+            <option value="ON_HOLD">On Hold</option>
+            <option value="FINISHED">Finished</option>
+          </select>
+        </label>
+        <button className="btn btn-small btn-save" type="submit">Apply filter</button>
+        <div className="text-xs font-bold text-[#687482] md:col-span-3">
+          Showing {filteredProjects.length} of {projects.length} projects
+        </div>
+      </form>
       <div className="panel table-wrap">
         <table>
           <thead>
@@ -46,7 +75,7 @@ export default async function ProjectsPage({
             </tr>
           </thead>
           <tbody>
-            {projects.map((project) => {
+            {filteredProjects.map((project) => {
               const totals = projectTotals(project.dailyRecords, project.invoices);
               return (
                 <tr key={project.id}>
@@ -75,6 +104,9 @@ export default async function ProjectsPage({
                 </tr>
               );
             })}
+            {!filteredProjects.length ? (
+              <tr><td colSpan={9} className="py-8 text-center font-bold text-[#687482]">No projects match this filter.</td></tr>
+            ) : null}
           </tbody>
         </table>
       </div>

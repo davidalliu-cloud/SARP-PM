@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { deleteInvoice, updateInvoice } from "@/app/actions";
 import { money } from "@/lib/format";
 
@@ -24,6 +24,20 @@ function displayDate(value: string) {
 
 export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredInvoices = useMemo(() => {
+    if (!normalizedQuery) return invoices;
+    return invoices.filter((invoice) => {
+      return [
+        invoice.invoiceNo,
+        invoice.monthCovered,
+        displayDate(invoice.invoiceDate),
+        invoice.amount,
+        invoice.notes,
+      ].join(" ").toLowerCase().includes(normalizedQuery);
+    });
+  }, [invoices, normalizedQuery]);
 
   if (!invoices.length) {
     return (
@@ -35,7 +49,12 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
 
   return (
     <div className="space-y-3">
-      {invoices.map((invoice) => {
+      <label>
+        Search invoices
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Invoice number, month, amount, or note" />
+      </label>
+      <div className="text-xs font-bold text-[#687482]">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
+      {filteredInvoices.map((invoice) => {
         const isEditing = editingId === invoice.id;
 
         return (
@@ -92,6 +111,11 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
           </div>
         );
       })}
+      {!filteredInvoices.length ? (
+        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7f9fb] p-4 text-sm font-bold text-[#687482]">
+          No invoices match your search.
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -42,7 +42,10 @@ export default async function MonthlyReportPage({
   return (
     <>
       <PageTitle eyebrow="Monthly report" title={project.name}>
-        <Link href={`/projects/${project.id}`} className="btn btn-secondary">Back to project</Link>
+        <div className="flex flex-wrap gap-2">
+          <Link href={`/api/projects/${project.id}/monthly/export?month=${selected}`} className="btn btn-small btn-save">Download CSV</Link>
+          <Link href={`/projects/${project.id}`} className="btn btn-small btn-secondary">Back to project</Link>
+        </div>
       </PageTitle>
 
       <form className="panel mb-5 grid gap-4 p-4 md:grid-cols-[160px_160px_auto] md:items-end">

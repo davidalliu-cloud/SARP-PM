@@ -97,6 +97,21 @@ export function DailyRecordsManager({
   expenseTypes: ExpenseTypeOption[];
 }) {
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredRecords = useMemo(() => {
+    if (!normalizedQuery) return records;
+    return records.filter((record) => {
+      const searchable = [
+        displayDate(record.date),
+        record.notes,
+        ...record.productItems.map((item) => `${item.productName} ${item.quantity} ${item.unit}`),
+        ...record.labourItems.map((item) => item.labourType === "external" ? `${item.externalTeamName} ${item.squareMeters}` : item.employeeName),
+        ...record.expenseItems.map((item) => `${item.category} ${item.description}`),
+      ].join(" ").toLowerCase();
+      return searchable.includes(normalizedQuery);
+    });
+  }, [records, normalizedQuery]);
 
   if (!records.length) {
     return (
@@ -107,24 +122,30 @@ export function DailyRecordsManager({
   }
 
   return (
-    <div className="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Products</th>
-            <th>Labour</th>
-            <th>Expenses</th>
-            <th>Product cost</th>
-            <th>Labour cost</th>
-            <th>Expense cost</th>
-            <th>Daily total</th>
-            <th>Notes</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((record) => {
+    <div className="grid gap-3">
+      <label>
+        Search daily records
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Date, product, employee, expense, or note" />
+      </label>
+      <div className="text-xs font-bold text-[#687482]">Showing {filteredRecords.length} of {records.length} records</div>
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Products</th>
+              <th>Labour</th>
+              <th>Expenses</th>
+              <th>Product cost</th>
+              <th>Labour cost</th>
+              <th>Expense cost</th>
+              <th>Daily total</th>
+              <th>Notes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {filteredRecords.map((record) => {
             const productCost = productTotal(record.productItems);
             const labourCost = labourTotal(record.labourItems);
             const expenses = expenseTotal(record.expenseItems);
@@ -179,8 +200,12 @@ export function DailyRecordsManager({
               </Fragment>
             );
           })}
-        </tbody>
-      </table>
+            {!filteredRecords.length ? (
+              <tr><td colSpan={10} className="py-8 text-center font-bold text-[#687482]">No daily records match your search.</td></tr>
+            ) : null}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
