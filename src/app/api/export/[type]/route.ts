@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { csvResponse, csvRows } from "@/lib/csv";
+import { daysSince } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
 
@@ -25,9 +26,10 @@ export async function GET(
     });
 
     const body = csvRows(
-      ["Project", "Client", "Start date", "Status", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Profit/loss", "Margin %"],
+      ["Project", "Client", "Start date", "Status", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
       projects.map((project) => {
         const totals = projectTotals(project.dailyRecords, project.invoices);
+        const outstanding = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
         return [
           project.name,
           project.clientName || "",
@@ -38,6 +40,7 @@ export async function GET(
           totals.expenseCost,
           totals.totalCost,
           totals.invoiced,
+          outstanding,
           totals.profit,
           totals.margin,
         ];
@@ -99,13 +102,16 @@ export async function GET(
       orderBy: [{ invoiceDate: "desc" }, { createdAt: "desc" }],
     });
     const body = csvRows(
-      ["Project", "Invoice date", "Month covered", "Invoice number", "Amount", "Notes"],
+      ["Project", "Invoice date", "Days since issued", "Month covered", "Invoice number", "Amount", "Paid status", "Paid date", "Notes"],
       invoices.map((invoice) => [
         invoice.project.name,
         invoice.invoiceDate,
+        daysSince(invoice.invoiceDate),
         invoice.monthCovered,
         invoice.invoiceNo || "",
         invoice.amount,
+        invoice.isPaid ? "Paid" : "Unpaid",
+        invoice.paidDate || "",
         invoice.notes || "",
       ]),
     );

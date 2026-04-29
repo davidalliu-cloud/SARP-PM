@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { csvResponse, csvRows } from "@/lib/csv";
+import { daysSince } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { monthKey, projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
 
@@ -32,10 +33,11 @@ export async function GET(
   const records = project.dailyRecords.filter((record) => monthKey(record.date) === selected);
   const invoices = project.invoices.filter((invoice) => invoice.monthCovered === selected);
   const totals = projectTotals(records, invoices);
+  const outstanding = invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
 
   const summary = csvRows(
-    ["Project", "Month", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Profit/loss", "Margin %"],
-    [[project.name, selected, totals.productCost, totals.labourCost, totals.expenseCost, totals.totalCost, totals.invoiced, totals.profit, totals.margin]],
+    ["Project", "Month", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
+    [[project.name, selected, totals.productCost, totals.labourCost, totals.expenseCost, totals.totalCost, totals.invoiced, outstanding, totals.profit, totals.margin]],
   );
 
   const daily = csvRows(
@@ -54,8 +56,17 @@ export async function GET(
   );
 
   const invoiceRows = csvRows(
-    ["Invoice date", "Month covered", "Invoice number", "Amount", "Notes"],
-    invoices.map((invoice) => [invoice.invoiceDate, invoice.monthCovered, invoice.invoiceNo || "", invoice.amount, invoice.notes || ""]),
+    ["Invoice date", "Days since issued", "Month covered", "Invoice number", "Amount", "Paid status", "Paid date", "Notes"],
+    invoices.map((invoice) => [
+      invoice.invoiceDate,
+      daysSince(invoice.invoiceDate),
+      invoice.monthCovered,
+      invoice.invoiceNo || "",
+      invoice.amount,
+      invoice.isPaid ? "Paid" : "Unpaid",
+      invoice.paidDate || "",
+      invoice.notes || "",
+    ]),
   );
 
   const filename = `${project.name.toLowerCase().replaceAll(/[^a-z0-9]+/g, "-").replaceAll(/(^-|-$)/g, "") || "project"}-${selected}-report.csv`;

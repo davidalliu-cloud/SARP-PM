@@ -19,6 +19,13 @@ export function monthInputValue(value = new Date()) {
   return value.toISOString().slice(0, 7);
 }
 
+export function daysSince(date: Date | string, now = new Date()) {
+  const start = new Date(date);
+  const startDay = Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate());
+  const nowDay = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Math.max(0, Math.floor((nowDay - startDay) / 86_400_000));
+}
+
 export function statusLabel(status: string) {
   if (status === "NOT_STARTED") return "Not Started";
   if (status === "ON_HOLD") return "On Hold";

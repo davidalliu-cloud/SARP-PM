@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { deleteInvoice, updateInvoice } from "@/app/actions";
-import { money } from "@/lib/format";
+import { daysSince, money } from "@/lib/format";
 
 export type InvoiceRow = {
   id: string;
@@ -11,6 +11,8 @@ export type InvoiceRow = {
   monthCovered: string;
   invoiceNo: string;
   amount: number;
+  isPaid: boolean;
+  paidDate: string;
   notes: string;
 };
 
@@ -34,6 +36,8 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         invoice.monthCovered,
         displayDate(invoice.invoiceDate),
         invoice.amount,
+        invoice.isPaid ? "paid" : "unpaid",
+        invoice.paidDate ? displayDate(invoice.paidDate) : "",
         invoice.notes,
       ].join(" ").toLowerCase().includes(normalizedQuery);
     });
@@ -64,6 +68,17 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <div className="font-black">{invoice.invoiceNo || "Invoice"}</div>
                 <div className="mt-1 text-sm font-semibold text-[#687482]">
                   {invoice.monthCovered} / {displayDate(invoice.invoiceDate)}
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  <span className={invoice.isPaid ? "status status-active" : "status status-on-hold"}>
+                    {invoice.isPaid ? "Paid" : "Unpaid"}
+                  </span>
+                  <span className="status status-not-started">
+                    Issued {daysSince(invoice.invoiceDate)} days ago
+                  </span>
+                  {invoice.isPaid && invoice.paidDate ? (
+                    <span className="status status-finished">Paid {displayDate(invoice.paidDate)}</span>
+                  ) : null}
                 </div>
                 {invoice.notes ? <div className="mt-2 text-sm text-[#46515d]">{invoice.notes}</div> : null}
               </div>
@@ -101,6 +116,14 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Month covered<input name="monthCovered" type="month" required defaultValue={invoice.monthCovered} /></label>
                 <label>Invoice number<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder="Optional" /></label>
                 <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
+                <label className="md:col-span-2">
+                  Paid status
+                  <span className="flex items-center gap-2 rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2 text-sm font-bold text-[#46515d]">
+                    <input className="size-4 w-auto" name="isPaid" type="checkbox" defaultChecked={invoice.isPaid} />
+                    Invoice has been paid
+                  </span>
+                </label>
+                <label>Paid date<input name="paidDate" type="date" defaultValue={invoice.paidDate ? dateInputValue(invoice.paidDate) : ""} /></label>
                 <label className="md:col-span-2">Notes<textarea name="notes" rows={3} defaultValue={invoice.notes} placeholder="Optional invoice notes" /></label>
                 <div className="flex gap-2 md:col-span-2">
                   <button className="btn btn-small btn-secondary" type="button" onClick={() => setEditingId(null)}>Cancel</button>

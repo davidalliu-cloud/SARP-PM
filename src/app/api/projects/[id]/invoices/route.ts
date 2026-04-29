@@ -11,6 +11,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       monthCovered: body.monthCovered,
       invoiceNo: body.invoiceNo || null,
       amount: Number(body.amount),
+      isPaid: Boolean(body.isPaid),
+      paidDate: body.isPaid ? (body.paidDate ? new Date(body.paidDate) : new Date()) : null,
       notes: body.notes || null,
     },
   });

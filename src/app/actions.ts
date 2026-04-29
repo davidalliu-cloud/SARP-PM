@@ -353,6 +353,8 @@ export async function createInvoice(formData: FormData) {
   await requireUser();
 
   const projectId = text(formData, "projectId");
+  const isPaid = formData.get("isPaid") === "on";
+  const paidDate = text(formData, "paidDate");
 
   await prisma.invoice.create({
     data: {
@@ -361,6 +363,8 @@ export async function createInvoice(formData: FormData) {
       monthCovered: text(formData, "monthCovered"),
       invoiceNo: text(formData, "invoiceNo") || null,
       amount: numberValue(formData.get("amount")),
+      isPaid,
+      paidDate: isPaid ? new Date(paidDate || text(formData, "invoiceDate")) : null,
       notes: text(formData, "notes") || null,
     },
   });
@@ -375,6 +379,8 @@ export async function updateInvoice(formData: FormData) {
 
   const id = text(formData, "id");
   const projectId = text(formData, "projectId");
+  const isPaid = formData.get("isPaid") === "on";
+  const paidDate = text(formData, "paidDate");
 
   await prisma.invoice.update({
     where: { id },
@@ -383,6 +389,8 @@ export async function updateInvoice(formData: FormData) {
       monthCovered: text(formData, "monthCovered"),
       invoiceNo: text(formData, "invoiceNo") || null,
       amount: numberValue(formData.get("amount")),
+      isPaid,
+      paidDate: isPaid ? new Date(paidDate || text(formData, "invoiceDate")) : null,
       notes: text(formData, "notes") || null,
     },
   });

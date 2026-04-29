@@ -15,6 +15,8 @@ export async function PATCH(
         monthCovered: body.monthCovered,
         invoiceNo: body.invoiceNo || null,
         amount: body.amount == null ? undefined : Number(body.amount),
+        isPaid: body.isPaid == null ? undefined : Boolean(body.isPaid),
+        paidDate: body.isPaid ? (body.paidDate ? new Date(body.paidDate) : new Date()) : null,
         notes: body.notes || null,
       },
     })

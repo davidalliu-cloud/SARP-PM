@@ -35,6 +35,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   const totals = projectTotals(project.dailyRecords, project.invoices);
+  const outstandingInvoices = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
   const dailyRecords = project.dailyRecords.map((record) => ({
     id: record.id,
     projectId: record.projectId,
@@ -73,6 +74,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     monthCovered: invoice.monthCovered,
     invoiceNo: invoice.invoiceNo || "",
     amount: invoice.amount,
+    isPaid: invoice.isPaid,
+    paidDate: invoice.paidDate?.toISOString() || "",
     notes: invoice.notes || "",
   }));
 
@@ -97,12 +100,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </PageTitle>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
         <StatCard label="Product cost" value={money(totals.productCost)} />
         <StatCard label="Labour cost" value={money(totals.labourCost)} />
         <StatCard label="Expenses" value={money(totals.expenseCost)} />
         <StatCard label="Total cost" value={money(totals.totalCost)} tone="maroon" />
         <StatCard label="Invoiced" value={money(totals.invoiced)} tone="blue" />
+        <StatCard label="Outstanding" value={money(outstandingInvoices)} tone={outstandingInvoices > 0 ? "maroon" : "green"} />
         <StatCard label="Profit margin" value={`${decimal(totals.margin)}%`} detail={money(totals.profit)} tone={totals.profit >= 0 ? "green" : "maroon"} />
       </section>
 
@@ -128,6 +132,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <label>Month covered<input name="monthCovered" type="month" required defaultValue={monthInputValue()} /></label>
               <label>Invoice number<input name="invoiceNo" placeholder="Optional" /></label>
               <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required placeholder="4200.00" /></label>
+              <label>
+                Paid status
+                <span className="flex items-center gap-2 rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2 text-sm font-bold text-[#46515d]">
+                  <input className="size-4 w-auto" name="isPaid" type="checkbox" />
+                  Invoice has been paid
+                </span>
+              </label>
+              <label>Paid date<input name="paidDate" type="date" defaultValue={dateInputValue()} /></label>
               <label>Notes<textarea name="notes" rows={3} placeholder="Optional invoice notes" /></label>
               <button className="btn btn-small btn-save justify-self-start" type="submit">Save invoice</button>
             </form>
