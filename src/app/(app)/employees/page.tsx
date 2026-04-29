@@ -30,13 +30,13 @@ export default async function EmployeesPage({
           <button className="btn btn-primary" type="submit">Add employee</button>
         </form>
         <div className="panel overflow-hidden">
-          <form className="border-b border-[#d8dee5] p-4">
+          <form className="border-b border-[#d7e1e5] p-4">
             <label>
               Search employees
               <input name="q" defaultValue={params.q || ""} placeholder="Employee, role, or wage" />
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
-              <div className="text-xs font-bold text-[#687482]">Showing {filteredEmployees.length} of {employees.length} employees</div>
+              <div className="text-xs font-bold text-[#6b7188]">Showing {filteredEmployees.length} of {employees.length} employees</div>
               <button className="btn btn-small btn-save" type="submit">Search</button>
             </div>
           </form>
@@ -67,7 +67,7 @@ export default async function EmployeesPage({
                   </tr>
                 ))}
                 {!filteredEmployees.length ? (
-                  <tr><td colSpan={4} className="py-8 text-center font-bold text-[#687482]">No employees match your search.</td></tr>
+                  <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No employees match your search.</td></tr>
                 ) : null}
               </tbody>
             </table>

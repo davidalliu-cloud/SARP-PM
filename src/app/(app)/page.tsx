@@ -6,9 +6,9 @@ import { prisma } from "@/lib/prisma";
 import { monthKey, projectTotals } from "@/lib/totals";
 
 const projectSections = [
-  { title: "Not started", statuses: ["NOT_STARTED"], border: "border-[#687482]", bg: "bg-[#f7f9fb]" },
-  { title: "Ongoing and on hold", statuses: ["ACTIVE", "ON_HOLD"], border: "border-[#285f8f]", bg: "bg-white" },
-  { title: "Finished", statuses: ["FINISHED"], border: "border-[#5d8068]", bg: "bg-[#f4faf6]" },
+  { title: "Not started", statuses: ["NOT_STARTED"], border: "border-[#6b7188]", bg: "bg-[#f3f7f3]" },
+  { title: "Ongoing and on hold", statuses: ["ACTIVE", "ON_HOLD"], border: "border-[#777da7]", bg: "bg-white" },
+  { title: "Finished", statuses: ["FINISHED"], border: "border-[#bdc8d0]", bg: "bg-[#f7fbfa]" },
 ];
 
 export default async function DashboardPage() {
@@ -72,7 +72,7 @@ export default async function DashboardPage() {
         <div className="panel p-4">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-black">Projects</h2>
-            <Link href="/projects" className="text-sm font-black text-[#285f8f]">View all</Link>
+            <Link href="/projects" className="text-sm font-black text-[#777da7]">View all</Link>
           </div>
           <div className="grid gap-4">
             {projectSections.map((section) => {
@@ -81,9 +81,9 @@ export default async function DashboardPage() {
 
               return (
                 <div key={section.title} className={`overflow-hidden rounded-lg border border-l-4 ${section.border} ${section.bg}`}>
-                  <div className="flex items-center justify-between border-b border-[#e8edf2] px-4 py-3">
+                  <div className="flex items-center justify-between border-b border-[#e8eef0] px-4 py-3">
                     <h3 className="font-black">{section.title}</h3>
-                    <span className="text-xs font-black uppercase text-[#687482]">{sectionRows.length} projects</span>
+                    <span className="text-xs font-black uppercase text-[#6b7188]">{sectionRows.length} projects</span>
                   </div>
                   <div className="table-wrap">
                     <table>
@@ -106,7 +106,7 @@ export default async function DashboardPage() {
                           return (
                             <tr key={project.id}>
                               <td>
-                                <Link href={`/projects/${project.id}`} className="font-black text-[#20262d]">{project.name}</Link>
+                                <Link href={`/projects/${project.id}`} className="font-black text-[#373455]">{project.name}</Link>
                                 <div className="mt-1"><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></div>
                               </td>
                               <td>{money(totals.productCost)}</td>
@@ -114,8 +114,8 @@ export default async function DashboardPage() {
                               <td>{money(totals.expenseCost)}</td>
                               <td className="font-bold">{money(totals.totalCost)}</td>
                               <td>{money(totals.invoiced)}</td>
-                              <td className={outstanding > 0 ? "font-bold text-[#7b2636]" : "font-bold text-[#315a3d]"}>{money(outstanding)}</td>
-                              <td className={totals.profit >= 0 ? "font-bold text-[#315a3d]" : "font-bold text-[#7b2636]"}>{money(totals.profit)}</td>
+                              <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
+                              <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>
                               <td>{decimal(totals.margin)}%</td>
                             </tr>
                           );
@@ -137,8 +137,8 @@ export default async function DashboardPage() {
                 <div key={project.id}>
                   <div className="mb-1 flex justify-between text-sm font-bold"><span>{project.name}</span><span>{money(totals.invoiced - totals.totalCost)}</span></div>
                   <div className="grid gap-1">
-                    <div className="h-3 rounded bg-[#e8edf2]"><div className="h-3 rounded bg-[#7b2636]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
-                    <div className="h-3 rounded bg-[#e8edf2]"><div className="h-3 rounded bg-[#285f8f]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
+                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
+                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
                   </div>
                 </div>
               ))}
@@ -150,11 +150,11 @@ export default async function DashboardPage() {
             <div className="grid grid-cols-6 items-end gap-3">
               {monthlyRows.map(([month, row]) => (
                 <div key={month} className="grid gap-2 text-center">
-                  <div className="flex h-32 items-end justify-center gap-1 border-b border-[#d8dee5]">
-                    <div className="w-4 rounded-t bg-[#7b2636]" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
-                    <div className="w-4 rounded-t bg-[#285f8f]" style={{ height: `${Math.max((row.invoiced / maxMonthly) * 100, 4)}%` }} />
+                  <div className="flex h-32 items-end justify-center gap-1 border-b border-[#d7e1e5]">
+                    <div className="w-4 rounded-t bg-[#5b193f]" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
+                    <div className="w-4 rounded-t bg-[#777da7]" style={{ height: `${Math.max((row.invoiced / maxMonthly) * 100, 4)}%` }} />
                   </div>
-                  <div className="text-xs font-black text-[#687482]">{month}</div>
+                  <div className="text-xs font-black text-[#6b7188]">{month}</div>
                 </div>
               ))}
             </div>
@@ -166,9 +166,9 @@ export default async function DashboardPage() {
               {rows.map(({ project, totals }) => (
                 <div key={project.id} className="grid grid-cols-[110px_1fr_90px] items-center gap-3 text-sm">
                   <div className="truncate font-bold">{project.name}</div>
-                  <div className="h-3 rounded bg-[#e8edf2]">
+                  <div className="h-3 rounded bg-[#e8eef0]">
                     <div
-                      className={`h-3 rounded ${totals.profit >= 0 ? "bg-[#5d8068]" : "bg-[#7b2636]"}`}
+                      className={`h-3 rounded ${totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
                       style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
                     />
                   </div>

@@ -53,9 +53,9 @@ export default async function ExportsPage() {
         {exportCards.map((card) => (
           <div key={card.href} className="panel grid gap-4 p-5">
             <div>
-              <div className="text-xs font-black uppercase text-[#7b2636]">{counts[card.countKey]} rows</div>
+              <div className="text-xs font-black uppercase text-[#5b193f]">{counts[card.countKey]} rows</div>
               <h2 className="mt-1 text-xl font-black">{card.title}</h2>
-              <p className="mt-2 text-sm font-semibold leading-6 text-[#687482]">{card.description}</p>
+              <p className="mt-2 text-sm font-semibold leading-6 text-[#6b7188]">{card.description}</p>
             </div>
             <Link href={card.href} className="btn btn-small btn-save justify-self-start">
               Download CSV

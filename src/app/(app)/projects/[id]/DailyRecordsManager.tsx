@@ -115,7 +115,7 @@ export function DailyRecordsManager({
 
   if (!records.length) {
     return (
-      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7f9fb] p-4 text-sm font-bold text-[#687482]">
+      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
         No daily records saved for this project yet.
       </div>
     );
@@ -127,7 +127,7 @@ export function DailyRecordsManager({
         Search daily records
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Date, product, employee, expense, or note" />
       </label>
-      <div className="text-xs font-bold text-[#687482]">Showing {filteredRecords.length} of {records.length} records</div>
+      <div className="text-xs font-bold text-[#6b7188]">Showing {filteredRecords.length} of {records.length} records</div>
       <div className="table-wrap">
         <table>
           <thead>
@@ -185,7 +185,7 @@ export function DailyRecordsManager({
                 </tr>
                 {isEditing ? (
                   <tr>
-                    <td colSpan={10} className="bg-[#f7f9fb]">
+                    <td colSpan={10} className="bg-[#f3f7f3]">
                       <DailyRecordEditForm
                         record={record}
                         products={products}
@@ -201,7 +201,7 @@ export function DailyRecordsManager({
             );
           })}
             {!filteredRecords.length ? (
-              <tr><td colSpan={10} className="py-8 text-center font-bold text-[#687482]">No daily records match your search.</td></tr>
+              <tr><td colSpan={10} className="py-8 text-center font-bold text-[#6b7188]">No daily records match your search.</td></tr>
             ) : null}
           </tbody>
         </table>
@@ -246,7 +246,7 @@ function DailyRecordEditForm({
         await updateDailyRecord(formData);
         onSaved();
       }}
-      className="grid gap-4 rounded-lg border border-[#d8dee5] bg-white p-4"
+      className="grid gap-4 rounded-lg border border-[#d7e1e5] bg-white p-4"
     >
       <input type="hidden" name="recordId" value={record.id} />
       <input type="hidden" name="projectId" value={record.projectId} />
@@ -265,9 +265,9 @@ function DailyRecordEditForm({
       <EditableLabourRows labourRows={labourRows} employeeMap={employeeMap} employees={employees} setLabourRows={setLabourRows} />
       <EditableExpenseRows expenseRows={expenseRows} expenseTypeMap={expenseTypeMap} expenseTypes={expenseTypes} setExpenseRows={setExpenseRows} />
 
-      <div className="flex flex-col gap-3 border-t border-[#d8dee5] pt-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-sm font-bold text-[#46515d]">
-          Updated daily total: <span className="text-[#20262d]">{money(total)}</span>
+      <div className="flex flex-col gap-3 border-t border-[#d7e1e5] pt-4 md:flex-row md:items-center md:justify-between">
+        <div className="text-sm font-bold text-[#373455]">
+          Updated daily total: <span className="text-[#373455]">{money(total)}</span>
         </div>
         <div className="flex gap-2">
           <button className="btn btn-small btn-secondary" type="button" onClick={onCancel}>Cancel</button>
@@ -321,8 +321,8 @@ function EditableProductRows({
               Cost per unit
               <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
             </label>
-            <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-              <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+              <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.quantity * row.costPerUnit)}</div>
             </div>
             <div className="grid content-end">
@@ -405,8 +405,8 @@ function EditableLabourRows({
               <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
               {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
             </label>
-            <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-              <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+              <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage)}</div>
             </div>
             <div className="grid content-end">
@@ -463,8 +463,8 @@ function EditableExpenseRows({
               Amount
               <input name="expenseAmount" type="number" min="0" step="0.01" value={row.amount} onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, amount: Number(event.target.value) } : item))} />
             </label>
-            <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-              <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+              <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.amount)}</div>
             </div>
             <div className="grid content-end">

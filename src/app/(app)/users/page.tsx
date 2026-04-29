@@ -12,7 +12,7 @@ export default async function UsersPage() {
     return (
       <>
         <PageTitle eyebrow="Access" title="Users" />
-        <div className="panel p-5 font-bold text-[#7b2636]">Only admins can manage user accounts.</div>
+        <div className="panel p-5 font-bold text-[#5b193f]">Only admins can manage user accounts.</div>
       </>
     );
   }

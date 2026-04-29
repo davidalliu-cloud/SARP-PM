@@ -119,8 +119,8 @@ export function DailyRecordForm({
                   Cost per unit
                   <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
                 </label>
-                <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-                  <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+                  <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                   <div className="font-black">EUR {(row.quantity * row.costPerUnit).toFixed(2)} {selected?.unit ? `/${selected.unit}` : ""}</div>
                 </div>
                 <div className="grid content-end">
@@ -198,8 +198,8 @@ export function DailyRecordForm({
                   <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
                   {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
                 </label>
-                <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-                  <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+                  <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                   <div className="font-black">EUR {(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage).toFixed(2)}</div>
                 </div>
                 <div className="grid content-end">
@@ -261,8 +261,8 @@ export function DailyRecordForm({
                   onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, amount: Number(event.target.value) } : item))}
                 />
               </label>
-              <div className="grid content-end rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2">
-                <div className="text-xs font-black uppercase text-[#687482]">Line total</div>
+              <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+                <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                 <div className="font-black">EUR {row.amount.toFixed(2)}</div>
               </div>
               <div className="grid content-end">
@@ -275,9 +275,9 @@ export function DailyRecordForm({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-[#d8dee5] pt-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-sm font-bold text-[#46515d]">
-          Daily total: <span className="text-[#20262d]">EUR {(productTotal + labourTotal + expenseTotal).toFixed(2)}</span>
+      <div className="flex flex-col gap-3 border-t border-[#d7e1e5] pt-4 md:flex-row md:items-center md:justify-between">
+        <div className="text-sm font-bold text-[#373455]">
+          Daily total: <span className="text-[#373455]">EUR {(productTotal + labourTotal + expenseTotal).toFixed(2)}</span>
         </div>
         <button className="btn btn-small btn-save" type="submit" disabled={!products.length || !employees.length}>Save daily record</button>
       </div>

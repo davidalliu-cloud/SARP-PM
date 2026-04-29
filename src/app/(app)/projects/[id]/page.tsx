@@ -117,13 +117,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             {products.length && employees.length && expenseTypes.length ? (
               <DailyRecordForm projectId={project.id} products={products} employees={employees} expenseTypes={expenseTypes} />
             ) : (
-              <div className="panel p-5 font-bold text-[#7b2636]">Add at least one product, employee, and expense option before entering daily costs.</div>
+              <div className="panel p-5 font-bold text-[#5b193f]">Add at least one product, employee, and expense option before entering daily costs.</div>
             )}
           </div>
 
           <div className="panel grid content-start gap-4 p-5">
             <div>
-              <div className="text-xs font-black uppercase text-[#7b2636]">Billing</div>
+              <div className="text-xs font-black uppercase text-[#5b193f]">Billing</div>
               <h2 className="mt-1 text-xl font-black">Add invoice</h2>
             </div>
             <form action={createInvoice} className="grid gap-4">
@@ -134,7 +134,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required placeholder="4200.00" /></label>
               <label>
                 Paid status
-                <span className="flex items-center gap-2 rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2 text-sm font-bold text-[#46515d]">
+                <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">
                   <input className="size-4 w-auto" name="isPaid" type="checkbox" />
                   Invoice has been paid
                 </span>
@@ -150,10 +150,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-xs font-black uppercase text-[#7b2636]">Site history</div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Site history</div>
                 <h2 className="text-xl font-black">Daily records</h2>
               </div>
-              <div className="text-sm font-bold text-[#687482]">{dailyRecords.length} records</div>
+              <div className="text-sm font-bold text-[#6b7188]">{dailyRecords.length} records</div>
             </div>
             <DailyRecordsManager projectId={project.id} records={dailyRecords} products={products} employees={employees} expenseTypes={expenseTypes} />
           </div>
@@ -161,10 +161,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-xs font-black uppercase text-[#7b2636]">Billing history</div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Billing history</div>
                 <h2 className="text-xl font-black">Invoices</h2>
               </div>
-              <div className="text-sm font-bold text-[#687482]">{money(totals.invoiced)} invoiced</div>
+              <div className="text-sm font-bold text-[#6b7188]">{money(totals.invoiced)} invoiced</div>
             </div>
             <InvoicesManager invoices={invoices} />
           </div>

@@ -15,12 +15,12 @@ export default async function ProductsPage({
     <>
       <PageTitle eyebrow="Master data" title="Products" />
       {params.error === "product-used" ? (
-        <div className="panel mb-5 border-[#e0b7c0] bg-[#f9eef1] p-4 font-bold text-[#7b2636]">
+        <div className="panel mb-5 border-[#e0b7c0] bg-[#f9eef1] p-4 font-bold text-[#5b193f]">
           This product is already used in a project daily record, so it cannot be deleted.
         </div>
       ) : null}
       {params.deleted ? (
-        <div className="panel mb-5 border-[#c8decf] bg-[#eef7f1] p-4 font-bold text-[#315a3d]">
+        <div className="panel mb-5 border-[#c8decf] bg-[#eef7f1] p-4 font-bold text-[#285d59]">
           Product deleted.
         </div>
       ) : null}

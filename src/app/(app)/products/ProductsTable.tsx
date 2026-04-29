@@ -22,7 +22,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
 
   return (
     <div className="panel flex min-h-0 flex-col overflow-hidden">
-      <div className="border-b border-[#d8dee5] bg-white p-4">
+      <div className="border-b border-[#d7e1e5] bg-white p-4">
         <label>
           Search products
           <input
@@ -31,7 +31,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
             placeholder="Search by product name, unit, or cost"
           />
         </label>
-        <div className="mt-2 text-xs font-bold text-[#687482]">
+        <div className="mt-2 text-xs font-bold text-[#6b7188]">
           Showing {filteredProducts.length} of {products.length} products
         </div>
       </div>
@@ -54,7 +54,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
                 </td>
                 <td>
                   <input className="h-9 py-1.5" form={`product-${product.id}`} name="defaultCostPerUnit" type="number" min="0" step="0.01" defaultValue={product.defaultCostPerUnit} required aria-label={`Cost for ${product.name}`} />
-                  <div className="mt-1 text-xs font-bold text-[#687482]">{money(product.defaultCostPerUnit)}</div>
+                  <div className="mt-1 text-xs font-bold text-[#6b7188]">{money(product.defaultCostPerUnit)}</div>
                 </td>
                 <td>
                   <div className="flex flex-nowrap gap-2">
@@ -65,7 +65,7 @@ export function ProductsTable({ products }: { products: Product[] }) {
               </tr>
             ))}
             {!filteredProducts.length ? (
-              <tr><td colSpan={4} className="py-8 text-center font-bold text-[#687482]">No products match your search.</td></tr>
+              <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No products match your search.</td></tr>
             ) : null}
           </tbody>
         </table>

@@ -29,7 +29,7 @@ export default async function ExpensesPage() {
                 </tr>
               ))}
               {!expenseTypes.length ? (
-                <tr><td colSpan={3} className="py-8 text-center font-bold text-[#687482]">No expense options yet.</td></tr>
+                <tr><td colSpan={3} className="py-8 text-center font-bold text-[#6b7188]">No expense options yet.</td></tr>
               ) : null}
             </tbody>
           </table>

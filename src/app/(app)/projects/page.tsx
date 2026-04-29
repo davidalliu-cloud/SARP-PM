@@ -35,7 +35,7 @@ export default async function ProjectsPage({
         <Link href="/projects/new" className="btn btn-primary">New project</Link>
       </PageTitle>
       {params.deleted ? (
-        <div className="panel mb-5 border-[#c8decf] bg-[#eef7f1] p-4 font-bold text-[#315a3d]">
+        <div className="panel mb-5 border-[#c8decf] bg-[#eef7f1] p-4 font-bold text-[#285d59]">
           Project deleted.
         </div>
       ) : null}
@@ -55,7 +55,7 @@ export default async function ProjectsPage({
           </select>
         </label>
         <button className="btn btn-small btn-save" type="submit">Apply filter</button>
-        <div className="text-xs font-bold text-[#687482] md:col-span-3">
+        <div className="text-xs font-bold text-[#6b7188] md:col-span-3">
           Showing {filteredProjects.length} of {projects.length} projects
         </div>
       </form>
@@ -84,7 +84,7 @@ export default async function ProjectsPage({
                       <input type="hidden" name="id" value={project.id} />
                       <input name="name" defaultValue={project.name} required aria-label={`Project name for ${project.name}`} />
                     </form>
-                    <Link href={`/projects/${project.id}`} className="mt-1 inline-block text-xs font-black text-[#285f8f]">Open project</Link>
+                    <Link href={`/projects/${project.id}`} className="mt-1 inline-block text-xs font-black text-[#777da7]">Open project</Link>
                   </td>
                   <td>
                     <input form={`project-${project.id}`} name="clientName" defaultValue={project.clientName || ""} placeholder="Client name" aria-label={`Client name for ${project.name}`} />
@@ -93,7 +93,7 @@ export default async function ProjectsPage({
                   <td><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></td>
                   <td>{money(totals.totalCost)}</td>
                   <td>{money(totals.invoiced)}</td>
-                  <td className={totals.profit >= 0 ? "font-bold text-[#315a3d]" : "font-bold text-[#7b2636]"}>{money(totals.profit)}</td>
+                  <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>
                   <td>{decimal(totals.margin)}%</td>
                   <td>
                     <div className="flex flex-nowrap gap-2">
@@ -105,7 +105,7 @@ export default async function ProjectsPage({
               );
             })}
             {!filteredProjects.length ? (
-              <tr><td colSpan={9} className="py-8 text-center font-bold text-[#687482]">No projects match this filter.</td></tr>
+              <tr><td colSpan={9} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
             ) : null}
           </tbody>
         </table>

@@ -106,7 +106,7 @@ export default async function MonthlyReportPage({
                 </tr>
               ))}
               {!records.length ? (
-                <tr><td colSpan={9} className="py-8 text-center font-bold text-[#687482]">No daily records for this month.</td></tr>
+                <tr><td colSpan={9} className="py-8 text-center font-bold text-[#6b7188]">No daily records for this month.</td></tr>
               ) : null}
             </tbody>
           </table>

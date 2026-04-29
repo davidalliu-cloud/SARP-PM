@@ -45,7 +45,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
 
   if (!invoices.length) {
     return (
-      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7f9fb] p-4 text-sm font-bold text-[#687482]">
+      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
         No invoices saved for this project yet.
       </div>
     );
@@ -57,16 +57,16 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         Search invoices
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Invoice number, month, amount, or note" />
       </label>
-      <div className="text-xs font-bold text-[#687482]">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
+      <div className="text-xs font-bold text-[#6b7188]">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
       {filteredInvoices.map((invoice) => {
         const isEditing = editingId === invoice.id;
 
         return (
-          <div key={invoice.id} className="rounded-lg border border-[#d8dee5] bg-white p-3">
+          <div key={invoice.id} className="rounded-lg border border-[#d7e1e5] bg-white p-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
                 <div className="font-black">{invoice.invoiceNo || "Invoice"}</div>
-                <div className="mt-1 text-sm font-semibold text-[#687482]">
+                <div className="mt-1 text-sm font-semibold text-[#6b7188]">
                   {invoice.monthCovered} / {displayDate(invoice.invoiceDate)}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -80,10 +80,10 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                     <span className="status status-finished">Paid {displayDate(invoice.paidDate)}</span>
                   ) : null}
                 </div>
-                {invoice.notes ? <div className="mt-2 text-sm text-[#46515d]">{invoice.notes}</div> : null}
+                {invoice.notes ? <div className="mt-2 text-sm text-[#373455]">{invoice.notes}</div> : null}
               </div>
               <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <div className="mr-1 font-black text-[#285f8f]">{money(invoice.amount)}</div>
+                <div className="mr-1 font-black text-[#777da7]">{money(invoice.amount)}</div>
                 <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : invoice.id)}>
                   {isEditing ? "Cancel" : "Edit"}
                 </button>
@@ -108,7 +108,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                   await updateInvoice(formData);
                   setEditingId(null);
                 }}
-                className="mt-4 grid gap-3 border-t border-[#e8edf2] pt-4 md:grid-cols-2"
+                className="mt-4 grid gap-3 border-t border-[#e8eef0] pt-4 md:grid-cols-2"
               >
                 <input type="hidden" name="id" value={invoice.id} />
                 <input type="hidden" name="projectId" value={invoice.projectId} />
@@ -118,7 +118,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
                 <label className="md:col-span-2">
                   Paid status
-                  <span className="flex items-center gap-2 rounded-lg border border-[#d8dee5] bg-[#f7f9fb] px-3 py-2 text-sm font-bold text-[#46515d]">
+                  <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">
                     <input className="size-4 w-auto" name="isPaid" type="checkbox" defaultChecked={invoice.isPaid} />
                     Invoice has been paid
                   </span>
@@ -135,7 +135,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         );
       })}
       {!filteredInvoices.length ? (
-        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7f9fb] p-4 text-sm font-bold text-[#687482]">
+        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
           No invoices match your search.
         </div>
       ) : null}
