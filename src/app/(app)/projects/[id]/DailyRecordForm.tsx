@@ -9,6 +9,7 @@ type ProductOption = {
   name: string;
   unit: string;
   defaultCostPerUnit: number;
+  lastCostPerUnit?: number | null;
 };
 
 type EmployeeOption = {
@@ -46,6 +47,10 @@ function newLabourRow(id: string, employees: EmployeeOption[]): LabourRow {
   };
 }
 
+function productCost(product?: ProductOption) {
+  return product?.lastCostPerUnit ?? product?.defaultCostPerUnit ?? 0;
+}
+
 export function DailyRecordForm({
   projectId,
   products,
@@ -57,7 +62,7 @@ export function DailyRecordForm({
   employees: EmployeeOption[];
   expenseTypes: ExpenseTypeOption[];
 }) {
-  const [productRows, setProductRows] = useState([{ id: "p-0", productId: products[0]?.id ?? "", quantity: 1, costPerUnit: products[0]?.defaultCostPerUnit ?? 0 }]);
+  const [productRows, setProductRows] = useState([{ id: "p-0", productId: products[0]?.id ?? "", quantity: 1, costPerUnit: productCost(products[0]) }]);
   const [labourRows, setLabourRows] = useState([newLabourRow("l-0", employees)]);
   const [expenseRows, setExpenseRows] = useState([{ id: "e-0", expenseTypeId: expenseTypes[0]?.id ?? "", description: "", amount: expenseTypes[0]?.defaultAmount ?? 0 }]);
 
@@ -88,7 +93,7 @@ export function DailyRecordForm({
           <button
             className="btn btn-small btn-secondary"
             type="button"
-            onClick={() => setProductRows((rows) => [...rows, { id: `p-${Date.now()}`, productId: products[0]?.id ?? "", quantity: 1, costPerUnit: products[0]?.defaultCostPerUnit ?? 0 }])}
+            onClick={() => setProductRows((rows) => [...rows, { id: `p-${Date.now()}`, productId: products[0]?.id ?? "", quantity: 1, costPerUnit: productCost(products[0]) }])}
           >
             Add product row
           </button>
@@ -105,7 +110,7 @@ export function DailyRecordForm({
                     value={row.productId}
                     onChange={(event) => {
                       const product = productMap.get(event.target.value);
-                      setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, productId: event.target.value, costPerUnit: product?.defaultCostPerUnit ?? 0 } : item));
+                      setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, productId: event.target.value, costPerUnit: productCost(product) } : item));
                     }}
                   >
                     {products.map((product) => <option key={product.id} value={product.id}>{product.name} / {product.unit}</option>)}

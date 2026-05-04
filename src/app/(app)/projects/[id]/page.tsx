@@ -45,7 +45,7 @@ function performanceSummary(tone: PerformanceTone) {
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [project, products, employees, expenseTypes] = await Promise.all([
+  const [project, products, employees, expenseTypes, productUsageHistory] = await Promise.all([
     prisma.project.findUnique({
       where: { id },
       include: {
@@ -77,6 +77,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     prisma.product.findMany({ orderBy: { name: "asc" } }),
     prisma.employee.findMany({ orderBy: { name: "asc" } }),
     prisma.expenseType.findMany({ orderBy: { name: "asc" } }),
+    prisma.productUsageItem.findMany({
+      include: { dailyRecord: { select: { date: true, createdAt: true } } },
+    }),
   ]);
 
   if (!project) notFound();
@@ -92,6 +95,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const marginTone = profitTone(totals.margin, totals.profit);
   const projectTone: PerformanceTone = budgetTone === "maroon" || marginTone === "maroon" || invoiceTone === "maroon" ? "maroon" : budgetTone === "amber" || marginTone === "amber" || invoiceTone === "amber" ? "amber" : totals.totalCost > 0 ? "green" : "default";
   const summary = performanceSummary(projectTone);
+  const latestProductCosts = new Map<string, number>();
+  productUsageHistory
+    .sort((a, b) => b.dailyRecord.date.getTime() - a.dailyRecord.date.getTime() || b.dailyRecord.createdAt.getTime() - a.dailyRecord.createdAt.getTime())
+    .forEach((item) => {
+      if (!latestProductCosts.has(item.productId)) {
+        latestProductCosts.set(item.productId, item.costPerUnit);
+      }
+    });
+  const productsWithLatestCosts = products.map((product) => ({
+    ...product,
+    lastCostPerUnit: latestProductCosts.get(product.id) ?? null,
+  }));
   const dailyRecords = project.dailyRecords.map((record) => ({
     id: record.id,
     projectId: record.projectId,
@@ -192,7 +207,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div>
             <h2 className="mb-3 text-xl font-black">Add daily cost record</h2>
             {products.length && employees.length && expenseTypes.length ? (
-              <DailyRecordForm projectId={project.id} products={products} employees={employees} expenseTypes={expenseTypes} />
+              <DailyRecordForm projectId={project.id} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
             ) : (
               <div className="panel p-5 font-bold text-[#5b193f]">Add at least one product, employee, and expense option before entering daily costs.</div>
             )}
@@ -240,7 +255,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               </div>
               <div className="text-sm font-bold text-[#6b7188]">{dailyRecords.length} records</div>
             </div>
-            <DailyRecordsManager projectId={project.id} records={dailyRecords} products={products} employees={employees} expenseTypes={expenseTypes} />
+            <DailyRecordsManager projectId={project.id} records={dailyRecords} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
           </div>
 
           <div className="panel p-4">

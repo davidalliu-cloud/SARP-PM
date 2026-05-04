@@ -10,6 +10,7 @@ type ProductOption = {
   name: string;
   unit: string;
   defaultCostPerUnit: number;
+  lastCostPerUnit?: number | null;
 };
 
 type EmployeeOption = {
@@ -73,6 +74,10 @@ function displayDate(value: string) {
 
 function productTotal(items: ProductRow[]) {
   return items.reduce((sum, item) => sum + item.quantity * item.costPerUnit, 0);
+}
+
+function productCost(product?: ProductOption) {
+  return product?.lastCostPerUnit ?? product?.defaultCostPerUnit ?? 0;
 }
 
 function labourTotal(items: LabourRow[]) {
@@ -226,7 +231,7 @@ function DailyRecordEditForm({
   onSaved: () => void;
 }) {
   const [productRows, setProductRows] = useState<ProductRow[]>(
-    record.productItems.length ? record.productItems : [{ id: `p-${record.id}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: products[0]?.defaultCostPerUnit ?? 0 }]
+    record.productItems.length ? record.productItems : [{ id: `p-${record.id}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: productCost(products[0]) }]
   );
   const [labourRows, setLabourRows] = useState<LabourRow[]>(
     record.labourItems.length ? record.labourItems : [{ id: `l-${record.id}`, labourType: "employee", employeeId: employees[0]?.id ?? "", employeeName: employees[0]?.name ?? "", externalTeamName: "", ratePerSquareMeter: 0, squareMeters: 0, dailyWage: employees[0]?.defaultDailyWage ?? 0 }]
@@ -293,7 +298,7 @@ function EditableProductRows({
     <div>
       <div className="mb-3 flex items-center justify-between">
         <h3 className="font-black">Products used</h3>
-        <button className="btn btn-small btn-secondary" type="button" onClick={() => setProductRows((rows) => [...rows, { id: `p-${Date.now()}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: products[0]?.defaultCostPerUnit ?? 0 }])}>
+        <button className="btn btn-small btn-secondary" type="button" onClick={() => setProductRows((rows) => [...rows, { id: `p-${Date.now()}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: productCost(products[0]) }])}>
           Add product row
         </button>
       </div>
@@ -307,7 +312,7 @@ function EditableProductRows({
                 value={row.productId}
                 onChange={(event) => {
                   const product = productMap.get(event.target.value);
-                  setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, productId: event.target.value, productName: product?.name ?? "", unit: product?.unit ?? "", costPerUnit: product?.defaultCostPerUnit ?? 0 } : item));
+                  setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, productId: event.target.value, productName: product?.name ?? "", unit: product?.unit ?? "", costPerUnit: productCost(product) } : item));
                 }}
               >
                 {products.map((product) => <option key={product.id} value={product.id}>{product.name} / {product.unit}</option>)}
