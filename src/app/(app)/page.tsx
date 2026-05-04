@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
-import { daysSince, money, decimal, statusClass, statusLabel } from "@/lib/format";
+import { daysSince, daysUntil, invoiceDueDate, money, decimal, statusClass, statusLabel } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, monthKey, projectTotals } from "@/lib/totals";
 
@@ -31,7 +31,10 @@ export default async function DashboardPage() {
   const overBudgetProjects = rows.filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget).length;
   const totalInvoiced = rows.reduce((sum, row) => sum + row.totals.invoiced, 0);
   const totalOutstanding = projects.reduce((sum, project) => sum + project.invoices.filter((invoice) => !invoice.isPaid).reduce((invoiceSum, invoice) => invoiceSum + invoice.amount, 0), 0);
-  const oldestUnpaidDays = Math.max(...projects.flatMap((project) => project.invoices.filter((invoice) => !invoice.isPaid).map((invoice) => daysSince(invoice.invoiceDate))), 0);
+  const unpaidInvoices = projects.flatMap((project) => project.invoices.filter((invoice) => !invoice.isPaid));
+  const oldestUnpaidDays = Math.max(...unpaidInvoices.map((invoice) => daysSince(invoice.invoiceDate)), 0);
+  const overdueInvoices = unpaidInvoices.filter((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0);
+  const overdueTotal = overdueInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
   const profit = totalInvoiced - totalCost;
   const margin = totalInvoiced > 0 ? (profit / totalInvoiced) * 100 : 0;
   const maxProjectValue = Math.max(...rows.map((row) => Math.max(row.totals.totalCost, row.totals.invoiced, 1)), 1);
@@ -61,12 +64,13 @@ export default async function DashboardPage() {
         <Link href="/projects/new" className="btn btn-primary">New project</Link>
       </PageTitle>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
         <StatCard label="Active projects" value={activeProjects} tone="green" />
         <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
         <StatCard label="Total costs" value={money(totalCost)} />
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
-        <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest ${oldestUnpaidDays} days` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
+        <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
+        <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
         <StatCard label="Profit / loss" value={money(profit)} tone={profit >= 0 ? "green" : "maroon"} />
         <StatCard label="Profit margin" value={`${decimal(margin)}%`} tone="maroon" />
       </section>

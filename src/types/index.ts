@@ -60,6 +60,9 @@ export interface Invoice {
   monthCovered: string
   invoiceNumber: string | null
   amount: number
+  dueDate: string | null
+  isPaid: boolean
+  paidDate: string | null
   notes: string | null
   createdAt: string
 }

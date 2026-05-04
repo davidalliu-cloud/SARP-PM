@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { requireUser } from "@/lib/auth";
 import { csvResponse, csvRows } from "@/lib/csv";
-import { daysSince } from "@/lib/format";
+import { daysSince, daysUntil, invoiceDueDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
 
@@ -132,11 +132,13 @@ export async function GET(
       orderBy: [{ invoiceDate: "desc" }, { createdAt: "desc" }],
     });
     const body = csvRows(
-      ["Project", "Invoice date", "Days since issued", "Month covered", "Invoice number", "Amount", "Paid status", "Paid date", "Notes"],
+      ["Project", "Invoice date", "Days since issued", "Due date", "Days overdue", "Month covered", "Invoice number", "Amount", "Paid status", "Paid date", "Notes"],
       invoices.map((invoice) => [
         invoice.project.name,
         invoice.invoiceDate,
         daysSince(invoice.invoiceDate),
+        invoiceDueDate(invoice.invoiceDate, invoice.dueDate),
+        invoice.isPaid ? 0 : Math.max(0, -daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate))),
         invoice.monthCovered,
         invoice.invoiceNo || "",
         invoice.amount,

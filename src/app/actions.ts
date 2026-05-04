@@ -7,6 +7,7 @@ import { hashPassword, requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
 const MAX_ATTACHMENT_SIZE = 8 * 1024 * 1024;
+const DEFAULT_PAYMENT_TERM_DAYS = 30;
 
 function text(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -16,6 +17,17 @@ function text(formData: FormData, key: string) {
 function numberValue(value: FormDataEntryValue | null) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function addDays(date: Date, days: number) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+function invoiceDueDate(invoiceDate: Date, formData: FormData) {
+  const dueDate = text(formData, "dueDate");
+  return dueDate ? new Date(dueDate) : addDays(invoiceDate, DEFAULT_PAYMENT_TERM_DAYS);
 }
 
 function dailyRecordLineItems(formData: FormData) {
@@ -375,22 +387,25 @@ export async function createInvoice(formData: FormData) {
   const projectId = text(formData, "projectId");
   const isPaid = formData.get("isPaid") === "on";
   const paidDate = text(formData, "paidDate");
+  const invoiceDate = new Date(text(formData, "invoiceDate"));
 
   await prisma.invoice.create({
     data: {
       projectId,
-      invoiceDate: new Date(text(formData, "invoiceDate")),
+      invoiceDate,
       monthCovered: text(formData, "monthCovered"),
       invoiceNo: text(formData, "invoiceNo") || null,
       amount: numberValue(formData.get("amount")),
+      dueDate: invoiceDueDate(invoiceDate, formData),
       isPaid,
-      paidDate: isPaid ? new Date(paidDate || text(formData, "invoiceDate")) : null,
+      paidDate: isPaid ? new Date(paidDate || new Date()) : null,
       notes: text(formData, "notes") || null,
     },
   });
 
   revalidatePath(`/projects/${projectId}`);
   revalidatePath(`/projects/${projectId}/monthly`);
+  revalidatePath("/invoices");
   revalidatePath("/");
 }
 
@@ -401,22 +416,66 @@ export async function updateInvoice(formData: FormData) {
   const projectId = text(formData, "projectId");
   const isPaid = formData.get("isPaid") === "on";
   const paidDate = text(formData, "paidDate");
+  const invoiceDate = new Date(text(formData, "invoiceDate"));
 
   await prisma.invoice.update({
     where: { id },
     data: {
-      invoiceDate: new Date(text(formData, "invoiceDate")),
+      invoiceDate,
       monthCovered: text(formData, "monthCovered"),
       invoiceNo: text(formData, "invoiceNo") || null,
       amount: numberValue(formData.get("amount")),
+      dueDate: invoiceDueDate(invoiceDate, formData),
       isPaid,
-      paidDate: isPaid ? new Date(paidDate || text(formData, "invoiceDate")) : null,
+      paidDate: isPaid ? new Date(paidDate || new Date()) : null,
       notes: text(formData, "notes") || null,
     },
   });
 
   revalidatePath(`/projects/${projectId}`);
   revalidatePath(`/projects/${projectId}/monthly`);
+  revalidatePath("/invoices");
+  revalidatePath("/");
+}
+
+export async function markInvoicePaid(formData: FormData) {
+  await requireUser();
+
+  const id = text(formData, "id");
+  const projectId = text(formData, "projectId");
+  const paidDate = text(formData, "paidDate");
+
+  await prisma.invoice.update({
+    where: { id },
+    data: {
+      isPaid: true,
+      paidDate: paidDate ? new Date(paidDate) : new Date(),
+    },
+  });
+
+  revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/projects/${projectId}/monthly`);
+  revalidatePath("/invoices");
+  revalidatePath("/");
+}
+
+export async function markInvoiceUnpaid(formData: FormData) {
+  await requireUser();
+
+  const id = text(formData, "id");
+  const projectId = text(formData, "projectId");
+
+  await prisma.invoice.update({
+    where: { id },
+    data: {
+      isPaid: false,
+      paidDate: null,
+    },
+  });
+
+  revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/projects/${projectId}/monthly`);
+  revalidatePath("/invoices");
   revalidatePath("/");
 }
 
@@ -430,6 +489,7 @@ export async function deleteInvoice(formData: FormData) {
 
   revalidatePath(`/projects/${projectId}`);
   revalidatePath(`/projects/${projectId}/monthly`);
+  revalidatePath("/invoices");
   revalidatePath("/");
 }
 

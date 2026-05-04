@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { addDays } from '@/lib/format'
 import { prisma } from '@/lib/prisma'
 
 export async function PATCH(
@@ -8,13 +9,15 @@ export async function PATCH(
   try {
     const { id } = await params
     const body = await req.json()
+    const invoiceDate = body.invoiceDate ? new Date(body.invoiceDate) : undefined
     const invoice = await prisma.invoice.update({
       where: { id },
       data: {
-        invoiceDate: body.invoiceDate ? new Date(body.invoiceDate) : undefined,
+        invoiceDate,
         monthCovered: body.monthCovered,
         invoiceNo: body.invoiceNo || null,
         amount: body.amount == null ? undefined : Number(body.amount),
+        dueDate: body.dueDate ? new Date(body.dueDate) : invoiceDate ? addDays(invoiceDate, 30) : undefined,
         isPaid: body.isPaid == null ? undefined : Boolean(body.isPaid),
         paidDate: body.isPaid ? (body.paidDate ? new Date(body.paidDate) : new Date()) : null,
         notes: body.notes || null,

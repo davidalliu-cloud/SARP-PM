@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { deleteInvoice, updateInvoice } from "@/app/actions";
-import { daysSince, money } from "@/lib/format";
+import { deleteInvoice, markInvoicePaid, markInvoiceUnpaid, updateInvoice } from "@/app/actions";
+import { daysSince, daysUntil, invoiceAgeLabel, invoiceDueDate, money } from "@/lib/format";
 
 export type InvoiceRow = {
   id: string;
@@ -11,6 +11,7 @@ export type InvoiceRow = {
   monthCovered: string;
   invoiceNo: string;
   amount: number;
+  dueDate: string;
   isPaid: boolean;
   paidDate: string;
   notes: string;
@@ -24,6 +25,22 @@ function displayDate(value: string) {
   return new Date(value).toLocaleDateString();
 }
 
+function invoiceStatusClass(invoice: InvoiceRow) {
+  if (invoice.isPaid) return "status status-active";
+  const dueIn = daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate));
+  if (dueIn < 0) return "status status-on-hold";
+  if (dueIn <= 7) return "status status-not-started";
+  return "status status-finished";
+}
+
+function invoiceStatusLabel(invoice: InvoiceRow) {
+  if (invoice.isPaid) return "Paid";
+  const dueIn = daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate));
+  if (dueIn < 0) return "Overdue";
+  if (dueIn <= 7) return "Due soon";
+  return "Open";
+}
+
 export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -35,8 +52,9 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         invoice.invoiceNo,
         invoice.monthCovered,
         displayDate(invoice.invoiceDate),
+        displayDate(invoice.dueDate),
         invoice.amount,
-        invoice.isPaid ? "paid" : "unpaid",
+        invoiceStatusLabel(invoice),
         invoice.paidDate ? displayDate(invoice.paidDate) : "",
         invoice.notes,
       ].join(" ").toLowerCase().includes(normalizedQuery);
@@ -67,13 +85,14 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
               <div>
                 <div className="font-black">{invoice.invoiceNo || "Invoice"}</div>
                 <div className="mt-1 text-sm font-semibold text-[#6b7188]">
-                  {invoice.monthCovered} / {displayDate(invoice.invoiceDate)}
+                  {invoice.monthCovered} / Issued {displayDate(invoice.invoiceDate)} / Due {displayDate(invoice.dueDate)}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <span className={invoice.isPaid ? "status status-active" : "status status-on-hold"}>
-                    {invoice.isPaid ? "Paid" : "Unpaid"}
-                  </span>
+                  <span className={invoiceStatusClass(invoice)}>{invoiceStatusLabel(invoice)}</span>
                   <span className="status status-not-started">
+                    {invoiceAgeLabel(invoice.invoiceDate, invoice.dueDate, invoice.isPaid)}
+                  </span>
+                  <span className="status status-finished">
                     Issued {daysSince(invoice.invoiceDate)} days ago
                   </span>
                   {invoice.isPaid && invoice.paidDate ? (
@@ -84,6 +103,20 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
               </div>
               <div className="flex flex-wrap items-center gap-2 sm:justify-end">
                 <div className="mr-1 font-black text-[#777da7]">{money(invoice.amount)}</div>
+                {invoice.isPaid ? (
+                  <form action={markInvoiceUnpaid}>
+                    <input type="hidden" name="id" value={invoice.id} />
+                    <input type="hidden" name="projectId" value={invoice.projectId} />
+                    <button className="btn btn-small btn-secondary" type="submit">Mark unpaid</button>
+                  </form>
+                ) : (
+                  <form action={markInvoicePaid} className="flex items-center gap-2">
+                    <input type="hidden" name="id" value={invoice.id} />
+                    <input type="hidden" name="projectId" value={invoice.projectId} />
+                    <input className="w-32" name="paidDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} aria-label="Paid date" />
+                    <button className="btn btn-small btn-save" type="submit">Mark paid</button>
+                  </form>
+                )}
                 <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : invoice.id)}>
                   {isEditing ? "Cancel" : "Edit"}
                 </button>
@@ -116,6 +149,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Month covered<input name="monthCovered" type="month" required defaultValue={invoice.monthCovered} /></label>
                 <label>Invoice number<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder="Optional" /></label>
                 <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
+                <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(invoice.dueDate)} /></label>
                 <label className="md:col-span-2">
                   Paid status
                   <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">

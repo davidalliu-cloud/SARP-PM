@@ -6,6 +6,7 @@ import { logout } from "@/app/login/actions";
 const navItems = [
   { href: "/", label: "Dashboard", icon: "D" },
   { href: "/projects", label: "Projects", icon: "P" },
+  { href: "/invoices", label: "Invoices", icon: "I" },
   { href: "/products", label: "Products", icon: "M" },
   { href: "/employees", label: "Employees", icon: "E" },
   { href: "/expenses", label: "Expenses", icon: "X" },

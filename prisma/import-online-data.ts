@@ -94,6 +94,7 @@ type ExportedData = {
     monthCovered: string;
     invoiceNo: string | null;
     amount: number;
+    dueDate?: JsonDate | null;
     isPaid?: boolean;
     paidDate?: JsonDate | null;
     notes: string | null;
@@ -225,6 +226,7 @@ async function main() {
     data.invoices.map((invoice) => ({
       ...invoice,
       invoiceDate: date(invoice.invoiceDate),
+      dueDate: invoice.dueDate ? date(invoice.dueDate) : null,
       isPaid: invoice.isPaid ?? false,
       paidDate: invoice.paidDate ? date(invoice.paidDate) : null,
       createdAt: date(invoice.createdAt),

@@ -141,6 +141,7 @@ model Invoice {
   monthCovered String
   invoiceNo    String?
   amount       Float
+  dueDate      DateTime?
   isPaid       Boolean  @default(false)
   paidDate     DateTime?
   notes        String?

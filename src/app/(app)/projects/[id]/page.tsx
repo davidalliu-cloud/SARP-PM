@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { createInvoice, updateProjectBudget, updateProjectStatus } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
-import { dateInputValue, decimal, money, monthInputValue } from "@/lib/format";
+import { addDays, dateInputValue, decimal, money, monthInputValue } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
 import { AttachmentsPanel } from "./AttachmentsPanel";
@@ -90,6 +90,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     monthCovered: invoice.monthCovered,
     invoiceNo: invoice.invoiceNo || "",
     amount: invoice.amount,
+    dueDate: invoice.dueDate?.toISOString() || addDays(invoice.invoiceDate, 30).toISOString(),
     isPaid: invoice.isPaid,
     paidDate: invoice.paidDate?.toISOString() || "",
     notes: invoice.notes || "",
@@ -158,6 +159,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <label>Month covered<input name="monthCovered" type="month" required defaultValue={monthInputValue()} /></label>
               <label>Invoice number<input name="invoiceNo" placeholder="Optional" /></label>
               <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required placeholder="4200.00" /></label>
+              <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(addDays(new Date(), 30))} /></label>
               <label>
                 Paid status
                 <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">

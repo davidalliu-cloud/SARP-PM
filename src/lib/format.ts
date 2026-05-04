@@ -26,6 +26,33 @@ export function daysSince(date: Date | string, now = new Date()) {
   return Math.max(0, Math.floor((nowDay - startDay) / 86_400_000));
 }
 
+export function addDays(date: Date | string, days: number) {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+export function daysUntil(date: Date | string, now = new Date()) {
+  const target = new Date(date);
+  const targetDay = Date.UTC(target.getUTCFullYear(), target.getUTCMonth(), target.getUTCDate());
+  const nowDay = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  return Math.ceil((targetDay - nowDay) / 86_400_000);
+}
+
+export function invoiceDueDate(invoiceDate: Date | string, dueDate?: Date | string | null) {
+  return dueDate ? new Date(dueDate) : addDays(invoiceDate, 30);
+}
+
+export function invoiceAgeLabel(invoiceDate: Date | string, dueDate?: Date | string | null, isPaid = false) {
+  const issuedDays = daysSince(invoiceDate);
+  if (isPaid) return `Issued ${issuedDays} days ago`;
+
+  const remaining = daysUntil(invoiceDueDate(invoiceDate, dueDate));
+  if (remaining < 0) return `${Math.abs(remaining)} days overdue`;
+  if (remaining === 0) return "Due today";
+  return `Due in ${remaining} days`;
+}
+
 export function statusLabel(status: string) {
   if (status === "NOT_STARTED") return "Not Started";
   if (status === "ON_HOLD") return "On Hold";

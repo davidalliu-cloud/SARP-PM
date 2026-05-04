@@ -117,6 +117,7 @@ async function main() {
     data: {
       projectId: project.id,
       invoiceDate: new Date("2026-04-25"),
+      dueDate: new Date("2026-05-25"),
       monthCovered: "2026-04",
       invoiceNo: "SARP-2026-041",
       amount: 4200,
