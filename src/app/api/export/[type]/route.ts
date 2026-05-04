@@ -3,7 +3,7 @@ import { requireUser } from "@/lib/auth";
 import { csvResponse, csvRows } from "@/lib/csv";
 import { daysSince } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
+import { budgetTotals, projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
 
 function todayStamp() {
   return new Date().toISOString().slice(0, 10);
@@ -26,19 +26,23 @@ export async function GET(
     });
 
     const body = csvRows(
-      ["Project", "Client", "Start date", "Status", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
+      ["Project", "Client", "Start date", "Status", "Budget", "Product cost", "Labour cost", "Expenses", "Total cost", "Budget left", "Budget used %", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
       projects.map((project) => {
         const totals = projectTotals(project.dailyRecords, project.invoices);
+        const budget = budgetTotals(project.budgetAmount, totals.totalCost);
         const outstanding = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
         return [
           project.name,
           project.clientName || "",
           project.startDate,
           project.status,
+          project.budgetAmount,
           totals.productCost,
           totals.labourCost,
           totals.expenseCost,
           totals.totalCost,
+          project.budgetAmount > 0 ? budget.budgetRemaining : "",
+          project.budgetAmount > 0 ? budget.budgetUsed : "",
           totals.invoiced,
           outstanding,
           totals.profit,

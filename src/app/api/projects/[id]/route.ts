@@ -32,6 +32,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       clientName: body.clientName ?? null,
       startDate: body.startDate ? new Date(body.startDate) : undefined,
       status: body.status as ProjectStatus | undefined,
+      budgetAmount: body.budgetAmount == null ? undefined : Number(body.budgetAmount),
     },
   });
   return NextResponse.json(project);

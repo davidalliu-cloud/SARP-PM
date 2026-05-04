@@ -3,7 +3,7 @@ import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
 import { daysSince, money, decimal, statusClass, statusLabel } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { monthKey, projectTotals } from "@/lib/totals";
+import { budgetTotals, monthKey, projectTotals } from "@/lib/totals";
 
 const projectSections = [
   { title: "Not started", statuses: ["NOT_STARTED"], border: "border-[#6b7188]", bg: "bg-[#f3f7f3]" },
@@ -27,6 +27,8 @@ export default async function DashboardPage() {
 
   const activeProjects = projects.filter((project) => project.status === "ACTIVE").length;
   const totalCost = rows.reduce((sum, row) => sum + row.totals.totalCost, 0);
+  const totalBudget = projects.reduce((sum, project) => sum + project.budgetAmount, 0);
+  const overBudgetProjects = rows.filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget).length;
   const totalInvoiced = rows.reduce((sum, row) => sum + row.totals.invoiced, 0);
   const totalOutstanding = projects.reduce((sum, project) => sum + project.invoices.filter((invoice) => !invoice.isPaid).reduce((invoiceSum, invoice) => invoiceSum + invoice.amount, 0), 0);
   const oldestUnpaidDays = Math.max(...projects.flatMap((project) => project.invoices.filter((invoice) => !invoice.isPaid).map((invoice) => daysSince(invoice.invoiceDate))), 0);
@@ -59,8 +61,9 @@ export default async function DashboardPage() {
         <Link href="/projects/new" className="btn btn-primary">New project</Link>
       </PageTitle>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-7">
         <StatCard label="Active projects" value={activeProjects} tone="green" />
+        <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
         <StatCard label="Total costs" value={money(totalCost)} />
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest ${oldestUnpaidDays} days` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
@@ -93,7 +96,9 @@ export default async function DashboardPage() {
                           <th>Products</th>
                           <th>Labour</th>
                           <th>Expenses</th>
+                          <th>Budget</th>
                           <th>Total cost</th>
+                          <th>Budget left</th>
                           <th>Invoiced</th>
                           <th>Outstanding</th>
                           <th>Profit/loss</th>
@@ -103,6 +108,7 @@ export default async function DashboardPage() {
                       <tbody>
                         {sectionRows.map(({ project, totals }) => {
                           const outstanding = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+                          const budget = budgetTotals(project.budgetAmount, totals.totalCost);
                           return (
                             <tr key={project.id}>
                               <td>
@@ -112,7 +118,11 @@ export default async function DashboardPage() {
                               <td>{money(totals.productCost)}</td>
                               <td>{money(totals.labourCost)}</td>
                               <td>{money(totals.expenseCost)}</td>
+                              <td>{project.budgetAmount > 0 ? money(project.budgetAmount) : "-"}</td>
                               <td className="font-bold">{money(totals.totalCost)}</td>
+                              <td className={budget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
+                                {project.budgetAmount > 0 ? money(budget.budgetRemaining) : "-"}
+                              </td>
                               <td>{money(totals.invoiced)}</td>
                               <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
                               <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>

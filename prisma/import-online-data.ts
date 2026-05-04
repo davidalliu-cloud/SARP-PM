@@ -50,6 +50,7 @@ type ExportedData = {
     clientName: string | null;
     startDate: JsonDate;
     status: ProjectStatus;
+    budgetAmount?: number;
     createdAt: JsonDate;
     updatedAt: JsonDate;
   }>;
@@ -182,6 +183,7 @@ async function main() {
     "projects",
     data.projects.map((project) => ({
       ...project,
+      budgetAmount: project.budgetAmount ?? 0,
       startDate: date(project.startDate),
       createdAt: date(project.createdAt),
       updatedAt: date(project.updatedAt),

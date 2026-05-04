@@ -4,7 +4,7 @@ import { DeleteProjectButton } from "@/components/DeleteProjectButton";
 import { PageTitle } from "@/components/PageTitle";
 import { money, decimal, statusClass, statusLabel } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { projectTotals } from "@/lib/totals";
+import { budgetTotals, projectTotals } from "@/lib/totals";
 
 export default async function ProjectsPage({
   searchParams,
@@ -67,7 +67,9 @@ export default async function ProjectsPage({
               <th>Client</th>
               <th>Start date</th>
               <th>Status</th>
+              <th>Budget</th>
               <th>Total cost</th>
+              <th>Budget left</th>
               <th>Invoiced</th>
               <th>Profit/loss</th>
               <th>Margin</th>
@@ -77,6 +79,7 @@ export default async function ProjectsPage({
           <tbody>
             {filteredProjects.map((project) => {
               const totals = projectTotals(project.dailyRecords, project.invoices);
+              const budget = budgetTotals(project.budgetAmount, totals.totalCost);
               return (
                 <tr key={project.id}>
                   <td>
@@ -91,7 +94,14 @@ export default async function ProjectsPage({
                   </td>
                   <td>{project.startDate.toLocaleDateString()}</td>
                   <td><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></td>
+                  <td>
+                    <input className="h-9 py-1.5" form={`project-${project.id}`} name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} aria-label={`Budget for ${project.name}`} />
+                  </td>
                   <td>{money(totals.totalCost)}</td>
+                  <td className={budget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
+                    {project.budgetAmount > 0 ? money(budget.budgetRemaining) : "-"}
+                    {project.budgetAmount > 0 ? <div className="mt-1 text-xs text-[#6b7188]">{decimal(budget.budgetUsed)}% used</div> : null}
+                  </td>
                   <td>{money(totals.invoiced)}</td>
                   <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>
                   <td>{decimal(totals.margin)}%</td>
@@ -105,7 +115,7 @@ export default async function ProjectsPage({
               );
             })}
             {!filteredProjects.length ? (
-              <tr><td colSpan={9} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
+              <tr><td colSpan={11} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
             ) : null}
           </tbody>
         </table>

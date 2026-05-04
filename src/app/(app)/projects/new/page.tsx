@@ -20,6 +20,10 @@ export default function NewProjectPage() {
           <input name="startDate" type="date" required defaultValue={dateInputValue()} />
         </label>
         <label>
+          Project budget / contract value
+          <input name="budgetAmount" type="number" min="0" step="0.01" placeholder="50000.00" />
+        </label>
+        <label>
           Status
           <select name="status" required defaultValue="NOT_STARTED">
             <option value="NOT_STARTED">Not Started</option>

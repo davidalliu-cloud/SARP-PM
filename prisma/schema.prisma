@@ -47,6 +47,7 @@ model Project {
   clientName   String?
   startDate    DateTime
   status       ProjectStatus @default(NOT_STARTED)
+  budgetAmount Float         @default(0)
   dailyRecords DailyRecord[]
   invoices     Invoice[]
   createdAt    DateTime      @default(now())

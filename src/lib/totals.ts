@@ -34,6 +34,15 @@ export function projectTotals(records: RecordWithItems[], invoices: Invoice[]) {
   return { productCost, labourCost, expenseCost, totalCost, invoiced, profit, margin };
 }
 
+export function budgetTotals(budgetAmount: number, totalCost: number) {
+  const budget = Number.isFinite(budgetAmount) ? budgetAmount : 0;
+  const budgetRemaining = budget - totalCost;
+  const budgetUsed = budget > 0 ? (totalCost / budget) * 100 : 0;
+  const isOverBudget = budget > 0 && totalCost > budget;
+
+  return { budget, budgetRemaining, budgetUsed, isOverBudget };
+}
+
 export function monthKey(date: Date) {
   return date.toISOString().slice(0, 7);
 }

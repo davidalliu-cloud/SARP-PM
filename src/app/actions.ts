@@ -72,6 +72,7 @@ export async function createProject(formData: FormData) {
       clientName: text(formData, "clientName") || null,
       startDate: new Date(text(formData, "startDate")),
       status: text(formData, "status") as ProjectStatus,
+      budgetAmount: numberValue(formData.get("budgetAmount")),
     },
   });
 
@@ -90,6 +91,7 @@ export async function updateProjectBasics(formData: FormData) {
     data: {
       name: text(formData, "name"),
       clientName: text(formData, "clientName") || null,
+      budgetAmount: numberValue(formData.get("budgetAmount")),
     },
   });
 
@@ -108,6 +110,22 @@ export async function updateProjectStatus(formData: FormData) {
   await prisma.project.update({
     where: { id },
     data: { status },
+  });
+
+  revalidatePath("/");
+  revalidatePath("/projects");
+  revalidatePath(`/projects/${id}`);
+  revalidatePath(`/projects/${id}/monthly`);
+}
+
+export async function updateProjectBudget(formData: FormData) {
+  await requireUser();
+
+  const id = text(formData, "id");
+
+  await prisma.project.update({
+    where: { id },
+    data: { budgetAmount: numberValue(formData.get("budgetAmount")) },
   });
 
   revalidatePath("/");

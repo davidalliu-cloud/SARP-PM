@@ -1,11 +1,11 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createInvoice, updateProjectStatus } from "@/app/actions";
+import { createInvoice, updateProjectBudget, updateProjectStatus } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
 import { dateInputValue, decimal, money, monthInputValue } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { projectTotals } from "@/lib/totals";
+import { budgetTotals, projectTotals } from "@/lib/totals";
 import { DailyRecordForm } from "./DailyRecordForm";
 import { DailyRecordsManager } from "./DailyRecordsManager";
 import { InvoicesManager } from "./InvoicesManager";
@@ -35,6 +35,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   const totals = projectTotals(project.dailyRecords, project.invoices);
+  const budget = budgetTotals(project.budgetAmount, totals.totalCost);
   const outstandingInvoices = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
   const dailyRecords = project.dailyRecords.map((record) => ({
     id: record.id,
@@ -83,6 +84,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     <>
       <PageTitle eyebrow={project.clientName || "Project"} title={project.name}>
         <div className="flex flex-wrap items-end gap-2">
+          <form action={updateProjectBudget} className="flex items-end gap-2">
+            <input type="hidden" name="id" value={project.id} />
+            <label className="min-w-44">
+              Budget
+              <input name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} />
+            </label>
+            <button className="btn btn-small btn-save mb-0.5" type="submit">Save budget</button>
+          </form>
           <form action={updateProjectStatus} className="flex items-end gap-2">
             <input type="hidden" name="id" value={project.id} />
             <label className="min-w-40">
@@ -100,11 +109,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </PageTitle>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-6">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-9">
+        <StatCard label="Budget" value={project.budgetAmount > 0 ? money(project.budgetAmount) : "Not set"} detail={project.budgetAmount > 0 ? `${decimal(budget.budgetUsed)}% used` : undefined} tone={budget.isOverBudget ? "maroon" : "blue"} />
         <StatCard label="Product cost" value={money(totals.productCost)} />
         <StatCard label="Labour cost" value={money(totals.labourCost)} />
         <StatCard label="Expenses" value={money(totals.expenseCost)} />
         <StatCard label="Total cost" value={money(totals.totalCost)} tone="maroon" />
+        <StatCard label="Budget left" value={project.budgetAmount > 0 ? money(budget.budgetRemaining) : "-"} detail={budget.isOverBudget ? "Over budget" : undefined} tone={budget.isOverBudget ? "maroon" : "green"} />
         <StatCard label="Invoiced" value={money(totals.invoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(outstandingInvoices)} tone={outstandingInvoices > 0 ? "maroon" : "green"} />
         <StatCard label="Profit margin" value={`${decimal(totals.margin)}%`} detail={money(totals.profit)} tone={totals.profit >= 0 ? "green" : "maroon"} />

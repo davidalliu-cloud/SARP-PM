@@ -21,6 +21,7 @@ export async function POST(request: Request) {
       clientName: body.clientName || null,
       startDate: new Date(body.startDate),
       status: (body.status || "NOT_STARTED") as ProjectStatus,
+      budgetAmount: body.budgetAmount == null ? 0 : Number(body.budgetAmount),
     },
   });
   return NextResponse.json(project, { status: 201 });
