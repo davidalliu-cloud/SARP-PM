@@ -145,3 +145,4 @@ th {
 .status-active { background: #e6f8f6; color: #285d59; }
 .status-finished { background: #eceef6; color: #373455; }
 .status-on-hold { background: #f4e8eb; color: var(--maroon); }
+.status-risk { background: #fff3d8; color: #7a4b00; }

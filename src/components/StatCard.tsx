@@ -8,7 +8,7 @@ export function StatCard({
 }: {
   label: string;
   value: ReactNode;
-  tone?: "default" | "maroon" | "blue" | "green";
+  tone?: "default" | "maroon" | "blue" | "green" | "amber";
   detail?: string;
 }) {
   const colors = {
@@ -16,6 +16,7 @@ export function StatCard({
     maroon: "border-[#5b193f]",
     blue: "border-[#777da7]",
     green: "border-[#e6f8f6]",
+    amber: "border-[#c28a2c]",
   };
 
   return (
