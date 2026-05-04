@@ -11,6 +11,7 @@ function hashPassword(password: string, salt = randomBytes(16).toString("hex")) 
 async function main() {
   await prisma.session.deleteMany();
   await prisma.user.deleteMany();
+  await prisma.attachment.deleteMany();
   await prisma.invoice.deleteMany();
   await prisma.expenseItem.deleteMany();
   await prisma.expenseType.deleteMany();

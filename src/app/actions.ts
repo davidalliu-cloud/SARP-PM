@@ -6,6 +6,8 @@ import { redirect } from "next/navigation";
 import { hashPassword, requireUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 
+const MAX_ATTACHMENT_SIZE = 8 * 1024 * 1024;
+
 function text(formData: FormData, key: string) {
   const value = formData.get(key);
   return typeof value === "string" ? value.trim() : "";
@@ -429,4 +431,50 @@ export async function deleteInvoice(formData: FormData) {
   revalidatePath(`/projects/${projectId}`);
   revalidatePath(`/projects/${projectId}/monthly`);
   revalidatePath("/");
+}
+
+export async function createAttachment(formData: FormData) {
+  await requireUser();
+
+  const projectId = text(formData, "projectId");
+  const dailyRecordId = text(formData, "dailyRecordId") || null;
+  const invoiceId = text(formData, "invoiceId") || null;
+  const category = text(formData, "category") || "Other";
+  const label = text(formData, "label") || null;
+  const file = formData.get("file");
+
+  if (!(file instanceof File) || file.size === 0) {
+    throw new Error("Select a file to upload.");
+  }
+
+  if (file.size > MAX_ATTACHMENT_SIZE) {
+    throw new Error("Attachment is too large. Maximum size is 8 MB.");
+  }
+
+  await prisma.attachment.create({
+    data: {
+      projectId,
+      dailyRecordId,
+      invoiceId,
+      category,
+      label,
+      fileName: file.name,
+      contentType: file.type || "application/octet-stream",
+      size: file.size,
+      data: Buffer.from(await file.arrayBuffer()),
+    },
+  });
+
+  revalidatePath(`/projects/${projectId}`);
+}
+
+export async function deleteAttachment(formData: FormData) {
+  await requireUser();
+
+  const id = text(formData, "id");
+  const projectId = text(formData, "projectId");
+
+  await prisma.attachment.delete({ where: { id } });
+
+  revalidatePath(`/projects/${projectId}`);
 }

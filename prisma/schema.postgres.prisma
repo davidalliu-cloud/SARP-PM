@@ -50,6 +50,7 @@ model Project {
   budgetAmount Float         @default(0)
   dailyRecords DailyRecord[]
   invoices     Invoice[]
+  attachments  Attachment[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -93,6 +94,7 @@ model DailyRecord {
   productItems ProductUsageItem[]
   labourItems  LabourEntryItem[]
   expenseItems ExpenseItem[]
+  attachments  Attachment[]
   createdAt    DateTime           @default(now())
   updatedAt    DateTime           @updatedAt
 }
@@ -142,6 +144,24 @@ model Invoice {
   isPaid       Boolean  @default(false)
   paidDate     DateTime?
   notes        String?
+  attachments  Attachment[]
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model Attachment {
+  id            String       @id @default(cuid())
+  projectId     String
+  project       Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  dailyRecordId String?
+  dailyRecord   DailyRecord? @relation(fields: [dailyRecordId], references: [id], onDelete: SetNull)
+  invoiceId     String?
+  invoice       Invoice?     @relation(fields: [invoiceId], references: [id], onDelete: SetNull)
+  category      String
+  label         String?
+  fileName      String
+  contentType   String
+  size          Int
+  data          Bytes
+  createdAt     DateTime     @default(now())
 }

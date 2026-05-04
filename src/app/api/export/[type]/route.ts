@@ -71,6 +71,32 @@ export async function GET(
     return csvResponse(`sarp-employees-${todayStamp()}.csv`, body);
   }
 
+  if (type === "attachments") {
+    const attachments = await prisma.attachment.findMany({
+      include: {
+        project: true,
+        dailyRecord: true,
+        invoice: true,
+      },
+      orderBy: [{ createdAt: "desc" }],
+    });
+    const body = csvRows(
+      ["Project", "Category", "File name", "Note", "Size", "Content type", "Daily record date", "Invoice", "Uploaded"],
+      attachments.map((attachment) => [
+        attachment.project.name,
+        attachment.category,
+        attachment.fileName,
+        attachment.label || "",
+        attachment.size,
+        attachment.contentType,
+        attachment.dailyRecord?.date || "",
+        attachment.invoice?.invoiceNo || attachment.invoice?.monthCovered || "",
+        attachment.createdAt,
+      ]),
+    );
+    return csvResponse(`sarp-attachments-${todayStamp()}.csv`, body);
+  }
+
   if (type === "daily-records") {
     const records = await prisma.dailyRecord.findMany({
       include: {

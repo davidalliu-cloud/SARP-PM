@@ -6,6 +6,7 @@ import { StatCard } from "@/components/StatCard";
 import { dateInputValue, decimal, money, monthInputValue } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
+import { AttachmentsPanel } from "./AttachmentsPanel";
 import { DailyRecordForm } from "./DailyRecordForm";
 import { DailyRecordsManager } from "./DailyRecordsManager";
 import { InvoicesManager } from "./InvoicesManager";
@@ -25,6 +26,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           orderBy: { date: "desc" },
         },
         invoices: { orderBy: { invoiceDate: "desc" } },
+        attachments: {
+          select: {
+            id: true,
+            category: true,
+            label: true,
+            fileName: true,
+            contentType: true,
+            size: true,
+            createdAt: true,
+            dailyRecord: { select: { date: true } },
+            invoice: { select: { invoiceNo: true, monthCovered: true } },
+          },
+          orderBy: { createdAt: "desc" },
+        },
       },
     }),
     prisma.product.findMany({ orderBy: { name: "asc" } }),
@@ -156,6 +171,13 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </form>
           </div>
         </div>
+
+        <AttachmentsPanel
+          projectId={project.id}
+          attachments={project.attachments}
+          dailyRecords={project.dailyRecords.map((record) => ({ id: record.id, date: record.date }))}
+          invoices={project.invoices.map((invoice) => ({ id: invoice.id, invoiceNo: invoice.invoiceNo, monthCovered: invoice.monthCovered }))}
+        />
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_430px]">
           <div className="panel p-4">

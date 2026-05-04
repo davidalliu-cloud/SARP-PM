@@ -18,6 +18,10 @@ async function main() {
     labourEntryItems: await prisma.labourEntryItem.findMany(),
     expenseItems: await prisma.expenseItem.findMany(),
     invoices: await prisma.invoice.findMany({ orderBy: { createdAt: "asc" } }),
+    attachments: (await prisma.attachment.findMany({ orderBy: { createdAt: "asc" } })).map((attachment) => ({
+      ...attachment,
+      data: Buffer.from(attachment.data).toString("base64"),
+    })),
   };
 
   writeFileSync(outputPath, JSON.stringify(data, null, 2));

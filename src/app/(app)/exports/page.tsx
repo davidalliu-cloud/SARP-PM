@@ -33,17 +33,24 @@ const exportCards = [
     href: "/api/export/employees",
     countKey: "employees" as const,
   },
+  {
+    title: "Attachments index",
+    description: "Project files list with categories, links, upload dates, and file sizes.",
+    href: "/api/export/attachments",
+    countKey: "attachments" as const,
+  },
 ];
 
 export default async function ExportsPage() {
-  const [projects, dailyRecords, invoices, products, employees] = await Promise.all([
+  const [projects, dailyRecords, invoices, products, employees, attachments] = await Promise.all([
     prisma.project.count(),
     prisma.dailyRecord.count(),
     prisma.invoice.count(),
     prisma.product.count(),
     prisma.employee.count(),
+    prisma.attachment.count(),
   ]);
-  const counts = { projects, dailyRecords, invoices, products, employees };
+  const counts = { projects, dailyRecords, invoices, products, employees, attachments };
 
   return (
     <>

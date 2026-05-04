@@ -100,6 +100,19 @@ type ExportedData = {
     createdAt: JsonDate;
     updatedAt: JsonDate;
   }>;
+  attachments?: Array<{
+    id: string;
+    projectId: string;
+    dailyRecordId: string | null;
+    invoiceId: string | null;
+    category: string;
+    label: string | null;
+    fileName: string;
+    contentType: string;
+    size: number;
+    data: string;
+    createdAt: JsonDate;
+  }>;
 };
 
 async function createManyInBatches<T>(
@@ -128,6 +141,7 @@ async function main() {
 
   console.log("Clearing online database tables...");
   await prisma.session.deleteMany();
+  await prisma.attachment.deleteMany();
   await prisma.invoice.deleteMany();
   await prisma.expenseItem.deleteMany();
   await prisma.labourEntryItem.deleteMany();
@@ -217,6 +231,16 @@ async function main() {
       updatedAt: date(invoice.updatedAt),
     })),
     (batch) => prisma.invoice.createMany({ data: batch })
+  );
+
+  await createManyInBatches(
+    "attachments",
+    (data.attachments ?? []).map((attachment) => ({
+      ...attachment,
+      data: Buffer.from(attachment.data, "base64"),
+      createdAt: date(attachment.createdAt),
+    })),
+    (batch) => prisma.attachment.createMany({ data: batch })
   );
 
   console.log(`Imported local data into online database: ${data.projects.length} projects, ${data.products.length} products, ${data.dailyRecords.length} daily records.`);
