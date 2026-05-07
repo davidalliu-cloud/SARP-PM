@@ -11,10 +11,40 @@ const projectSections = [
   { title: "Finished", statuses: ["FINISHED"], border: "border-[#bdc8d0]", bg: "bg-[#f7fbfa]" },
 ];
 
+function percent(value: number, total: number) {
+  return total > 0 ? (value / total) * 100 : 0;
+}
+
+function BarRow({
+  label,
+  value,
+  total,
+  detail,
+  color = "bg-[#777da7]",
+}: {
+  label: string;
+  value: number;
+  total: number;
+  detail: string;
+  color?: string;
+}) {
+  return (
+    <div>
+      <div className="mb-1 flex items-center justify-between gap-3 text-sm">
+        <span className="truncate font-bold text-[#373455]">{label}</span>
+        <span className="shrink-0 font-black text-[#373455]">{detail}</span>
+      </div>
+      <div className="h-3 overflow-hidden rounded bg-[#e8eef0]">
+        <div className={`h-full rounded ${color}`} style={{ width: `${Math.max(percent(value, total), value > 0 ? 3 : 0)}%` }} />
+      </div>
+    </div>
+  );
+}
+
 export default async function DashboardPage() {
   const projects = await prisma.project.findMany({
     include: {
-      dailyRecords: { include: { productItems: true, labourItems: true, expenseItems: true } },
+      dailyRecords: { include: { productItems: { include: { product: true } }, labourItems: true, expenseItems: true } },
       invoices: true,
     },
     orderBy: { createdAt: "desc" },
@@ -38,6 +68,18 @@ export default async function DashboardPage() {
   const profit = totalInvoiced - totalCost;
   const margin = totalInvoiced > 0 ? (profit / totalInvoiced) * 100 : 0;
   const maxProjectValue = Math.max(...rows.map((row) => Math.max(row.totals.totalCost, row.totals.invoiced, 1)), 1);
+  const totalProductCost = rows.reduce((sum, row) => sum + row.totals.productCost, 0);
+  const totalLabourCost = rows.reduce((sum, row) => sum + row.totals.labourCost, 0);
+  const totalExpenseCost = rows.reduce((sum, row) => sum + row.totals.expenseCost, 0);
+  const costBreakdown = [
+    { label: "Products", value: totalProductCost, color: "bg-[#5b193f]" },
+    { label: "Labour", value: totalLabourCost, color: "bg-[#777da7]" },
+    { label: "Expenses", value: totalExpenseCost, color: "bg-[#285d59]" },
+  ];
+  const materialUsage = new Map<string, { name: string; unit: string; quantity: number; cost: number }>();
+  const expenseBreakdown = new Map<string, number>();
+  let internalLabourCost = 0;
+  let externalLabourCost = 0;
 
   const monthly = new Map<string, { cost: number; invoiced: number }>();
   projects.forEach((project) => {
@@ -48,6 +90,20 @@ export default async function DashboardPage() {
       current.cost += record.labourItems.reduce((sum, item) => sum + item.dailyWage, 0);
       current.cost += record.expenseItems.reduce((sum, item) => sum + item.amount, 0);
       monthly.set(key, current);
+
+      record.productItems.forEach((item) => {
+        const currentMaterial = materialUsage.get(item.productId) ?? { name: item.product.name, unit: item.product.unit, quantity: 0, cost: 0 };
+        currentMaterial.quantity += item.quantity;
+        currentMaterial.cost += item.quantity * item.costPerUnit;
+        materialUsage.set(item.productId, currentMaterial);
+      });
+      record.labourItems.forEach((item) => {
+        if (item.employeeId) internalLabourCost += item.dailyWage;
+        else externalLabourCost += item.dailyWage;
+      });
+      record.expenseItems.forEach((item) => {
+        expenseBreakdown.set(item.category, (expenseBreakdown.get(item.category) ?? 0) + item.amount);
+      });
     });
     project.invoices.forEach((invoice) => {
       const current = monthly.get(invoice.monthCovered) ?? { cost: 0, invoiced: 0 };
@@ -57,6 +113,11 @@ export default async function DashboardPage() {
   });
   const monthlyRows = Array.from(monthly.entries()).sort(([a], [b]) => a.localeCompare(b)).slice(-6);
   const maxMonthly = Math.max(...monthlyRows.map(([, row]) => Math.max(row.cost, row.invoiced, 1)), 1);
+  const topMaterials = Array.from(materialUsage.values()).sort((a, b) => b.cost - a.cost).slice(0, 6);
+  const maxMaterialCost = Math.max(...topMaterials.map((item) => item.cost), 1);
+  const expenseRows = Array.from(expenseBreakdown.entries()).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5);
+  const maxExpenseCost = Math.max(...expenseRows.map((item) => item.value), 1);
+  const mostExpensiveProjects = [...rows].sort((a, b) => b.totals.totalCost - a.totals.totalCost).slice(0, 5);
 
   return (
     <>
@@ -73,6 +134,71 @@ export default async function DashboardPage() {
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
         <StatCard label="Profit / loss" value={money(profit)} tone={profit >= 0 ? "green" : "maroon"} />
         <StatCard label="Profit margin" value={`${decimal(margin)}%`} tone="maroon" />
+      </section>
+
+      <section className="mt-6 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
+        <div className="panel p-4">
+          <h2 className="mb-4 text-lg font-black">Cost breakdown</h2>
+          <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
+            {costBreakdown.map((item) => (
+              <div key={item.label} className={item.color} style={{ width: `${percent(item.value, totalCost)}%` }} />
+            ))}
+          </div>
+          <div className="grid gap-3">
+            {costBreakdown.map((item) => (
+              <BarRow key={item.label} label={item.label} value={item.value} total={totalCost} detail={`${money(item.value)} / ${decimal(percent(item.value, totalCost))}%`} color={item.color} />
+            ))}
+          </div>
+        </div>
+
+        <div className="panel p-4">
+          <h2 className="mb-4 text-lg font-black">Most material used</h2>
+          <div className="grid gap-3">
+            {topMaterials.map((item) => (
+              <BarRow
+                key={`${item.name}-${item.unit}`}
+                label={item.name}
+                value={item.cost}
+                total={maxMaterialCost}
+                detail={`${decimal(item.quantity, 2)} ${item.unit} / ${money(item.cost)}`}
+                color="bg-[#5b193f]"
+              />
+            ))}
+            {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No product usage recorded yet.</div> : null}
+          </div>
+        </div>
+
+        <div className="panel p-4 xl:col-span-2 2xl:col-span-1">
+          <h2 className="mb-4 text-lg font-black">Labour split</h2>
+          <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
+            <div className="bg-[#777da7]" style={{ width: `${percent(internalLabourCost, totalLabourCost)}%` }} />
+            <div className="bg-[#285d59]" style={{ width: `${percent(externalLabourCost, totalLabourCost)}%` }} />
+          </div>
+          <div className="grid gap-3">
+            <BarRow label="Employees" value={internalLabourCost} total={totalLabourCost} detail={`${money(internalLabourCost)} / ${decimal(percent(internalLabourCost, totalLabourCost))}%`} color="bg-[#777da7]" />
+            <BarRow label="External m2 teams" value={externalLabourCost} total={totalLabourCost} detail={`${money(externalLabourCost)} / ${decimal(percent(externalLabourCost, totalLabourCost))}%`} color="bg-[#285d59]" />
+          </div>
+        </div>
+
+        <div className="panel p-4">
+          <h2 className="mb-4 text-lg font-black">Expense categories</h2>
+          <div className="grid gap-3">
+            {expenseRows.map((item) => (
+              <BarRow key={item.label} label={item.label} value={item.value} total={maxExpenseCost} detail={money(item.value)} color="bg-[#285d59]" />
+            ))}
+            {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No extra expenses recorded yet.</div> : null}
+          </div>
+        </div>
+
+        <div className="panel p-4 xl:col-span-1 2xl:col-span-2">
+          <h2 className="mb-4 text-lg font-black">Highest cost projects</h2>
+          <div className="grid gap-3">
+            {mostExpensiveProjects.map(({ project, totals }) => (
+              <BarRow key={project.id} label={project.name} value={totals.totalCost} total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)} detail={money(totals.totalCost)} color={totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"} />
+            ))}
+            {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
+          </div>
+        </div>
       </section>
 
       <section className="mt-6 grid gap-4 xl:grid-cols-[1.3fr_1fr]">
