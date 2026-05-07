@@ -1,10 +1,8 @@
 import Link from "next/link";
-import { updateProjectBasics } from "@/app/actions";
-import { DeleteProjectButton } from "@/components/DeleteProjectButton";
 import { PageTitle } from "@/components/PageTitle";
-import { money, decimal, statusClass, statusLabel } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
+import { ProjectsTable } from "./ProjectsTable";
 
 export default async function ProjectsPage({
   searchParams,
@@ -27,6 +25,25 @@ export default async function ProjectsPage({
       (project.clientName || "").toLowerCase().includes(query);
     const matchesStatus = status === "ALL" || project.status === status;
     return matchesSearch && matchesStatus;
+  });
+  const projectRows = filteredProjects.map((project) => {
+    const totals = projectTotals(project.dailyRecords, project.invoices);
+    const budget = budgetTotals(project.budgetAmount, totals.totalCost);
+    return {
+      id: project.id,
+      name: project.name,
+      clientName: project.clientName,
+      startDate: project.startDate.toISOString(),
+      status: project.status,
+      budgetAmount: project.budgetAmount,
+      budgetRemaining: budget.budgetRemaining,
+      budgetUsed: budget.budgetUsed,
+      isOverBudget: budget.isOverBudget,
+      totalCost: totals.totalCost,
+      invoiced: totals.invoiced,
+      profit: totals.profit,
+      margin: totals.margin,
+    };
   });
 
   return (
@@ -59,67 +76,7 @@ export default async function ProjectsPage({
           Showing {filteredProjects.length} of {projects.length} projects
         </div>
       </form>
-      <div className="panel table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Project</th>
-              <th>Client</th>
-              <th>Start date</th>
-              <th>Status</th>
-              <th>Budget</th>
-              <th>Total cost</th>
-              <th>Budget left</th>
-              <th>Invoiced</th>
-              <th>Profit/loss</th>
-              <th>Margin</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredProjects.map((project) => {
-              const totals = projectTotals(project.dailyRecords, project.invoices);
-              const budget = budgetTotals(project.budgetAmount, totals.totalCost);
-              return (
-                <tr key={project.id}>
-                  <td>
-                    <form id={`project-${project.id}`} action={updateProjectBasics}>
-                      <input type="hidden" name="id" value={project.id} />
-                      <input name="name" defaultValue={project.name} required aria-label={`Project name for ${project.name}`} />
-                    </form>
-                    <Link href={`/projects/${project.id}`} className="mt-1 inline-block text-xs font-black text-[#777da7]">Open project</Link>
-                  </td>
-                  <td>
-                    <input form={`project-${project.id}`} name="clientName" defaultValue={project.clientName || ""} placeholder="Client name" aria-label={`Client name for ${project.name}`} />
-                  </td>
-                  <td>{project.startDate.toLocaleDateString()}</td>
-                  <td><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></td>
-                  <td>
-                    <input className="h-9 py-1.5" form={`project-${project.id}`} name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} aria-label={`Budget for ${project.name}`} />
-                  </td>
-                  <td>{money(totals.totalCost)}</td>
-                  <td className={budget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
-                    {project.budgetAmount > 0 ? money(budget.budgetRemaining) : "-"}
-                    {project.budgetAmount > 0 ? <div className="mt-1 text-xs text-[#6b7188]">{decimal(budget.budgetUsed)}% used</div> : null}
-                  </td>
-                  <td>{money(totals.invoiced)}</td>
-                  <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>
-                  <td>{decimal(totals.margin)}%</td>
-                  <td>
-                    <div className="flex flex-nowrap gap-2">
-                      <button form={`project-${project.id}`} className="btn btn-small btn-save" type="submit">Save</button>
-                      <DeleteProjectButton id={project.id} name={project.name} />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-            {!filteredProjects.length ? (
-              <tr><td colSpan={11} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
-            ) : null}
-          </tbody>
-        </table>
-      </div>
+      <ProjectsTable projects={projectRows} />
     </>
   );
 }

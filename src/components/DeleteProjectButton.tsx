@@ -13,7 +13,7 @@ export function DeleteProjectButton({ id, name }: { id: string; name: string }) 
       }}
     >
       <input type="hidden" name="id" value={id} />
-      <button className="btn btn-small btn-delete" type="submit">Delete</button>
+      <button className="btn btn-small btn-delete w-full justify-center" type="submit">Delete</button>
     </form>
   );
 }
