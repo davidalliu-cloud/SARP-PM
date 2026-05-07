@@ -57,8 +57,14 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                       <input name="name" defaultValue={project.name} required aria-label={`Project name for ${project.name}`} />
                     </form>
                   ) : (
-                    <Link href={`/projects/${project.id}`} className="font-black text-[#373455] underline-offset-4 hover:text-[#5b193f] hover:underline">
-                      {project.name}
+                    <Link
+                      href={`/projects/${project.id}`}
+                      className="group inline-flex max-w-64 items-center gap-2 rounded-md px-2 py-1 -ml-2 font-black text-[#373455] transition hover:bg-[#f4e8eb] hover:text-[#5b193f] focus-visible:bg-[#f4e8eb] focus-visible:text-[#5b193f]"
+                    >
+                      <span className="truncate underline-offset-4 group-hover:underline group-focus-visible:underline">{project.name}</span>
+                      <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-black uppercase text-[#5b193f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                        Open
+                      </span>
                     </Link>
                   )}
                 </td>
