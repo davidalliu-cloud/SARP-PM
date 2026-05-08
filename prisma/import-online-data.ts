@@ -51,6 +51,7 @@ type ExportedData = {
     startDate: JsonDate;
     status: ProjectStatus;
     budgetAmount?: number;
+    contractAreaM2?: number;
     createdAt: JsonDate;
     updatedAt: JsonDate;
   }>;
@@ -58,6 +59,7 @@ type ExportedData = {
     id: string;
     projectId: string;
     date: JsonDate;
+    completedAreaM2?: number;
     notes: string | null;
     createdAt: JsonDate;
     updatedAt: JsonDate;
@@ -199,6 +201,7 @@ async function main() {
     data.projects.map((project) => ({
       ...project,
       budgetAmount: project.budgetAmount ?? 0,
+      contractAreaM2: project.contractAreaM2 ?? 0,
       startDate: date(project.startDate),
       createdAt: date(project.createdAt),
       updatedAt: date(project.updatedAt),
@@ -210,6 +213,7 @@ async function main() {
     "daily records",
     data.dailyRecords.map((dailyRecord) => ({
       ...dailyRecord,
+      completedAreaM2: dailyRecord.completedAreaM2 ?? 0,
       date: date(dailyRecord.date),
       createdAt: date(dailyRecord.createdAt),
       updatedAt: date(dailyRecord.updatedAt),

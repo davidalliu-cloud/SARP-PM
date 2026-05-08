@@ -24,6 +24,10 @@ export default function NewProjectPage() {
           <input name="budgetAmount" type="number" min="0" step="0.01" placeholder="50000.00" />
         </label>
         <label>
+          Project area m2
+          <input name="contractAreaM2" type="number" min="0" step="0.01" placeholder="1200" />
+        </label>
+        <label>
           Status
           <select name="status" required defaultValue="NOT_STARTED">
             <option value="NOT_STARTED">Not Started</option>

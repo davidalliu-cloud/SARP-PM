@@ -44,6 +44,7 @@ export interface DailyRecord {
   id: string
   projectId: string
   date: string
+  completedAreaM2: number
   notes: string | null
   createdAt: string
   productUsages: DailyProductUsage[]
@@ -73,6 +74,8 @@ export interface Project {
   client: string | null
   startDate: string
   status: ProjectStatus
+  budgetAmount: number
+  contractAreaM2: number
   createdAt: string
   updatedAt: string
 }

@@ -38,6 +38,7 @@ export default async function MonthlyReportPage({
   const records = project.dailyRecords.filter((record) => monthKey(record.date) === selected);
   const invoices = project.invoices.filter((invoice) => invoice.monthCovered === selected);
   const totals = projectTotals(records, invoices);
+  const completedAreaM2 = records.reduce((sum, record) => sum + record.completedAreaM2, 0);
 
   return (
     <>
@@ -74,6 +75,14 @@ export default async function MonthlyReportPage({
         <StatCard label="Margin" value={`${decimal(totals.margin)}%`} />
       </section>
 
+      <section className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+        <StatCard label="Completed area" value={completedAreaM2 > 0 ? `${decimal(completedAreaM2, 1)} m2` : "-"} tone={completedAreaM2 > 0 ? "green" : "default"} />
+        <StatCard label="Product cost / m2" value={completedAreaM2 > 0 ? money(totals.productCost / completedAreaM2) : "-"} tone="blue" />
+        <StatCard label="Labour cost / m2" value={completedAreaM2 > 0 ? money(totals.labourCost / completedAreaM2) : "-"} tone="blue" />
+        <StatCard label="Total cost / m2" value={completedAreaM2 > 0 ? money(totals.totalCost / completedAreaM2) : "-"} tone="maroon" />
+        <StatCard label="Profit / m2" value={completedAreaM2 > 0 ? money(totals.profit / completedAreaM2) : "-"} tone={totals.profit >= 0 ? "green" : "maroon"} />
+      </section>
+
       <section className="panel mt-5 p-4">
         <h2 className="mb-3 text-xl font-black">Daily breakdown for {selected}</h2>
         <div className="table-wrap">
@@ -81,6 +90,7 @@ export default async function MonthlyReportPage({
             <thead>
               <tr>
                 <th>Date</th>
+                <th>Area</th>
                 <th>Products</th>
                 <th>Employees</th>
                 <th>Expenses</th>
@@ -95,6 +105,7 @@ export default async function MonthlyReportPage({
               {records.map((record) => (
                 <tr key={record.id}>
                   <td className="font-bold">{record.date.toLocaleDateString()}</td>
+                  <td>{record.completedAreaM2 > 0 ? `${record.completedAreaM2.toLocaleString()} m2` : "-"}</td>
                   <td>{record.productItems.map((item) => `${item.product.name}: ${item.quantity} ${item.product.unit}`).join(", ") || "-"}</td>
                   <td>{record.labourItems.map((item) => item.employee?.name || item.employeeName || (item.externalTeamName ? `${item.externalTeamName} (${item.squareMeters || 0} m2)` : "Former employee")).join(", ") || "-"}</td>
                   <td>{record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join(", ") || "-"}</td>
@@ -106,7 +117,7 @@ export default async function MonthlyReportPage({
                 </tr>
               ))}
               {!records.length ? (
-                <tr><td colSpan={9} className="py-8 text-center font-bold text-[#6b7188]">No daily records for this month.</td></tr>
+                <tr><td colSpan={10} className="py-8 text-center font-bold text-[#6b7188]">No daily records for this month.</td></tr>
               ) : null}
             </tbody>
           </table>

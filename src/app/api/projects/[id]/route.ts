@@ -33,6 +33,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       startDate: body.startDate ? new Date(body.startDate) : undefined,
       status: body.status as ProjectStatus | undefined,
       budgetAmount: body.budgetAmount == null ? undefined : Number(body.budgetAmount),
+      contractAreaM2: body.contractAreaM2 == null ? undefined : Number(body.contractAreaM2),
     },
   });
   return NextResponse.json(project);

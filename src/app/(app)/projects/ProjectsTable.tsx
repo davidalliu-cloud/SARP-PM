@@ -13,6 +13,7 @@ type ProjectRow = {
   startDate: string;
   status: string;
   budgetAmount: number;
+  contractAreaM2: number;
   budgetRemaining: number;
   budgetUsed: number;
   isOverBudget: boolean;
@@ -35,6 +36,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             <th>Start date</th>
             <th>Status</th>
             <th>Budget</th>
+            <th>Area</th>
             <th>Total cost</th>
             <th>Budget left</th>
             <th>Invoiced</th>
@@ -84,6 +86,13 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                     project.budgetAmount > 0 ? money(project.budgetAmount) : "-"
                   )}
                 </td>
+                <td>
+                  {isEditing ? (
+                    <input className="h-9 py-1.5" form={formId} name="contractAreaM2" type="number" min="0" step="0.01" defaultValue={project.contractAreaM2} aria-label={`Area m2 for ${project.name}`} />
+                  ) : (
+                    project.contractAreaM2 > 0 ? `${project.contractAreaM2.toLocaleString()} m2` : "-"
+                  )}
+                </td>
                 <td>{money(project.totalCost)}</td>
                 <td className={project.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
                   {project.budgetAmount > 0 ? money(project.budgetRemaining) : "-"}
@@ -107,7 +116,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             );
           })}
           {!projects.length ? (
-            <tr><td colSpan={11} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
+            <tr><td colSpan={12} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
           ) : null}
         </tbody>
       </table>

@@ -87,6 +87,7 @@ export async function createProject(formData: FormData) {
       startDate: new Date(text(formData, "startDate")),
       status: text(formData, "status") as ProjectStatus,
       budgetAmount: numberValue(formData.get("budgetAmount")),
+      contractAreaM2: numberValue(formData.get("contractAreaM2")),
     },
   });
 
@@ -106,6 +107,7 @@ export async function updateProjectBasics(formData: FormData) {
       name: text(formData, "name"),
       clientName: text(formData, "clientName") || null,
       budgetAmount: numberValue(formData.get("budgetAmount")),
+      contractAreaM2: numberValue(formData.get("contractAreaM2")),
     },
   });
 
@@ -324,6 +326,7 @@ export async function createDailyRecord(formData: FormData) {
     data: {
       projectId,
       date: new Date(text(formData, "date")),
+      completedAreaM2: numberValue(formData.get("completedAreaM2")),
       notes: text(formData, "notes") || null,
       productItems: { create: items.productItems },
       labourItems: { create: items.labourItems },
@@ -347,6 +350,7 @@ export async function updateDailyRecord(formData: FormData) {
     where: { id: recordId },
     data: {
       date: new Date(text(formData, "date")),
+      completedAreaM2: numberValue(formData.get("completedAreaM2")),
       notes: text(formData, "notes") || null,
       productItems: {
         deleteMany: {},

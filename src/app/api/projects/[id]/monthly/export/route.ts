@@ -34,16 +34,18 @@ export async function GET(
   const invoices = project.invoices.filter((invoice) => invoice.monthCovered === selected);
   const totals = projectTotals(records, invoices);
   const outstanding = invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+  const completedAreaM2 = records.reduce((sum, record) => sum + record.completedAreaM2, 0);
 
   const summary = csvRows(
-    ["Project", "Month", "Product cost", "Labour cost", "Expenses", "Total cost", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
-    [[project.name, selected, totals.productCost, totals.labourCost, totals.expenseCost, totals.totalCost, totals.invoiced, outstanding, totals.profit, totals.margin]],
+    ["Project", "Month", "Completed area m2", "Product cost", "Labour cost", "Expenses", "Total cost", "Total cost per m2", "Invoiced", "Invoiced per m2", "Outstanding", "Profit/loss", "Profit per m2", "Margin %"],
+    [[project.name, selected, completedAreaM2, totals.productCost, totals.labourCost, totals.expenseCost, totals.totalCost, completedAreaM2 > 0 ? totals.totalCost / completedAreaM2 : "", totals.invoiced, completedAreaM2 > 0 ? totals.invoiced / completedAreaM2 : "", outstanding, totals.profit, completedAreaM2 > 0 ? totals.profit / completedAreaM2 : "", totals.margin]],
   );
 
   const daily = csvRows(
-    ["Date", "Products", "Labour", "Expenses", "Product cost", "Labour cost", "Expense cost", "Daily total", "Notes"],
+    ["Date", "Completed area m2", "Products", "Labour", "Expenses", "Product cost", "Labour cost", "Expense cost", "Daily total", "Daily total per m2", "Notes"],
     records.map((record) => [
       record.date,
+      record.completedAreaM2,
       record.productItems.map((item) => `${item.product.name}: ${item.quantity} ${item.product.unit}`).join("; "),
       record.labourItems.map((item) => item.employee?.name || item.employeeName || `${item.externalTeamName || "External team"} (${item.squareMeters || 0} m2)`).join("; "),
       record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join("; "),
@@ -51,6 +53,7 @@ export async function GET(
       recordLabourCost(record),
       recordExpenseCost(record),
       recordTotal(record),
+      record.completedAreaM2 > 0 ? recordTotal(record) / record.completedAreaM2 : "",
       record.notes || "",
     ]),
   );

@@ -8,6 +8,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     data: {
       projectId: id,
       date: new Date(body.date),
+      completedAreaM2: body.completedAreaM2 == null ? 0 : Number(body.completedAreaM2),
       notes: body.notes || null,
       productItems: {
         create: (body.productItems || []).map((item: { productId: string; quantity: number; costPerUnit: number }) => ({

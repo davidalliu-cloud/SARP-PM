@@ -71,6 +71,7 @@ export default async function DashboardPage() {
   const totalProductCost = rows.reduce((sum, row) => sum + row.totals.productCost, 0);
   const totalLabourCost = rows.reduce((sum, row) => sum + row.totals.labourCost, 0);
   const totalExpenseCost = rows.reduce((sum, row) => sum + row.totals.expenseCost, 0);
+  const totalCompletedArea = projects.reduce((sum, project) => sum + project.dailyRecords.reduce((recordSum, record) => recordSum + record.completedAreaM2, 0), 0);
   const costBreakdown = [
     { label: "Products", value: totalProductCost, color: "bg-[#5b193f]" },
     { label: "Labour", value: totalLabourCost, color: "bg-[#777da7]" },
@@ -118,6 +119,21 @@ export default async function DashboardPage() {
   const expenseRows = Array.from(expenseBreakdown.entries()).map(([label, value]) => ({ label, value })).sort((a, b) => b.value - a.value).slice(0, 5);
   const maxExpenseCost = Math.max(...expenseRows.map((item) => item.value), 1);
   const mostExpensiveProjects = [...rows].sort((a, b) => b.totals.totalCost - a.totals.totalCost).slice(0, 5);
+  const projectM2Rows = rows
+    .map((row) => {
+      const completedArea = row.project.dailyRecords.reduce((sum, record) => sum + record.completedAreaM2, 0);
+      return {
+        project: row.project,
+        totals: row.totals,
+        completedArea,
+        totalCostPerM2: completedArea > 0 ? row.totals.totalCost / completedArea : 0,
+        profitPerM2: completedArea > 0 ? row.totals.profit / completedArea : 0,
+      };
+    })
+    .filter((row) => row.completedArea > 0)
+    .sort((a, b) => b.totalCostPerM2 - a.totalCostPerM2)
+    .slice(0, 5);
+  const maxProjectCostPerM2 = Math.max(...projectM2Rows.map((row) => row.totalCostPerM2), 1);
 
   return (
     <>
@@ -129,6 +145,7 @@ export default async function DashboardPage() {
         <StatCard label="Active projects" value={activeProjects} tone="green" />
         <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
         <StatCard label="Total costs" value={money(totalCost)} />
+        <StatCard label="Average cost / m2" value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={totalCompletedArea > 0 ? `${decimal(totalCompletedArea, 1)} m2 completed` : "Enter daily completed m2"} tone={totalCompletedArea > 0 ? "blue" : "default"} />
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
@@ -197,6 +214,23 @@ export default async function DashboardPage() {
               <BarRow key={project.id} label={project.name} value={totals.totalCost} total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)} detail={money(totals.totalCost)} color={totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"} />
             ))}
             {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
+          </div>
+        </div>
+
+        <div className="panel p-4 xl:col-span-2 2xl:col-span-3">
+          <h2 className="mb-4 text-lg font-black">Cost per m2 by project</h2>
+          <div className="grid gap-3">
+            {projectM2Rows.map((row) => (
+              <BarRow
+                key={row.project.id}
+                label={row.project.name}
+                value={row.totalCostPerM2}
+                total={maxProjectCostPerM2}
+                detail={`${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
+                color={row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+              />
+            ))}
+            {!projectM2Rows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">Add completed m2 to daily records to compare project rates.</div> : null}
           </div>
         </div>
       </section>

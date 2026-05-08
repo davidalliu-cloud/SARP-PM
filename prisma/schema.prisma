@@ -48,6 +48,7 @@ model Project {
   startDate    DateTime
   status       ProjectStatus @default(NOT_STARTED)
   budgetAmount Float         @default(0)
+  contractAreaM2 Float        @default(0)
   dailyRecords DailyRecord[]
   invoices     Invoice[]
   attachments  Attachment[]
@@ -90,6 +91,7 @@ model DailyRecord {
   projectId    String
   project      Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
   date         DateTime
+  completedAreaM2 Float       @default(0)
   notes        String?
   productItems ProductUsageItem[]
   labourItems  LabourEntryItem[]

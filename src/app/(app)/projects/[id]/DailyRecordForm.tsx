@@ -76,10 +76,14 @@ export function DailyRecordForm({
   return (
     <form action={createDailyRecord} className="panel grid gap-5 p-5">
       <input type="hidden" name="projectId" value={projectId} />
-      <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+      <div className="grid gap-4 md:grid-cols-[220px_220px_1fr]">
         <label>
           Date
           <input name="date" type="date" required defaultValue={dateInputValue()} />
+        </label>
+        <label>
+          Completed area m2
+          <input name="completedAreaM2" type="number" min="0" step="0.01" placeholder="85" />
         </label>
         <label>
           Notes

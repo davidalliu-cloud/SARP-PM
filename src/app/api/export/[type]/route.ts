@@ -26,21 +26,27 @@ export async function GET(
     });
 
     const body = csvRows(
-      ["Project", "Client", "Start date", "Status", "Budget", "Product cost", "Labour cost", "Expenses", "Total cost", "Budget left", "Budget used %", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
+      ["Project", "Client", "Start date", "Status", "Budget", "Project area m2", "Completed area m2", "Product cost", "Labour cost", "Expenses", "Total cost", "Total cost per m2", "Invoiced per m2", "Profit per m2", "Budget left", "Budget used %", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
       projects.map((project) => {
         const totals = projectTotals(project.dailyRecords, project.invoices);
         const budget = budgetTotals(project.budgetAmount, totals.totalCost);
         const outstanding = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+        const completedAreaM2 = project.dailyRecords.reduce((sum, record) => sum + record.completedAreaM2, 0);
         return [
           project.name,
           project.clientName || "",
           project.startDate,
           project.status,
           project.budgetAmount,
+          project.contractAreaM2,
+          completedAreaM2,
           totals.productCost,
           totals.labourCost,
           totals.expenseCost,
           totals.totalCost,
+          completedAreaM2 > 0 ? totals.totalCost / completedAreaM2 : "",
+          completedAreaM2 > 0 ? totals.invoiced / completedAreaM2 : "",
+          completedAreaM2 > 0 ? totals.profit / completedAreaM2 : "",
           project.budgetAmount > 0 ? budget.budgetRemaining : "",
           project.budgetAmount > 0 ? budget.budgetUsed : "",
           totals.invoiced,
@@ -109,10 +115,11 @@ export async function GET(
     });
 
     const body = csvRows(
-      ["Project", "Date", "Products", "Labour", "Expenses", "Product cost", "Labour cost", "Expense cost", "Daily total", "Notes"],
+      ["Project", "Date", "Completed area m2", "Products", "Labour", "Expenses", "Product cost", "Labour cost", "Expense cost", "Daily total", "Daily total per m2", "Notes"],
       records.map((record) => [
         record.project.name,
         record.date,
+        record.completedAreaM2,
         record.productItems.map((item) => `${item.product.name} (${item.quantity} ${item.product.unit} x ${item.costPerUnit})`).join("; "),
         record.labourItems.map((item) => item.employee?.name || item.employeeName || `${item.externalTeamName || "External team"} (${item.squareMeters || 0} m2 x ${item.ratePerSquareMeter || 0})`).join("; "),
         record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""} (${item.amount})`).join("; "),
@@ -120,6 +127,7 @@ export async function GET(
         recordLabourCost(record),
         recordExpenseCost(record),
         recordTotal(record),
+        record.completedAreaM2 > 0 ? recordTotal(record) / record.completedAreaM2 : "",
         record.notes || "",
       ]),
     );
