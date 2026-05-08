@@ -195,6 +195,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     return map;
   }, new Map<string, { name: string; days: number; squareMeters: number; cost: number }>()).values())
     .sort((a, b) => b.cost - a.cost);
+  const expenseSummary = Array.from(project.dailyRecords.reduce((map, record) => {
+    record.expenseItems.forEach((item) => {
+      const current = map.get(item.category) ?? {
+        category: item.category,
+        entries: 0,
+        cost: 0,
+      };
+      current.entries += 1;
+      current.cost += item.amount;
+      map.set(item.category, current);
+    });
+    return map;
+  }, new Map<string, { category: string; entries: number; cost: number }>()).values())
+    .sort((a, b) => b.cost - a.cost);
   const invoices = project.invoices.map((invoice) => ({
     id: invoice.id,
     projectId: invoice.projectId,
@@ -274,111 +288,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <StatCard label="Remaining area" value={project.contractAreaM2 > 0 ? `${decimal(Math.max(project.contractAreaM2 - completedAreaM2, 0), 1)} m2` : "-"} tone={areaProgress >= 100 ? "green" : areaProgress >= 80 ? "amber" : "blue"} />
       </section>
 
-      <section className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <div className="panel p-4">
-          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="text-xs font-black uppercase text-[#5b193f]">Usage summary</div>
-              <h2 className="text-xl font-black">Products used</h2>
-            </div>
-            <div className="text-sm font-bold text-[#6b7188]">{productUsageSummary.length} products</div>
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Quantity</th>
-                  <th>Total cost</th>
-                  <th>Average cost</th>
-                </tr>
-              </thead>
-              <tbody>
-                {productUsageSummary.map((item) => (
-                  <tr key={item.id}>
-                    <td className="font-black text-[#373455]">{item.name}</td>
-                    <td>{decimal(item.quantity, 2)} {item.unit}</td>
-                    <td className="font-bold">{money(item.cost)}</td>
-                    <td>{item.quantity > 0 ? `${money(item.cost / item.quantity)} / ${item.unit}` : "-"}</td>
-                  </tr>
-                ))}
-                {!productUsageSummary.length ? (
-                  <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No product usage recorded yet.</td></tr>
-                ) : null}
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div className="grid gap-5">
-          <div className="panel p-4">
-            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Labour summary</div>
-                <h2 className="text-xl font-black">Employee man-days</h2>
-              </div>
-              <div className="text-sm font-bold text-[#6b7188]">{employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0)} days</div>
-            </div>
-            <div className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Employee</th>
-                    <th>Man-days</th>
-                    <th>Cost</th>
-                    <th>Average / day</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {employeeLabourSummary.map((item) => (
-                    <tr key={item.id}>
-                      <td className="font-black text-[#373455]">{item.name}</td>
-                      <td>{decimal(item.manDays, 1)}</td>
-                      <td className="font-bold">{money(item.cost)}</td>
-                      <td>{item.manDays > 0 ? money(item.cost / item.manDays) : "-"}</td>
-                    </tr>
-                  ))}
-                  {!employeeLabourSummary.length ? (
-                    <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No employee labour recorded yet.</td></tr>
-                  ) : null}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {externalTeamSummary.length ? (
-            <div className="panel p-4">
-              <div className="mb-3">
-                <div className="text-xs font-black uppercase text-[#5b193f]">External labour</div>
-                <h2 className="text-xl font-black">m2 teams</h2>
-              </div>
-              <div className="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Team</th>
-                      <th>Days</th>
-                      <th>m2</th>
-                      <th>Cost</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {externalTeamSummary.map((item) => (
-                      <tr key={item.name}>
-                        <td className="font-black text-[#373455]">{item.name}</td>
-                        <td>{decimal(item.days, 1)}</td>
-                        <td>{decimal(item.squareMeters, 2)} m2</td>
-                        <td className="font-bold">{money(item.cost)}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          ) : null}
-        </div>
-      </section>
-
       <section className="mt-6 grid gap-5">
         <div className="grid gap-5 2xl:grid-cols-[minmax(0,1fr)_420px]">
           <div>
@@ -446,6 +355,180 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <InvoicesManager invoices={invoices} />
           </div>
         </div>
+      </section>
+
+      <section className="mt-6 grid gap-5">
+        <div className="panel p-4">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
+              <h2 className="text-xl font-black">Product quantities and costs</h2>
+            </div>
+            <div className="text-sm font-bold text-[#6b7188]">{productUsageSummary.length} products / {money(totals.productCost)}</div>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Total quantity</th>
+                  <th>Associated cost</th>
+                  <th>% of total cost</th>
+                  <th>Average cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productUsageSummary.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-black text-[#373455]">{item.name}</td>
+                    <td>{decimal(item.quantity, 2)} {item.unit}</td>
+                    <td className="font-bold">{money(item.cost)}</td>
+                    <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
+                    <td>{item.quantity > 0 ? `${money(item.cost / item.quantity)} / ${item.unit}` : "-"}</td>
+                  </tr>
+                ))}
+                {productUsageSummary.length ? (
+                  <tr className="bg-[#f3f7f3] font-black">
+                    <td>Total products</td>
+                    <td>-</td>
+                    <td>{money(totals.productCost)}</td>
+                    <td>{decimal(totals.totalCost > 0 ? (totals.productCost / totals.totalCost) * 100 : 0)}%</td>
+                    <td>-</td>
+                  </tr>
+                ) : (
+                  <tr><td colSpan={5} className="py-8 text-center font-bold text-[#6b7188]">No product usage recorded yet.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="grid gap-5 xl:grid-cols-2">
+          <div className="panel p-4">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
+                <h2 className="text-xl font-black">Employee labour</h2>
+              </div>
+              <div className="text-sm font-bold text-[#6b7188]">{employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0)} man-days / {money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Man-days</th>
+                    <th>Associated cost</th>
+                    <th>% of total cost</th>
+                    <th>Average / day</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employeeLabourSummary.map((item) => (
+                    <tr key={item.id}>
+                      <td className="font-black text-[#373455]">{item.name}</td>
+                      <td>{decimal(item.manDays, 1)}</td>
+                      <td className="font-bold">{money(item.cost)}</td>
+                      <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
+                      <td>{item.manDays > 0 ? money(item.cost / item.manDays) : "-"}</td>
+                    </tr>
+                  ))}
+                  {employeeLabourSummary.length ? (
+                    <tr className="bg-[#f3f7f3] font-black">
+                      <td>Total employee labour</td>
+                      <td>{decimal(employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0), 1)}</td>
+                      <td>{money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</td>
+                      <td>{decimal(totals.totalCost > 0 ? (employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0) / totals.totalCost) * 100 : 0)}%</td>
+                      <td>-</td>
+                    </tr>
+                  ) : (
+                    <tr><td colSpan={5} className="py-8 text-center font-bold text-[#6b7188]">No employee labour recorded yet.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className="panel p-4">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
+                <h2 className="text-xl font-black">Expenses</h2>
+              </div>
+              <div className="text-sm font-bold text-[#6b7188]">{expenseSummary.length} categories / {money(totals.expenseCost)}</div>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Expense type</th>
+                    <th>Entries</th>
+                    <th>Associated cost</th>
+                    <th>% of total cost</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {expenseSummary.map((item) => (
+                    <tr key={item.category}>
+                      <td className="font-black text-[#373455]">{item.category}</td>
+                      <td>{item.entries}</td>
+                      <td className="font-bold">{money(item.cost)}</td>
+                      <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
+                    </tr>
+                  ))}
+                  {expenseSummary.length ? (
+                    <tr className="bg-[#f3f7f3] font-black">
+                      <td>Total expenses</td>
+                      <td>{expenseSummary.reduce((sum, item) => sum + item.entries, 0)}</td>
+                      <td>{money(totals.expenseCost)}</td>
+                      <td>{decimal(totals.totalCost > 0 ? (totals.expenseCost / totals.totalCost) * 100 : 0)}%</td>
+                    </tr>
+                  ) : (
+                    <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No expenses recorded yet.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {externalTeamSummary.length ? (
+          <div className="panel p-4">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
+                <h2 className="text-xl font-black">External m2 teams</h2>
+              </div>
+              <div className="text-sm font-bold text-[#6b7188]">{money(externalTeamSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Team</th>
+                    <th>Days</th>
+                    <th>Total m2</th>
+                    <th>Associated cost</th>
+                    <th>% of total cost</th>
+                    <th>Average / m2</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {externalTeamSummary.map((item) => (
+                    <tr key={item.name}>
+                      <td className="font-black text-[#373455]">{item.name}</td>
+                      <td>{decimal(item.days, 1)}</td>
+                      <td>{decimal(item.squareMeters, 2)} m2</td>
+                      <td className="font-bold">{money(item.cost)}</td>
+                      <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
+                      <td>{item.squareMeters > 0 ? `${money(item.cost / item.squareMeters)} / m2` : "-"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ) : null}
       </section>
     </>
   );
