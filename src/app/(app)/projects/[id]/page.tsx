@@ -145,6 +145,56 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       amount: item.amount,
     })),
   }));
+  const productUsageSummary = Array.from(project.dailyRecords.reduce((map, record) => {
+    record.productItems.forEach((item) => {
+      const current = map.get(item.productId) ?? {
+        id: item.productId,
+        name: item.product.name,
+        unit: item.product.unit,
+        quantity: 0,
+        cost: 0,
+      };
+      current.quantity += item.quantity;
+      current.cost += item.quantity * item.costPerUnit;
+      map.set(item.productId, current);
+    });
+    return map;
+  }, new Map<string, { id: string; name: string; unit: string; quantity: number; cost: number }>()).values())
+    .sort((a, b) => b.cost - a.cost);
+  const employeeLabourSummary = Array.from(project.dailyRecords.reduce((map, record) => {
+    record.labourItems.forEach((item) => {
+      if (!item.employeeId && !item.employeeName) return;
+      const key = item.employeeId || item.employeeName || item.id;
+      const current = map.get(key) ?? {
+        id: key,
+        name: item.employee?.name || item.employeeName || "Former employee",
+        manDays: 0,
+        cost: 0,
+      };
+      current.manDays += 1;
+      current.cost += item.dailyWage;
+      map.set(key, current);
+    });
+    return map;
+  }, new Map<string, { id: string; name: string; manDays: number; cost: number }>()).values())
+    .sort((a, b) => b.cost - a.cost);
+  const externalTeamSummary = Array.from(project.dailyRecords.reduce((map, record) => {
+    record.labourItems.forEach((item) => {
+      if (!item.externalTeamName) return;
+      const current = map.get(item.externalTeamName) ?? {
+        name: item.externalTeamName,
+        days: 0,
+        squareMeters: 0,
+        cost: 0,
+      };
+      current.days += 1;
+      current.squareMeters += item.squareMeters || 0;
+      current.cost += item.dailyWage;
+      map.set(item.externalTeamName, current);
+    });
+    return map;
+  }, new Map<string, { name: string; days: number; squareMeters: number; cost: number }>()).values())
+    .sort((a, b) => b.cost - a.cost);
   const invoices = project.invoices.map((invoice) => ({
     id: invoice.id,
     projectId: invoice.projectId,
@@ -222,6 +272,111 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <StatCard label="Invoiced / m2" value={completedAreaM2 > 0 ? money(perM2(totals.invoiced, completedAreaM2)) : "-"} tone={completedAreaM2 > 0 ? invoiceTone : "default"} />
         <StatCard label="Profit / m2" value={completedAreaM2 > 0 ? money(perM2(totals.profit, completedAreaM2)) : "-"} tone={completedAreaM2 > 0 ? marginTone : "default"} />
         <StatCard label="Remaining area" value={project.contractAreaM2 > 0 ? `${decimal(Math.max(project.contractAreaM2 - completedAreaM2, 0), 1)} m2` : "-"} tone={areaProgress >= 100 ? "green" : areaProgress >= 80 ? "amber" : "blue"} />
+      </section>
+
+      <section className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <div className="panel p-4">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-xs font-black uppercase text-[#5b193f]">Usage summary</div>
+              <h2 className="text-xl font-black">Products used</h2>
+            </div>
+            <div className="text-sm font-bold text-[#6b7188]">{productUsageSummary.length} products</div>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Total cost</th>
+                  <th>Average cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                {productUsageSummary.map((item) => (
+                  <tr key={item.id}>
+                    <td className="font-black text-[#373455]">{item.name}</td>
+                    <td>{decimal(item.quantity, 2)} {item.unit}</td>
+                    <td className="font-bold">{money(item.cost)}</td>
+                    <td>{item.quantity > 0 ? `${money(item.cost / item.quantity)} / ${item.unit}` : "-"}</td>
+                  </tr>
+                ))}
+                {!productUsageSummary.length ? (
+                  <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No product usage recorded yet.</td></tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="grid gap-5">
+          <div className="panel p-4">
+            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <div className="text-xs font-black uppercase text-[#5b193f]">Labour summary</div>
+                <h2 className="text-xl font-black">Employee man-days</h2>
+              </div>
+              <div className="text-sm font-bold text-[#6b7188]">{employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0)} days</div>
+            </div>
+            <div className="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Employee</th>
+                    <th>Man-days</th>
+                    <th>Cost</th>
+                    <th>Average / day</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {employeeLabourSummary.map((item) => (
+                    <tr key={item.id}>
+                      <td className="font-black text-[#373455]">{item.name}</td>
+                      <td>{decimal(item.manDays, 1)}</td>
+                      <td className="font-bold">{money(item.cost)}</td>
+                      <td>{item.manDays > 0 ? money(item.cost / item.manDays) : "-"}</td>
+                    </tr>
+                  ))}
+                  {!employeeLabourSummary.length ? (
+                    <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No employee labour recorded yet.</td></tr>
+                  ) : null}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {externalTeamSummary.length ? (
+            <div className="panel p-4">
+              <div className="mb-3">
+                <div className="text-xs font-black uppercase text-[#5b193f]">External labour</div>
+                <h2 className="text-xl font-black">m2 teams</h2>
+              </div>
+              <div className="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Team</th>
+                      <th>Days</th>
+                      <th>m2</th>
+                      <th>Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {externalTeamSummary.map((item) => (
+                      <tr key={item.name}>
+                        <td className="font-black text-[#373455]">{item.name}</td>
+                        <td>{decimal(item.days, 1)}</td>
+                        <td>{decimal(item.squareMeters, 2)} m2</td>
+                        <td className="font-bold">{money(item.cost)}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </section>
 
       <section className="mt-6 grid gap-5">
