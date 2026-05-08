@@ -43,10 +43,6 @@ function performanceSummary(tone: PerformanceTone) {
   return { label: "Tracking", className: "status status-finished", text: "Not enough pressure signals yet to classify this project." };
 }
 
-function perM2(value: number, area: number) {
-  return area > 0 ? value / area : 0;
-}
-
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const [project, products, employees, expenseTypes, productUsageHistory] = await Promise.all([
@@ -89,8 +85,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   const totals = projectTotals(project.dailyRecords, project.invoices);
-  const completedAreaM2 = project.dailyRecords.reduce((sum, record) => sum + record.completedAreaM2, 0);
-  const areaProgress = project.contractAreaM2 > 0 ? (completedAreaM2 / project.contractAreaM2) * 100 : 0;
   const budget = budgetTotals(project.budgetAmount, totals.totalCost);
   const unpaidInvoices = project.invoices.filter((invoice) => !invoice.isPaid);
   const outstandingInvoices = unpaidInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
@@ -275,17 +269,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <StatCard label="Invoiced" value={money(totals.invoiced)} detail={totals.totalCost > 0 ? `${decimal((totals.invoiced / totals.totalCost) * 100)}% cost recovery` : "No costs yet"} tone={invoiceTone} />
         <StatCard label="Outstanding" value={money(outstandingInvoices)} detail={overdueInvoices.length ? `${overdueInvoices.length} overdue` : outstandingInvoices > 0 ? "Awaiting payment" : "Fully paid"} tone={overdueInvoices.length ? "maroon" : outstandingInvoices > 0 ? "amber" : "green"} />
         <StatCard label="Profit margin" value={`${decimal(totals.margin)}%`} detail={money(totals.profit)} tone={marginTone} />
-      </section>
-
-      <section className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
-        <StatCard label="Completed area" value={completedAreaM2 > 0 ? `${decimal(completedAreaM2, 1)} m2` : "Not set"} detail={project.contractAreaM2 > 0 ? `${decimal(areaProgress)}% of ${decimal(project.contractAreaM2, 1)} m2` : "Set project area for progress"} tone={completedAreaM2 > 0 ? "green" : "default"} />
-        <StatCard label="Product cost / m2" value={completedAreaM2 > 0 ? money(perM2(totals.productCost, completedAreaM2)) : "-"} tone="blue" />
-        <StatCard label="Labour cost / m2" value={completedAreaM2 > 0 ? money(perM2(totals.labourCost, completedAreaM2)) : "-"} tone="blue" />
-        <StatCard label="Expense cost / m2" value={completedAreaM2 > 0 ? money(perM2(totals.expenseCost, completedAreaM2)) : "-"} tone="blue" />
-        <StatCard label="Total cost / m2" value={completedAreaM2 > 0 ? money(perM2(totals.totalCost, completedAreaM2)) : "-"} detail={completedAreaM2 > 0 ? "Based on completed area" : "Enter daily completed m2"} tone={completedAreaM2 > 0 ? costTone : "default"} />
-        <StatCard label="Invoiced / m2" value={completedAreaM2 > 0 ? money(perM2(totals.invoiced, completedAreaM2)) : "-"} tone={completedAreaM2 > 0 ? invoiceTone : "default"} />
-        <StatCard label="Profit / m2" value={completedAreaM2 > 0 ? money(perM2(totals.profit, completedAreaM2)) : "-"} tone={completedAreaM2 > 0 ? marginTone : "default"} />
-        <StatCard label="Remaining area" value={project.contractAreaM2 > 0 ? `${decimal(Math.max(project.contractAreaM2 - completedAreaM2, 0), 1)} m2` : "-"} tone={areaProgress >= 100 ? "green" : areaProgress >= 80 ? "amber" : "blue"} />
       </section>
 
       <section className="mt-6 grid gap-5">
