@@ -41,6 +41,16 @@ function BarRow({
   );
 }
 
+function ProfitLossValue({ value }: { value: number }) {
+  const isProfit = value >= 0;
+  return (
+    <span className={isProfit ? "font-black text-[#285d59]" : "font-black text-[#5b193f]"}>
+      {isProfit ? "Profit " : "Loss "}
+      {money(Math.abs(value))}
+    </span>
+  );
+}
+
 export default async function DashboardPage() {
   const projects = await prisma.project.findMany({
     include: {
@@ -149,8 +159,8 @@ export default async function DashboardPage() {
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
-        <StatCard label="Profit / loss" value={money(profit)} tone={profit >= 0 ? "green" : "maroon"} />
-        <StatCard label="Profit margin" value={`${decimal(margin)}%`} tone="maroon" />
+        <StatCard label={profit >= 0 ? "Profit" : "Loss"} value={<ProfitLossValue value={profit} />} detail={profit >= 0 ? "Company result is positive" : "Company result is negative"} tone={profit >= 0 ? "green" : "maroon"} />
+        <StatCard label="Profit margin" value={<span className={margin >= 0 ? "text-[#285d59]" : "text-[#5b193f]"}>{decimal(margin)}%</span>} tone={margin >= 0 ? "green" : "maroon"} />
       </section>
 
       <section className="mt-6 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
@@ -265,7 +275,7 @@ export default async function DashboardPage() {
                           <th>Budget left</th>
                           <th>Invoiced</th>
                           <th>Outstanding</th>
-                          <th>Profit/loss</th>
+                          <th>Profit / loss</th>
                           <th>Margin</th>
                         </tr>
                       </thead>
@@ -289,8 +299,8 @@ export default async function DashboardPage() {
                               </td>
                               <td>{money(totals.invoiced)}</td>
                               <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
-                              <td className={totals.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(totals.profit)}</td>
-                              <td>{decimal(totals.margin)}%</td>
+                              <td><ProfitLossValue value={totals.profit} /></td>
+                              <td className={totals.margin >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{decimal(totals.margin)}%</td>
                             </tr>
                           );
                         })}
@@ -309,7 +319,7 @@ export default async function DashboardPage() {
             <div className="space-y-4">
               {rows.map(({ project, totals }) => (
                 <div key={project.id}>
-                  <div className="mb-1 flex justify-between text-sm font-bold"><span>{project.name}</span><span>{money(totals.invoiced - totals.totalCost)}</span></div>
+                  <div className="mb-1 flex justify-between text-sm font-bold"><span>{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} /></div>
                   <div className="grid gap-1">
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
@@ -346,7 +356,7 @@ export default async function DashboardPage() {
                       style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
                     />
                   </div>
-                  <div className="text-right font-black">{money(totals.profit)}</div>
+                  <div className="text-right"><ProfitLossValue value={totals.profit} /></div>
                 </div>
               ))}
             </div>
