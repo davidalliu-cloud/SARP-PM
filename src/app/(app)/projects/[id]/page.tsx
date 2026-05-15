@@ -249,7 +249,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </PageTitle>
 
-      <section className={`mb-4 rounded-lg border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-[#5b193f]" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
+      <nav className="sticky top-0 z-10 mb-5 overflow-x-auto border-y border-[#d7e1e5] bg-[#f3f7f3]/95 py-3 backdrop-blur">
+        <div className="flex min-w-max gap-2">
+          <a href="#overview" className="btn btn-small btn-secondary">Overview</a>
+          <a href="#daily-entry" className="btn btn-small btn-secondary">Daily entry</a>
+          <a href="#attachments" className="btn btn-small btn-secondary">Attachments</a>
+          <a href="#daily-records" className="btn btn-small btn-secondary">Daily records</a>
+          <a href="#invoices" className="btn btn-small btn-secondary">Invoices</a>
+          <a href="#cost-summary" className="btn btn-small btn-secondary">Cost summary</a>
+        </div>
+      </nav>
+
+      <section id="overview" className={`scroll-mt-24 mb-4 rounded-lg border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-[#5b193f]" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-xs font-black uppercase text-[#6b7188]">Project performance</div>
@@ -273,7 +284,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <section className="mt-6 grid gap-5">
         <div className="grid gap-5 2xl:grid-cols-[minmax(0,1fr)_420px]">
-          <div>
+          <div id="daily-entry" className="scroll-mt-24">
             <h2 className="mb-3 text-xl font-black">Add daily cost record</h2>
             {products.length && employees.length && expenseTypes.length ? (
               <DailyRecordForm projectId={project.id} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
@@ -308,15 +319,17 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <AttachmentsPanel
-          projectId={project.id}
-          attachments={project.attachments}
-          dailyRecords={project.dailyRecords.map((record) => ({ id: record.id, date: record.date }))}
-          invoices={project.invoices.map((invoice) => ({ id: invoice.id, invoiceNo: invoice.invoiceNo, monthCovered: invoice.monthCovered }))}
-        />
+        <div id="attachments" className="scroll-mt-24">
+          <AttachmentsPanel
+            projectId={project.id}
+            attachments={project.attachments}
+            dailyRecords={project.dailyRecords.map((record) => ({ id: record.id, date: record.date }))}
+            invoices={project.invoices.map((invoice) => ({ id: invoice.id, invoiceNo: invoice.invoiceNo, monthCovered: invoice.monthCovered }))}
+          />
+        </div>
 
         <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_430px]">
-          <div className="panel p-4">
+          <div id="daily-records" className="panel scroll-mt-24 p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <div className="text-xs font-black uppercase text-[#5b193f]">Site history</div>
@@ -327,7 +340,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <DailyRecordsManager projectId={project.id} records={dailyRecords} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
           </div>
 
-          <div className="panel p-4">
+          <div id="invoices" className="panel scroll-mt-24 p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <div className="text-xs font-black uppercase text-[#5b193f]">Billing history</div>
@@ -340,7 +353,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </section>
 
-      <section className="mt-6 grid gap-5">
+      <section id="cost-summary" className="mt-6 grid scroll-mt-24 gap-5">
         <div className="panel p-4">
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>

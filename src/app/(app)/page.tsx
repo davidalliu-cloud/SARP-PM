@@ -21,8 +21,48 @@ type ActionItem = {
   rank: number;
 };
 
+const periodOptions = [
+  { value: "this-month", label: "This month" },
+  { value: "last-month", label: "Last month" },
+  { value: "this-year", label: "This year" },
+  { value: "all", label: "All time" },
+];
+
 function percent(value: number, total: number) {
   return total > 0 ? (value / total) * 100 : 0;
+}
+
+function getPeriodRange(period: string) {
+  const now = new Date();
+  const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  const nextMonthStart = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+
+  if (period === "last-month") {
+    return {
+      label: "Last month",
+      start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
+      end: thisMonthStart,
+    };
+  }
+
+  if (period === "this-year") {
+    return {
+      label: "This year",
+      start: new Date(now.getFullYear(), 0, 1),
+      end: new Date(now.getFullYear() + 1, 0, 1),
+    };
+  }
+
+  if (period === "all") {
+    return { label: "All time", start: null, end: null };
+  }
+
+  return { label: "This month", start: thisMonthStart, end: nextMonthStart };
+}
+
+function isInPeriod(date: Date, start: Date | null, end: Date | null) {
+  if (!start || !end) return true;
+  return date >= start && date < end;
 }
 
 function BarRow({
@@ -81,7 +121,15 @@ function ActionRequiredCard({ item }: { item: ActionItem }) {
   );
 }
 
-export default async function DashboardPage() {
+export default async function DashboardPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ period?: string }>;
+}) {
+  const params = await searchParams;
+  const selectedPeriod = periodOptions.some((option) => option.value === params.period) ? params.period || "this-month" : "this-month";
+  const periodRange = getPeriodRange(selectedPeriod);
+
   const projects = await prisma.project.findMany({
     include: {
       dailyRecords: { include: { productItems: { include: { product: true } }, labourItems: true, expenseItems: true } },
@@ -90,15 +138,25 @@ export default async function DashboardPage() {
     orderBy: { createdAt: "desc" },
   });
 
-  const rows = projects.map((project) => ({
+  const allRows = projects.map((project) => ({
     project,
     totals: projectTotals(project.dailyRecords, project.invoices),
   }));
+  const rows = projects.map((project) => {
+    const periodDailyRecords = project.dailyRecords.filter((record) => isInPeriod(record.date, periodRange.start, periodRange.end));
+    const periodInvoices = project.invoices.filter((invoice) => isInPeriod(invoice.invoiceDate, periodRange.start, periodRange.end));
+    return {
+      project,
+      dailyRecords: periodDailyRecords,
+      invoices: periodInvoices,
+      totals: projectTotals(periodDailyRecords, periodInvoices),
+    };
+  });
 
   const activeProjects = projects.filter((project) => project.status === "ACTIVE").length;
   const totalCost = rows.reduce((sum, row) => sum + row.totals.totalCost, 0);
   const totalBudget = projects.reduce((sum, project) => sum + project.budgetAmount, 0);
-  const overBudgetProjects = rows.filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget).length;
+  const overBudgetProjects = allRows.filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget).length;
   const totalInvoiced = rows.reduce((sum, row) => sum + row.totals.invoiced, 0);
   const totalOutstanding = projects.reduce((sum, project) => sum + project.invoices.filter((invoice) => !invoice.isPaid).reduce((invoiceSum, invoice) => invoiceSum + invoice.amount, 0), 0);
   const unpaidInvoices = projects.flatMap((project) => project.invoices.filter((invoice) => !invoice.isPaid));
@@ -121,7 +179,7 @@ export default async function DashboardPage() {
           rank: 1,
         }))
     ),
-    ...rows
+    ...allRows
       .filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget)
       .map((row) => ({
         id: `budget-${row.project.id}`,
@@ -132,7 +190,7 @@ export default async function DashboardPage() {
         tone: "maroon" as const,
         rank: 2,
       })),
-    ...rows
+    ...allRows
       .filter((row) => row.totals.invoiced > 0 && row.totals.margin < 10 && row.project.status !== "FINISHED")
       .map((row) => ({
         id: `margin-${row.project.id}`,
@@ -143,7 +201,7 @@ export default async function DashboardPage() {
         tone: row.totals.profit >= 0 ? ("amber" as const) : ("maroon" as const),
         rank: row.totals.profit >= 0 ? 3 : 2,
       })),
-    ...rows
+    ...allRows
       .filter((row) => row.project.status === "ACTIVE" && row.totals.totalCost > 0 && row.totals.invoiced === 0)
       .map((row) => ({
         id: `uninvoiced-${row.project.id}`,
@@ -154,7 +212,7 @@ export default async function DashboardPage() {
         tone: "amber" as const,
         rank: 4,
       })),
-    ...rows
+    ...allRows
       .filter((row) => ["ACTIVE", "ON_HOLD"].includes(row.project.status) && row.project.budgetAmount <= 0)
       .map((row) => ({
         id: `missing-budget-${row.project.id}`,
@@ -170,7 +228,7 @@ export default async function DashboardPage() {
   const totalProductCost = rows.reduce((sum, row) => sum + row.totals.productCost, 0);
   const totalLabourCost = rows.reduce((sum, row) => sum + row.totals.labourCost, 0);
   const totalExpenseCost = rows.reduce((sum, row) => sum + row.totals.expenseCost, 0);
-  const totalCompletedArea = projects.reduce((sum, project) => sum + project.dailyRecords.reduce((recordSum, record) => recordSum + record.completedAreaM2, 0), 0);
+  const totalCompletedArea = rows.reduce((sum, row) => sum + row.dailyRecords.reduce((recordSum, record) => recordSum + record.completedAreaM2, 0), 0);
   const costBreakdown = [
     { label: "Products", value: totalProductCost, color: "bg-[#5b193f]" },
     { label: "Labour", value: totalLabourCost, color: "bg-[#777da7]" },
@@ -182,8 +240,8 @@ export default async function DashboardPage() {
   let externalLabourCost = 0;
 
   const monthly = new Map<string, { cost: number; invoiced: number }>();
-  projects.forEach((project) => {
-    project.dailyRecords.forEach((record) => {
+  rows.forEach(({ dailyRecords, invoices }) => {
+    dailyRecords.forEach((record) => {
       const key = monthKey(record.date);
       const current = monthly.get(key) ?? { cost: 0, invoiced: 0 };
       current.cost += record.productItems.reduce((sum, item) => sum + item.quantity * item.costPerUnit, 0);
@@ -205,7 +263,7 @@ export default async function DashboardPage() {
         expenseBreakdown.set(item.category, (expenseBreakdown.get(item.category) ?? 0) + item.amount);
       });
     });
-    project.invoices.forEach((invoice) => {
+    invoices.forEach((invoice) => {
       const current = monthly.get(invoice.monthCovered) ?? { cost: 0, invoiced: 0 };
       current.invoiced += invoice.amount;
       monthly.set(invoice.monthCovered, current);
@@ -220,7 +278,7 @@ export default async function DashboardPage() {
   const mostExpensiveProjects = [...rows].sort((a, b) => b.totals.totalCost - a.totals.totalCost).slice(0, 5);
   const projectM2Rows = rows
     .map((row) => {
-      const completedArea = row.project.dailyRecords.reduce((sum, record) => sum + record.completedAreaM2, 0);
+      const completedArea = row.dailyRecords.reduce((sum, record) => sum + record.completedAreaM2, 0);
       return {
         project: row.project,
         totals: row.totals,
@@ -239,6 +297,29 @@ export default async function DashboardPage() {
       <PageTitle eyebrow="Control room" title="Profitability dashboard">
         <Link href="/projects/new" className="btn btn-primary">New project</Link>
       </PageTitle>
+
+      <section className="panel mb-6 p-4">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <div className="text-xs font-black uppercase text-[#5b193f]">Dashboard period</div>
+            <h2 className="mt-1 text-lg font-black text-[#373455]">{periodRange.label}</h2>
+            <p className="mt-1 text-sm font-semibold text-[#6b7188]">
+              Cost, invoicing, profit, and analytics are filtered by this period. Open invoice warnings stay visible at all times.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {periodOptions.map((option) => (
+              <Link
+                key={option.value}
+                href={`/?period=${option.value}`}
+                className={`btn btn-small ${selectedPeriod === option.value ? "btn-primary" : "btn-secondary"}`}
+              >
+                {option.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
         <StatCard label="Active projects" value={activeProjects} tone="green" />
