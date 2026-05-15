@@ -11,6 +11,16 @@ const projectSections = [
   { title: "Finished", statuses: ["FINISHED"], border: "border-[#bdc8d0]", bg: "bg-[#f7fbfa]" },
 ];
 
+type ActionItem = {
+  id: string;
+  title: string;
+  detail: string;
+  amount?: string;
+  href: string;
+  tone: "maroon" | "amber" | "blue";
+  rank: number;
+};
+
 function percent(value: number, total: number) {
   return total > 0 ? (value / total) * 100 : 0;
 }
@@ -51,6 +61,26 @@ function ProfitLossValue({ value }: { value: number }) {
   );
 }
 
+function ActionRequiredCard({ item }: { item: ActionItem }) {
+  const toneClasses = {
+    maroon: "border-[#5b193f] bg-[#fff8fa] text-[#5b193f]",
+    amber: "border-[#c28a2c] bg-[#fffaf0] text-[#7a4b00]",
+    blue: "border-[#777da7] bg-[#f7f8fc] text-[#373455]",
+  };
+
+  return (
+    <Link href={item.href} className={`block rounded-lg border-l-4 p-3 transition hover:-translate-y-0.5 hover:shadow-md ${toneClasses[item.tone]}`}>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="truncate text-sm font-black">{item.title}</div>
+          <div className="mt-1 text-xs font-bold text-[#6b7188]">{item.detail}</div>
+        </div>
+        {item.amount ? <div className="shrink-0 text-sm font-black">{item.amount}</div> : null}
+      </div>
+    </Link>
+  );
+}
+
 export default async function DashboardPage() {
   const projects = await prisma.project.findMany({
     include: {
@@ -77,6 +107,65 @@ export default async function DashboardPage() {
   const overdueTotal = overdueInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
   const profit = totalInvoiced - totalCost;
   const margin = totalInvoiced > 0 ? (profit / totalInvoiced) * 100 : 0;
+  const actionItems: ActionItem[] = [
+    ...projects.flatMap((project) =>
+      project.invoices
+        .filter((invoice) => !invoice.isPaid && daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0)
+        .map((invoice) => ({
+          id: `invoice-${invoice.id}`,
+          title: `${project.name}: invoice overdue`,
+          detail: `${invoice.invoiceNo ? `Invoice ${invoice.invoiceNo}` : "Invoice"} is ${Math.abs(daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)))} days overdue`,
+          amount: money(invoice.amount),
+          href: `/projects/${project.id}`,
+          tone: "maroon" as const,
+          rank: 1,
+        }))
+    ),
+    ...rows
+      .filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget)
+      .map((row) => ({
+        id: `budget-${row.project.id}`,
+        title: `${row.project.name}: over budget`,
+        detail: `Budget exceeded by ${money(Math.abs(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetRemaining))}`,
+        amount: `${decimal(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetUsed)}% used`,
+        href: `/projects/${row.project.id}`,
+        tone: "maroon" as const,
+        rank: 2,
+      })),
+    ...rows
+      .filter((row) => row.totals.invoiced > 0 && row.totals.margin < 10 && row.project.status !== "FINISHED")
+      .map((row) => ({
+        id: `margin-${row.project.id}`,
+        title: `${row.project.name}: low margin`,
+        detail: row.totals.profit >= 0 ? `Current margin is ${decimal(row.totals.margin)}%` : `Current loss is ${money(Math.abs(row.totals.profit))}`,
+        amount: `${decimal(row.totals.margin)}%`,
+        href: `/projects/${row.project.id}`,
+        tone: row.totals.profit >= 0 ? ("amber" as const) : ("maroon" as const),
+        rank: row.totals.profit >= 0 ? 3 : 2,
+      })),
+    ...rows
+      .filter((row) => row.project.status === "ACTIVE" && row.totals.totalCost > 0 && row.totals.invoiced === 0)
+      .map((row) => ({
+        id: `uninvoiced-${row.project.id}`,
+        title: `${row.project.name}: costs not invoiced`,
+        detail: "Project has recorded costs but no invoice yet",
+        amount: money(row.totals.totalCost),
+        href: `/projects/${row.project.id}`,
+        tone: "amber" as const,
+        rank: 4,
+      })),
+    ...rows
+      .filter((row) => ["ACTIVE", "ON_HOLD"].includes(row.project.status) && row.project.budgetAmount <= 0)
+      .map((row) => ({
+        id: `missing-budget-${row.project.id}`,
+        title: `${row.project.name}: budget missing`,
+        detail: "Add a project budget to track overruns properly",
+        href: `/projects/${row.project.id}`,
+        tone: "blue" as const,
+        rank: 5,
+      })),
+  ].sort((a, b) => a.rank - b.rank);
+  const visibleActionItems = actionItems.slice(0, 8);
   const maxProjectValue = Math.max(...rows.map((row) => Math.max(row.totals.totalCost, row.totals.invoiced, 1)), 1);
   const totalProductCost = rows.reduce((sum, row) => sum + row.totals.productCost, 0);
   const totalLabourCost = rows.reduce((sum, row) => sum + row.totals.labourCost, 0);
@@ -155,7 +244,6 @@ export default async function DashboardPage() {
         <StatCard label="Active projects" value={activeProjects} tone="green" />
         <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
         <StatCard label="Total costs" value={money(totalCost)} />
-        <StatCard label="Average cost / m2" value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={totalCompletedArea > 0 ? `${decimal(totalCompletedArea, 1)} m2 completed` : "Enter daily completed m2"} tone={totalCompletedArea > 0 ? "blue" : "default"} />
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
@@ -163,89 +251,176 @@ export default async function DashboardPage() {
         <StatCard label="Profit margin" value={<span className={margin >= 0 ? "text-[#285d59]" : "text-[#5b193f]"}>{decimal(margin)}%</span>} tone={margin >= 0 ? "green" : "maroon"} />
       </section>
 
-      <section className="mt-6 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
-        <div className="panel p-4">
-          <h2 className="mb-4 text-lg font-black">Cost breakdown</h2>
-          <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
-            {costBreakdown.map((item) => (
-              <div key={item.label} className={item.color} style={{ width: `${percent(item.value, totalCost)}%` }} />
-            ))}
+      <section className="panel mt-6 p-4">
+        <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
+          <div>
+            <h2 className="text-lg font-black">Action required</h2>
+            <p className="mt-1 text-sm font-semibold text-[#6b7188]">Items that need attention first.</p>
           </div>
-          <div className="grid gap-3">
-            {costBreakdown.map((item) => (
-              <BarRow key={item.label} label={item.label} value={item.value} total={totalCost} detail={`${money(item.value)} / ${decimal(percent(item.value, totalCost))}%`} color={item.color} />
-            ))}
-          </div>
+          {actionItems.length > visibleActionItems.length ? (
+            <span className="status status-risk">{actionItems.length - visibleActionItems.length} more</span>
+          ) : null}
         </div>
-
-        <div className="panel p-4">
-          <h2 className="mb-4 text-lg font-black">Most material used</h2>
-          <div className="grid gap-3">
-            {topMaterials.map((item) => (
-              <BarRow
-                key={`${item.name}-${item.unit}`}
-                label={item.name}
-                value={item.cost}
-                total={maxMaterialCost}
-                detail={`${decimal(item.quantity, 2)} ${item.unit} / ${money(item.cost)}`}
-                color="bg-[#5b193f]"
-              />
-            ))}
-            {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No product usage recorded yet.</div> : null}
+        {visibleActionItems.length ? (
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            {visibleActionItems.map((item) => <ActionRequiredCard key={item.id} item={item} />)}
           </div>
-        </div>
-
-        <div className="panel p-4 xl:col-span-2 2xl:col-span-1">
-          <h2 className="mb-4 text-lg font-black">Labour split</h2>
-          <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
-            <div className="bg-[#777da7]" style={{ width: `${percent(internalLabourCost, totalLabourCost)}%` }} />
-            <div className="bg-[#285d59]" style={{ width: `${percent(externalLabourCost, totalLabourCost)}%` }} />
+        ) : (
+          <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7fbfa] p-4 text-sm font-bold text-[#285d59]">
+            No urgent issues right now. Projects, invoices, and budgets are not showing immediate pressure.
           </div>
-          <div className="grid gap-3">
-            <BarRow label="Employees" value={internalLabourCost} total={totalLabourCost} detail={`${money(internalLabourCost)} / ${decimal(percent(internalLabourCost, totalLabourCost))}%`} color="bg-[#777da7]" />
-            <BarRow label="External m2 teams" value={externalLabourCost} total={totalLabourCost} detail={`${money(externalLabourCost)} / ${decimal(percent(externalLabourCost, totalLabourCost))}%`} color="bg-[#285d59]" />
-          </div>
-        </div>
-
-        <div className="panel p-4">
-          <h2 className="mb-4 text-lg font-black">Expense categories</h2>
-          <div className="grid gap-3">
-            {expenseRows.map((item) => (
-              <BarRow key={item.label} label={item.label} value={item.value} total={maxExpenseCost} detail={money(item.value)} color="bg-[#285d59]" />
-            ))}
-            {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No extra expenses recorded yet.</div> : null}
-          </div>
-        </div>
-
-        <div className="panel p-4 xl:col-span-1 2xl:col-span-2">
-          <h2 className="mb-4 text-lg font-black">Highest cost projects</h2>
-          <div className="grid gap-3">
-            {mostExpensiveProjects.map(({ project, totals }) => (
-              <BarRow key={project.id} label={project.name} value={totals.totalCost} total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)} detail={money(totals.totalCost)} color={totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"} />
-            ))}
-            {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
-          </div>
-        </div>
-
-        <div className="panel p-4 xl:col-span-2 2xl:col-span-3">
-          <h2 className="mb-4 text-lg font-black">Cost per m2 by project</h2>
-          <div className="grid gap-3">
-            {projectM2Rows.map((row) => (
-              <BarRow
-                key={row.project.id}
-                label={row.project.name}
-                value={row.totalCostPerM2}
-                total={maxProjectCostPerM2}
-                detail={`${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
-                color={row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
-              />
-            ))}
-            {!projectM2Rows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">Add completed m2 to daily records to compare project rates.</div> : null}
-          </div>
-        </div>
+        )}
       </section>
 
-      <section className="mt-6 grid gap-4 xl:grid-cols-[1.3fr_1fr]">
+      <details className="panel mt-6 p-4">
+        <summary className="cursor-pointer list-none">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <h2 className="text-lg font-black">Detailed analytics</h2>
+              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Open when you want cost breakdowns, product usage, labour split, and chart views.</p>
+            </div>
+            <span className="btn btn-secondary btn-small">Show analytics</span>
+          </div>
+        </summary>
+
+        <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Cost breakdown</h2>
+            <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
+              {costBreakdown.map((item) => (
+                <div key={item.label} className={item.color} style={{ width: `${percent(item.value, totalCost)}%` }} />
+              ))}
+            </div>
+            <div className="grid gap-3">
+              {costBreakdown.map((item) => (
+                <BarRow key={item.label} label={item.label} value={item.value} total={totalCost} detail={`${money(item.value)} / ${decimal(percent(item.value, totalCost))}%`} color={item.color} />
+              ))}
+            </div>
+          </div>
+
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Most material used</h2>
+            <div className="grid gap-3">
+              {topMaterials.map((item) => (
+                <BarRow
+                  key={`${item.name}-${item.unit}`}
+                  label={item.name}
+                  value={item.cost}
+                  total={maxMaterialCost}
+                  detail={`${decimal(item.quantity, 2)} ${item.unit} / ${money(item.cost)}`}
+                  color="bg-[#5b193f]"
+                />
+              ))}
+              {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No product usage recorded yet.</div> : null}
+            </div>
+          </div>
+
+          <div className="panel p-4 xl:col-span-2 2xl:col-span-1">
+            <h2 className="mb-4 text-lg font-black">Labour split</h2>
+            <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
+              <div className="bg-[#777da7]" style={{ width: `${percent(internalLabourCost, totalLabourCost)}%` }} />
+              <div className="bg-[#285d59]" style={{ width: `${percent(externalLabourCost, totalLabourCost)}%` }} />
+            </div>
+            <div className="grid gap-3">
+              <BarRow label="Employees" value={internalLabourCost} total={totalLabourCost} detail={`${money(internalLabourCost)} / ${decimal(percent(internalLabourCost, totalLabourCost))}%`} color="bg-[#777da7]" />
+              <BarRow label="External m2 teams" value={externalLabourCost} total={totalLabourCost} detail={`${money(externalLabourCost)} / ${decimal(percent(externalLabourCost, totalLabourCost))}%`} color="bg-[#285d59]" />
+            </div>
+          </div>
+
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Expense categories</h2>
+            <div className="grid gap-3">
+              {expenseRows.map((item) => (
+                <BarRow key={item.label} label={item.label} value={item.value} total={maxExpenseCost} detail={money(item.value)} color="bg-[#285d59]" />
+              ))}
+              {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No extra expenses recorded yet.</div> : null}
+            </div>
+          </div>
+
+          <div className="panel p-4 xl:col-span-1 2xl:col-span-2">
+            <h2 className="mb-4 text-lg font-black">Highest cost projects</h2>
+            <div className="grid gap-3">
+              {mostExpensiveProjects.map(({ project, totals }) => (
+                <BarRow key={project.id} label={project.name} value={totals.totalCost} total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)} detail={money(totals.totalCost)} color={totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"} />
+              ))}
+              {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
+            </div>
+          </div>
+
+          {projectM2Rows.length ? (
+            <div className="panel p-4 xl:col-span-2 2xl:col-span-3">
+              <h2 className="mb-4 text-lg font-black">Cost per m2 by project</h2>
+              <div className="mb-4">
+                <StatCard label="Average cost / m2" value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={`${decimal(totalCompletedArea, 1)} m2 completed`} tone="blue" />
+              </div>
+              <div className="grid gap-3">
+                {projectM2Rows.map((row) => (
+                  <BarRow
+                    key={row.project.id}
+                    label={row.project.name}
+                    value={row.totalCostPerM2}
+                    total={maxProjectCostPerM2}
+                    detail={`${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
+                    color={row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+                  />
+                ))}
+              </div>
+            </div>
+          ) : null}
+        </section>
+
+        <section className="mt-4 grid gap-4 xl:grid-cols-3">
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Cost vs invoiced</h2>
+            <div className="space-y-4">
+              {rows.map(({ project, totals }) => (
+                <div key={project.id}>
+                  <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} /></div>
+                  <div className="grid gap-1">
+                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
+                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Monthly costs and invoicing</h2>
+            <div className="grid grid-cols-6 items-end gap-3">
+              {monthlyRows.map(([month, row]) => (
+                <div key={month} className="grid gap-2 text-center">
+                  <div className="flex h-32 items-end justify-center gap-1 border-b border-[#d7e1e5]">
+                    <div className="w-4 rounded-t bg-[#5b193f]" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
+                    <div className="w-4 rounded-t bg-[#777da7]" style={{ height: `${Math.max((row.invoiced / maxMonthly) * 100, 4)}%` }} />
+                  </div>
+                  <div className="text-xs font-black text-[#6b7188]">{month}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="panel p-4">
+            <h2 className="mb-4 text-lg font-black">Profit/loss by project</h2>
+            <div className="space-y-3">
+              {rows.map(({ project, totals }) => (
+                <div key={project.id} className="grid grid-cols-[110px_1fr_90px] items-center gap-3 text-sm">
+                  <div className="truncate font-bold">{project.name}</div>
+                  <div className="h-3 rounded bg-[#e8eef0]">
+                    <div
+                      className={`h-3 rounded ${totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
+                      style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
+                    />
+                  </div>
+                  <div className="text-right"><ProfitLossValue value={totals.profit} /></div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      </details>
+
+      <section className="mt-6">
         <div className="panel p-4">
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-black">Projects</h2>
@@ -310,56 +485,6 @@ export default async function DashboardPage() {
                 </div>
               );
             })}
-          </div>
-        </div>
-
-        <div className="grid gap-4">
-          <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Cost vs invoiced</h2>
-            <div className="space-y-4">
-              {rows.map(({ project, totals }) => (
-                <div key={project.id}>
-                  <div className="mb-1 flex justify-between text-sm font-bold"><span>{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} /></div>
-                  <div className="grid gap-1">
-                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
-                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Monthly costs and invoicing</h2>
-            <div className="grid grid-cols-6 items-end gap-3">
-              {monthlyRows.map(([month, row]) => (
-                <div key={month} className="grid gap-2 text-center">
-                  <div className="flex h-32 items-end justify-center gap-1 border-b border-[#d7e1e5]">
-                    <div className="w-4 rounded-t bg-[#5b193f]" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
-                    <div className="w-4 rounded-t bg-[#777da7]" style={{ height: `${Math.max((row.invoiced / maxMonthly) * 100, 4)}%` }} />
-                  </div>
-                  <div className="text-xs font-black text-[#6b7188]">{month}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Profit/loss by project</h2>
-            <div className="space-y-3">
-              {rows.map(({ project, totals }) => (
-                <div key={project.id} className="grid grid-cols-[110px_1fr_90px] items-center gap-3 text-sm">
-                  <div className="truncate font-bold">{project.name}</div>
-                  <div className="h-3 rounded bg-[#e8eef0]">
-                    <div
-                      className={`h-3 rounded ${totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
-                      style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
-                    />
-                  </div>
-                  <div className="text-right"><ProfitLossValue value={totals.profit} /></div>
-                </div>
-              ))}
-            </div>
           </div>
         </div>
       </section>
