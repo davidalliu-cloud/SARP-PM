@@ -101,6 +101,20 @@ function ProfitLossValue({ value }: { value: number }) {
   );
 }
 
+function ProfitLossWithMargin({ value, margin }: { value: number; margin: number }) {
+  const isProfit = value >= 0;
+  return (
+    <span className={isProfit ? "font-black text-[#285d59]" : "font-black text-[#5b193f]"}>
+      {isProfit ? "Profit " : "Loss "}
+      {money(Math.abs(value))}
+      <span className="block text-base font-black">
+        {isProfit ? "+" : "-"}
+        {decimal(Math.abs(margin))}%
+      </span>
+    </span>
+  );
+}
+
 function ActionRequiredCard({ item }: { item: ActionItem }) {
   const toneClasses = {
     maroon: "border-[#5b193f] bg-[#fff8fa] text-[#5b193f]",
@@ -328,8 +342,7 @@ export default async function DashboardPage({
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
-        <StatCard label={profit >= 0 ? "Profit" : "Loss"} value={<ProfitLossValue value={profit} />} detail={profit >= 0 ? "Company result is positive" : "Company result is negative"} tone={profit >= 0 ? "green" : "maroon"} />
-        <StatCard label="Profit margin" value={<span className={margin >= 0 ? "text-[#285d59]" : "text-[#5b193f]"}>{decimal(margin)}%</span>} tone={margin >= 0 ? "green" : "maroon"} />
+        <StatCard label={profit >= 0 ? "Profit" : "Loss"} value={<ProfitLossWithMargin value={profit} margin={margin} />} detail={profit >= 0 ? "Company result is positive" : "Company result is negative"} tone={profit >= 0 ? "green" : "maroon"} />
       </section>
 
       <section className="panel mt-6 p-4">
