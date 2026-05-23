@@ -5,12 +5,6 @@ import { daysSince, daysUntil, invoiceDueDate, money, decimal, statusClass, stat
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, monthKey, projectTotals } from "@/lib/totals";
 
-const projectSections = [
-  { title: "Not started", statuses: ["NOT_STARTED"], border: "border-[#6b7188]", bg: "bg-[#f3f7f3]" },
-  { title: "Ongoing and on hold", statuses: ["ACTIVE", "ON_HOLD"], border: "border-[#777da7]", bg: "bg-white" },
-  { title: "Finished", statuses: ["FINISHED"], border: "border-[#bdc8d0]", bg: "bg-[#f7fbfa]" },
-];
-
 type ActionItem = {
   id: string;
   title: string;
@@ -19,6 +13,18 @@ type ActionItem = {
   href: string;
   tone: "maroon" | "amber" | "blue";
   rank: number;
+};
+
+type ProjectDashboardRow = {
+  project: {
+    id: string;
+    name: string;
+    clientName: string | null;
+    status: string;
+    budgetAmount: number;
+    invoices: { amount: number; isPaid: boolean }[];
+  };
+  totals: ReturnType<typeof projectTotals>;
 };
 
 const periodOptions = [
@@ -135,6 +141,98 @@ function ActionRequiredCard({ item }: { item: ActionItem }) {
   );
 }
 
+function projectAttention(row: ProjectDashboardRow, fullTotals: ReturnType<typeof projectTotals>) {
+  const fullBudget = budgetTotals(row.project.budgetAmount, fullTotals.totalCost);
+  const outstanding = row.project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+
+  if (fullBudget.isOverBudget) {
+    return { label: "Over budget", className: "status status-on-hold", rank: 1 };
+  }
+
+  if (row.totals.profit < 0) {
+    return { label: "Loss this period", className: "status status-on-hold", rank: 2 };
+  }
+
+  if (outstanding > 0) {
+    return { label: "Payment open", className: "status status-risk", rank: 3 };
+  }
+
+  if (row.project.budgetAmount <= 0) {
+    return { label: "Budget missing", className: "status status-finished", rank: 4 };
+  }
+
+  if (row.totals.invoiced > 0 && row.totals.margin < 10) {
+    return { label: "Low margin", className: "status status-risk", rank: 5 };
+  }
+
+  return { label: "On track", className: "status status-active", rank: 6 };
+}
+
+function ProjectDashboardTable({
+  rows,
+  fullTotalsByProjectId,
+  emptyText,
+}: {
+  rows: ProjectDashboardRow[];
+  fullTotalsByProjectId: Map<string, ReturnType<typeof projectTotals>>;
+  emptyText: string;
+}) {
+  return (
+    <div className="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Attention</th>
+            <th>Budget used</th>
+            <th>Cost</th>
+            <th>Invoiced</th>
+            <th>Outstanding</th>
+            <th>Profit / loss</th>
+            <th>Margin</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => {
+            const fullTotals = fullTotalsByProjectId.get(row.project.id) ?? row.totals;
+            const fullBudget = budgetTotals(row.project.budgetAmount, fullTotals.totalCost);
+            const outstanding = row.project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+            const attention = projectAttention(row, fullTotals);
+
+            return (
+              <tr key={row.project.id}>
+                <td>
+                  <Link href={`/projects/${row.project.id}`} className="font-black text-[#373455] hover:text-[#5b193f] hover:underline">
+                    {row.project.name}
+                  </Link>
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <span className={`status ${statusClass(row.project.status)}`}>{statusLabel(row.project.status)}</span>
+                    {row.project.clientName ? <span className="text-xs font-bold text-[#6b7188]">{row.project.clientName}</span> : null}
+                  </div>
+                </td>
+                <td><span className={attention.className}>{attention.label}</span></td>
+                <td className={fullBudget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
+                  {row.project.budgetAmount > 0 ? `${decimal(fullBudget.budgetUsed)}%` : "-"}
+                </td>
+                <td className="font-bold">{money(row.totals.totalCost)}</td>
+                <td>{money(row.totals.invoiced)}</td>
+                <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
+                <td><ProfitLossValue value={row.totals.profit} /></td>
+                <td className={row.totals.margin >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{decimal(row.totals.margin)}%</td>
+              </tr>
+            );
+          })}
+          {!rows.length ? (
+            <tr>
+              <td colSpan={8} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
+            </tr>
+          ) : null}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
 export default async function DashboardPage({
   searchParams,
 }: {
@@ -156,6 +254,7 @@ export default async function DashboardPage({
     project,
     totals: projectTotals(project.dailyRecords, project.invoices),
   }));
+  const fullTotalsByProjectId = new Map(allRows.map((row) => [row.project.id, row.totals]));
   const rows = projects.map((project) => {
     const periodDailyRecords = project.dailyRecords.filter((record) => isInPeriod(record.date, periodRange.start, periodRange.end));
     const periodInvoices = project.invoices.filter((invoice) => isInPeriod(invoice.invoiceDate, periodRange.start, periodRange.end));
@@ -166,6 +265,16 @@ export default async function DashboardPage({
       totals: projectTotals(periodDailyRecords, periodInvoices),
     };
   });
+  const activeProjectRows = rows
+    .filter((row) => row.project.status === "ACTIVE")
+    .sort((a, b) => {
+      const aAttention = projectAttention(a, fullTotalsByProjectId.get(a.project.id) ?? a.totals);
+      const bAttention = projectAttention(b, fullTotalsByProjectId.get(b.project.id) ?? b.totals);
+      return aAttention.rank - bAttention.rank || b.totals.totalCost - a.totals.totalCost;
+    });
+  const finishedProjectRows = rows
+    .filter((row) => row.project.status === "FINISHED")
+    .sort((a, b) => b.totals.invoiced - a.totals.invoiced || b.totals.profit - a.totals.profit);
 
   const activeProjects = projects.filter((project) => project.status === "ACTIVE").length;
   const totalCost = rows.reduce((sum, row) => sum + row.totals.totalCost, 0);
@@ -516,70 +625,37 @@ export default async function DashboardPage({
 
       <section className="mt-6">
         <div className="panel p-4">
-          <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-black">Projects</h2>
+          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-xs font-black uppercase text-[#5b193f]">Current work</div>
+              <h2 className="text-lg font-black">Active projects</h2>
+              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Sorted by what needs attention first, then by current period cost.</p>
+            </div>
             <Link href="/projects" className="text-sm font-black text-[#777da7]">View all</Link>
           </div>
-          <div className="grid gap-4">
-            {projectSections.map((section) => {
-              const sectionRows = rows.filter(({ project }) => section.statuses.includes(project.status));
-              if (!sectionRows.length) return null;
+          <ProjectDashboardTable
+            rows={activeProjectRows}
+            fullTotalsByProjectId={fullTotalsByProjectId}
+            emptyText="No active projects found. Change a project status to Active when work starts."
+          />
+        </div>
+      </section>
 
-              return (
-                <div key={section.title} className={`overflow-hidden rounded-lg border border-l-4 ${section.border} ${section.bg}`}>
-                  <div className="flex items-center justify-between border-b border-[#e8eef0] px-4 py-3">
-                    <h3 className="font-black">{section.title}</h3>
-                    <span className="text-xs font-black uppercase text-[#6b7188]">{sectionRows.length} projects</span>
-                  </div>
-                  <div className="table-wrap">
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Project</th>
-                          <th>Products</th>
-                          <th>Labour</th>
-                          <th>Expenses</th>
-                          <th>Budget</th>
-                          <th>Total cost</th>
-                          <th>Budget left</th>
-                          <th>Invoiced</th>
-                          <th>Outstanding</th>
-                          <th>Profit / loss</th>
-                          <th>Margin</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {sectionRows.map(({ project, totals }) => {
-                          const outstanding = project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
-                          const budget = budgetTotals(project.budgetAmount, totals.totalCost);
-                          return (
-                            <tr key={project.id}>
-                              <td>
-                                <Link href={`/projects/${project.id}`} className="font-black text-[#373455]">{project.name}</Link>
-                                <div className="mt-1"><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></div>
-                              </td>
-                              <td>{money(totals.productCost)}</td>
-                              <td>{money(totals.labourCost)}</td>
-                              <td>{money(totals.expenseCost)}</td>
-                              <td>{project.budgetAmount > 0 ? money(project.budgetAmount) : "-"}</td>
-                              <td className="font-bold">{money(totals.totalCost)}</td>
-                              <td className={budget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
-                                {project.budgetAmount > 0 ? money(budget.budgetRemaining) : "-"}
-                              </td>
-                              <td>{money(totals.invoiced)}</td>
-                              <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
-                              <td><ProfitLossValue value={totals.profit} /></td>
-                              <td className={totals.margin >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{decimal(totals.margin)}%</td>
-                            </tr>
-                          );
-                        })}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              );
-            })}
+      <section className="mt-6">
+        <div className="panel border-t-4 border-[#bdc8d0] p-4">
+          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-xs font-black uppercase text-[#6b7188]">Closed work</div>
+              <h2 className="text-lg font-black">Finished projects</h2>
+              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Kept separate so completed jobs do not distract from current site work.</p>
+            </div>
+            <span className="status status-finished">{finishedProjectRows.length} finished</span>
           </div>
+          <ProjectDashboardTable
+            rows={finishedProjectRows}
+            fullTotalsByProjectId={fullTotalsByProjectId}
+            emptyText="No finished projects in this view."
+          />
         </div>
       </section>
     </>
