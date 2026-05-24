@@ -28,14 +28,6 @@ export default function NewProjectPage() {
           <input name="estimatedContractValue" type="number" min="0" step="0.01" placeholder="Expected contract value" />
         </label>
         <label>
-          Estimated profit margin %
-          <input name="estimatedProfitMargin" type="number" min="-100" max="100" step="0.1" placeholder="25" />
-        </label>
-        <label>
-          Project area m2
-          <input name="contractAreaM2" type="number" min="0" step="0.01" placeholder="1200" />
-        </label>
-        <label>
           Status
           <select name="status" required defaultValue="NOT_STARTED">
             <option value="NOT_STARTED">Not Started</option>

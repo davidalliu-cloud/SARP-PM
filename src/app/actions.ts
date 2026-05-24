@@ -19,6 +19,10 @@ function numberValue(value: FormDataEntryValue | null) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function targetMarginFromBudget(budgetAmount: number, estimatedContractValue: number) {
+  return estimatedContractValue > 0 ? ((estimatedContractValue - budgetAmount) / estimatedContractValue) * 100 : 0;
+}
+
 function addDays(date: Date, days: number) {
   const result = new Date(date);
   result.setDate(result.getDate() + days);
@@ -80,16 +84,19 @@ function dailyRecordLineItems(formData: FormData) {
 export async function createProject(formData: FormData) {
   await requireUser();
 
+  const budgetAmount = numberValue(formData.get("budgetAmount"));
+  const estimatedContractValue = numberValue(formData.get("estimatedContractValue"));
+
   await prisma.project.create({
     data: {
       name: text(formData, "name"),
       clientName: text(formData, "clientName") || null,
       startDate: new Date(text(formData, "startDate")),
       status: text(formData, "status") as ProjectStatus,
-      budgetAmount: numberValue(formData.get("budgetAmount")),
-      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
-      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
-      contractAreaM2: numberValue(formData.get("contractAreaM2")),
+      budgetAmount,
+      estimatedContractValue,
+      estimatedProfitMargin: targetMarginFromBudget(budgetAmount, estimatedContractValue),
+      contractAreaM2: 0,
     },
   });
 
@@ -102,16 +109,17 @@ export async function updateProjectBasics(formData: FormData) {
   await requireUser();
 
   const id = text(formData, "id");
+  const budgetAmount = numberValue(formData.get("budgetAmount"));
+  const estimatedContractValue = numberValue(formData.get("estimatedContractValue"));
 
   await prisma.project.update({
     where: { id },
     data: {
       name: text(formData, "name"),
       clientName: text(formData, "clientName") || null,
-      budgetAmount: numberValue(formData.get("budgetAmount")),
-      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
-      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
-      contractAreaM2: numberValue(formData.get("contractAreaM2")),
+      budgetAmount,
+      estimatedContractValue,
+      estimatedProfitMargin: targetMarginFromBudget(budgetAmount, estimatedContractValue),
     },
   });
 
@@ -142,14 +150,15 @@ export async function updateProjectBudget(formData: FormData) {
   await requireUser();
 
   const id = text(formData, "id");
+  const budgetAmount = numberValue(formData.get("budgetAmount"));
+  const estimatedContractValue = numberValue(formData.get("estimatedContractValue"));
 
   await prisma.project.update({
     where: { id },
     data: {
-      budgetAmount: numberValue(formData.get("budgetAmount")),
-      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
-      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
-      contractAreaM2: numberValue(formData.get("contractAreaM2")),
+      budgetAmount,
+      estimatedContractValue,
+      estimatedProfitMargin: targetMarginFromBudget(budgetAmount, estimatedContractValue),
     },
   });
 

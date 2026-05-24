@@ -15,7 +15,6 @@ type ProjectRow = {
   budgetAmount: number;
   estimatedContractValue: number;
   estimatedProfitMargin: number;
-  contractAreaM2: number;
   budgetRemaining: number;
   budgetUsed: number;
   isOverBudget: boolean;
@@ -40,7 +39,6 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             <th>Budget</th>
             <th>Contract value</th>
             <th>Target margin</th>
-            <th>Area</th>
             <th>Total cost</th>
             <th>Budget left</th>
             <th>Invoiced</th>
@@ -97,20 +95,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                     project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "-"
                   )}
                 </td>
-                <td>
-                  {isEditing ? (
-                    <input className="h-9 py-1.5" form={formId} name="estimatedProfitMargin" type="number" min="-100" max="100" step="0.1" defaultValue={project.estimatedProfitMargin} aria-label={`Target margin for ${project.name}`} />
-                  ) : (
-                    project.estimatedProfitMargin ? `${decimal(project.estimatedProfitMargin)}%` : "-"
-                  )}
-                </td>
-                <td>
-                  {isEditing ? (
-                    <input className="h-9 py-1.5" form={formId} name="contractAreaM2" type="number" min="0" step="0.01" defaultValue={project.contractAreaM2} aria-label={`Area m2 for ${project.name}`} />
-                  ) : (
-                    project.contractAreaM2 > 0 ? `${project.contractAreaM2.toLocaleString()} m2` : "-"
-                  )}
-                </td>
+                <td>{project.estimatedProfitMargin ? `${decimal(project.estimatedProfitMargin)}%` : "-"}</td>
                 <td>{money(project.totalCost)}</td>
                 <td className={project.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
                   {project.budgetAmount > 0 ? money(project.budgetRemaining) : "-"}
@@ -134,7 +119,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             );
           })}
           {!projects.length ? (
-            <tr><td colSpan={14} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
+            <tr><td colSpan={12} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
           ) : null}
         </tbody>
       </table>

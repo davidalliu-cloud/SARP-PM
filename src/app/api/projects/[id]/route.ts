@@ -2,6 +2,10 @@ import { NextResponse } from "next/server";
 import { ProjectStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 
+function targetMarginFromBudget(budgetAmount: number | undefined, estimatedContractValue: number | undefined) {
+  return estimatedContractValue && estimatedContractValue > 0 && budgetAmount != null ? ((estimatedContractValue - budgetAmount) / estimatedContractValue) * 100 : undefined;
+}
+
 export async function GET(_: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const project = await prisma.project.findUnique({
@@ -25,6 +29,8 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const body = await request.json();
+  const budgetAmount = body.budgetAmount == null ? undefined : Number(body.budgetAmount);
+  const estimatedContractValue = body.estimatedContractValue == null ? undefined : Number(body.estimatedContractValue);
   const project = await prisma.project.update({
     where: { id },
     data: {
@@ -32,9 +38,9 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
       clientName: body.clientName ?? null,
       startDate: body.startDate ? new Date(body.startDate) : undefined,
       status: body.status as ProjectStatus | undefined,
-      budgetAmount: body.budgetAmount == null ? undefined : Number(body.budgetAmount),
-      estimatedContractValue: body.estimatedContractValue == null ? undefined : Number(body.estimatedContractValue),
-      estimatedProfitMargin: body.estimatedProfitMargin == null ? undefined : Number(body.estimatedProfitMargin),
+      budgetAmount,
+      estimatedContractValue,
+      estimatedProfitMargin: targetMarginFromBudget(budgetAmount, estimatedContractValue),
       contractAreaM2: body.contractAreaM2 == null ? undefined : Number(body.contractAreaM2),
     },
   });
