@@ -22,6 +22,8 @@ export async function POST(request: Request) {
       startDate: new Date(body.startDate),
       status: (body.status || "NOT_STARTED") as ProjectStatus,
       budgetAmount: body.budgetAmount == null ? 0 : Number(body.budgetAmount),
+      estimatedContractValue: body.estimatedContractValue == null ? 0 : Number(body.estimatedContractValue),
+      estimatedProfitMargin: body.estimatedProfitMargin == null ? 0 : Number(body.estimatedProfitMargin),
       contractAreaM2: body.contractAreaM2 == null ? 0 : Number(body.contractAreaM2),
     },
   });

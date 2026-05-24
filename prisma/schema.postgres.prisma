@@ -48,6 +48,8 @@ model Project {
   startDate    DateTime
   status       ProjectStatus @default(NOT_STARTED)
   budgetAmount Float         @default(0)
+  estimatedContractValue Float @default(0)
+  estimatedProfitMargin Float @default(0)
   contractAreaM2 Float        @default(0)
   dailyRecords DailyRecord[]
   invoices     Invoice[]

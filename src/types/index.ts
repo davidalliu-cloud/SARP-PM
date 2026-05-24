@@ -75,6 +75,8 @@ export interface Project {
   startDate: string
   status: ProjectStatus
   budgetAmount: number
+  estimatedContractValue: number
+  estimatedProfitMargin: number
   contractAreaM2: number
   createdAt: string
   updatedAt: string

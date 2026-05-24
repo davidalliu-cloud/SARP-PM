@@ -51,6 +51,8 @@ type ExportedData = {
     startDate: JsonDate;
     status: ProjectStatus;
     budgetAmount?: number;
+    estimatedContractValue?: number;
+    estimatedProfitMargin?: number;
     contractAreaM2?: number;
     createdAt: JsonDate;
     updatedAt: JsonDate;
@@ -201,6 +203,8 @@ async function main() {
     data.projects.map((project) => ({
       ...project,
       budgetAmount: project.budgetAmount ?? 0,
+      estimatedContractValue: project.estimatedContractValue ?? 0,
+      estimatedProfitMargin: project.estimatedProfitMargin ?? 0,
       contractAreaM2: project.contractAreaM2 ?? 0,
       startDate: date(project.startDate),
       createdAt: date(project.createdAt),

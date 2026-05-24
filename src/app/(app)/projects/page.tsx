@@ -36,6 +36,8 @@ export default async function ProjectsPage({
       startDate: project.startDate.toISOString(),
       status: project.status,
       budgetAmount: project.budgetAmount,
+      estimatedContractValue: project.estimatedContractValue,
+      estimatedProfitMargin: project.estimatedProfitMargin,
       contractAreaM2: project.contractAreaM2,
       budgetRemaining: budget.budgetRemaining,
       budgetUsed: budget.budgetUsed,

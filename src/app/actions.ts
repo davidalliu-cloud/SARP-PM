@@ -87,6 +87,8 @@ export async function createProject(formData: FormData) {
       startDate: new Date(text(formData, "startDate")),
       status: text(formData, "status") as ProjectStatus,
       budgetAmount: numberValue(formData.get("budgetAmount")),
+      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
+      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
       contractAreaM2: numberValue(formData.get("contractAreaM2")),
     },
   });
@@ -107,6 +109,8 @@ export async function updateProjectBasics(formData: FormData) {
       name: text(formData, "name"),
       clientName: text(formData, "clientName") || null,
       budgetAmount: numberValue(formData.get("budgetAmount")),
+      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
+      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
       contractAreaM2: numberValue(formData.get("contractAreaM2")),
     },
   });
@@ -141,7 +145,12 @@ export async function updateProjectBudget(formData: FormData) {
 
   await prisma.project.update({
     where: { id },
-    data: { budgetAmount: numberValue(formData.get("budgetAmount")) },
+    data: {
+      budgetAmount: numberValue(formData.get("budgetAmount")),
+      estimatedContractValue: numberValue(formData.get("estimatedContractValue")),
+      estimatedProfitMargin: numberValue(formData.get("estimatedProfitMargin")),
+      contractAreaM2: numberValue(formData.get("contractAreaM2")),
+    },
   });
 
   revalidatePath("/");

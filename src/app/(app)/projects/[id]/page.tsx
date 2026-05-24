@@ -93,6 +93,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const costTone = budgetTone === "default" ? "blue" : budgetTone;
   const invoiceTone = recoveryTone(totals.invoiced, totals.totalCost);
   const marginTone = profitTone(totals.margin, totals.profit);
+  const estimatedProfit = project.estimatedContractValue > 0 ? project.estimatedContractValue * (project.estimatedProfitMargin / 100) : 0;
+  const estimatedCostAllowance = project.estimatedContractValue > 0 ? project.estimatedContractValue - estimatedProfit : 0;
+  const actualVsTargetMargin = totals.invoiced > 0 && project.estimatedProfitMargin > 0 ? totals.margin - project.estimatedProfitMargin : 0;
+  const planningTone: PerformanceTone = project.estimatedContractValue <= 0 ? "default" : totals.profit < estimatedProfit * 0.85 && totals.invoiced > 0 ? "amber" : "green";
   const projectTone: PerformanceTone = budgetTone === "maroon" || marginTone === "maroon" || invoiceTone === "maroon" ? "maroon" : budgetTone === "amber" || marginTone === "amber" || invoiceTone === "amber" ? "amber" : totals.totalCost > 0 ? "green" : "default";
   const summary = performanceSummary(projectTone);
   const latestProductCosts = new Map<string, number>();
@@ -226,11 +230,19 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               Budget
               <input name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} />
             </label>
+            <label className="min-w-44">
+              Contract value
+              <input name="estimatedContractValue" type="number" min="0" step="0.01" defaultValue={project.estimatedContractValue} />
+            </label>
+            <label className="min-w-36">
+              Target margin %
+              <input name="estimatedProfitMargin" type="number" min="-100" max="100" step="0.1" defaultValue={project.estimatedProfitMargin} />
+            </label>
             <label className="min-w-40">
               Area m2
               <input name="contractAreaM2" type="number" min="0" step="0.01" defaultValue={project.contractAreaM2} />
             </label>
-            <button className="btn btn-small btn-save mb-0.5" type="submit">Save budget</button>
+            <button className="btn btn-small btn-save mb-0.5" type="submit">Save plan</button>
           </form>
           <form action={updateProjectStatus} className="flex items-end gap-2">
             <input type="hidden" name="id" value={project.id} />
@@ -272,6 +284,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-9">
         <StatCard label="Budget" value={project.budgetAmount > 0 ? money(project.budgetAmount) : "Not set"} detail={project.budgetAmount > 0 ? `${decimal(budget.budgetUsed)}% used` : "Set a budget for risk colours"} tone={budgetTone} />
+        <StatCard label="Contract value" value={project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "Not set"} detail={estimatedProfit > 0 ? `${money(estimatedProfit)} target profit` : "Add expected contract value"} tone={planningTone} />
+        <StatCard label="Target margin" value={project.estimatedProfitMargin ? `${decimal(project.estimatedProfitMargin)}%` : "Not set"} detail={actualVsTargetMargin ? `${actualVsTargetMargin >= 0 ? "+" : ""}${decimal(actualVsTargetMargin)}% vs actual` : "Compare expected vs actual"} tone={actualVsTargetMargin < 0 ? "amber" : planningTone} />
+        <StatCard label="Cost allowance" value={estimatedCostAllowance > 0 ? money(estimatedCostAllowance) : "-"} detail={project.budgetAmount > 0 && estimatedCostAllowance > 0 ? `${money(estimatedCostAllowance - totals.totalCost)} left vs actual cost` : "Contract value less target profit"} tone={estimatedCostAllowance > 0 && totals.totalCost > estimatedCostAllowance ? "maroon" : planningTone} />
         <StatCard label="Product cost" value={money(totals.productCost)} detail={project.budgetAmount > 0 ? "Part of budget pressure" : undefined} tone={costTone} />
         <StatCard label="Labour cost" value={money(totals.labourCost)} detail={project.budgetAmount > 0 ? "Part of budget pressure" : undefined} tone={costTone} />
         <StatCard label="Expenses" value={money(totals.expenseCost)} detail={project.budgetAmount > 0 ? "Part of budget pressure" : undefined} tone={costTone} />

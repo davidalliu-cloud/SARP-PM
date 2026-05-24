@@ -20,8 +20,16 @@ export default function NewProjectPage() {
           <input name="startDate" type="date" required defaultValue={dateInputValue()} />
         </label>
         <label>
-          Project budget / contract value
-          <input name="budgetAmount" type="number" min="0" step="0.01" placeholder="50000.00" />
+          Project budget
+          <input name="budgetAmount" type="number" min="0" step="0.01" placeholder="Estimated cost budget" />
+        </label>
+        <label>
+          Estimated contract value
+          <input name="estimatedContractValue" type="number" min="0" step="0.01" placeholder="Expected contract value" />
+        </label>
+        <label>
+          Estimated profit margin %
+          <input name="estimatedProfitMargin" type="number" min="-100" max="100" step="0.1" placeholder="25" />
         </label>
         <label>
           Project area m2

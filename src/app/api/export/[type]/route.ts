@@ -26,7 +26,7 @@ export async function GET(
     });
 
     const body = csvRows(
-      ["Project", "Client", "Start date", "Status", "Budget", "Project area m2", "Completed area m2", "Product cost", "Labour cost", "Expenses", "Total cost", "Total cost per m2", "Invoiced per m2", "Profit per m2", "Budget left", "Budget used %", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
+      ["Project", "Client", "Start date", "Status", "Budget", "Estimated contract value", "Estimated profit margin %", "Estimated profit", "Project area m2", "Completed area m2", "Product cost", "Labour cost", "Expenses", "Total cost", "Total cost per m2", "Invoiced per m2", "Profit per m2", "Budget left", "Budget used %", "Invoiced", "Outstanding", "Profit/loss", "Margin %"],
       projects.map((project) => {
         const totals = projectTotals(project.dailyRecords, project.invoices);
         const budget = budgetTotals(project.budgetAmount, totals.totalCost);
@@ -38,6 +38,9 @@ export async function GET(
           project.startDate,
           project.status,
           project.budgetAmount,
+          project.estimatedContractValue,
+          project.estimatedProfitMargin,
+          project.estimatedContractValue > 0 ? project.estimatedContractValue * (project.estimatedProfitMargin / 100) : "",
           project.contractAreaM2,
           completedAreaM2,
           totals.productCost,
