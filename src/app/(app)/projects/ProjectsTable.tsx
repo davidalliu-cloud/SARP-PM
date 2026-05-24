@@ -27,23 +27,25 @@ type ProjectRow = {
 export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
 
+  function profitClass(project: ProjectRow) {
+    if (project.profit < 0 || project.margin < 0) return "text-[#5b193f]";
+    if (project.estimatedProfitMargin > 0 && project.margin >= project.estimatedProfitMargin) return "text-[#285d59]";
+    if (project.estimatedProfitMargin > 0) return "text-[#c28a2c]";
+    return "text-[#285d59]";
+  }
+
   return (
     <div className="panel table-wrap">
       <table>
         <thead>
           <tr>
             <th>Project</th>
-            <th>Client</th>
-            <th>Start date</th>
             <th>Status</th>
             <th>Budget</th>
-            <th>Contract value</th>
-            <th>Target margin</th>
-            <th>Total cost</th>
-            <th>Budget left</th>
+            <th>Contract</th>
+            <th>Cost</th>
             <th>Invoiced</th>
-            <th>Profit/loss</th>
-            <th>Margin</th>
+            <th>Profit / margin</th>
             <th>Action</th>
           </tr>
         </thead>
@@ -59,51 +61,59 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                     <form id={formId} action={updateProjectBasics}>
                       <input type="hidden" name="id" value={project.id} />
                       <input name="name" defaultValue={project.name} required aria-label={`Project name for ${project.name}`} />
+                      <input form={formId} name="clientName" defaultValue={project.clientName || ""} placeholder="Client name" aria-label={`Client name for ${project.name}`} />
                     </form>
                   ) : (
-                    <Link
-                      href={`/projects/${project.id}`}
-                      className="group inline-flex max-w-64 items-center gap-2 rounded-md px-2 py-1 -ml-2 font-black text-[#373455] transition hover:bg-[#f4e8eb] hover:text-[#5b193f] focus-visible:bg-[#f4e8eb] focus-visible:text-[#5b193f]"
-                    >
-                      <span className="truncate underline-offset-4 group-hover:underline group-focus-visible:underline">{project.name}</span>
-                      <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-black uppercase text-[#5b193f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-                        Open
-                      </span>
-                    </Link>
+                    <div>
+                      <Link
+                        href={`/projects/${project.id}`}
+                        className="group inline-flex max-w-72 items-center gap-2 rounded-md px-2 py-1 -ml-2 font-black text-[#373455] transition hover:bg-[#f4e8eb] hover:text-[#5b193f] focus-visible:bg-[#f4e8eb] focus-visible:text-[#5b193f]"
+                      >
+                        <span className="truncate underline-offset-4 group-hover:underline group-focus-visible:underline">{project.name}</span>
+                        <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-black uppercase text-[#5b193f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                          Open
+                        </span>
+                      </Link>
+                      <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                        {project.clientName || "No client"} / Start {new Date(project.startDate).toLocaleDateString()}
+                      </div>
+                    </div>
                   )}
                 </td>
-                <td>
-                  {isEditing ? (
-                    <input form={formId} name="clientName" defaultValue={project.clientName || ""} placeholder="Client name" aria-label={`Client name for ${project.name}`} />
-                  ) : (
-                    <span className="font-semibold text-[#373455]">{project.clientName || "-"}</span>
-                  )}
-                </td>
-                <td>{new Date(project.startDate).toLocaleDateString()}</td>
                 <td><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></td>
                 <td>
                   {isEditing ? (
                     <input className="h-9 py-1.5" form={formId} name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} aria-label={`Budget for ${project.name}`} />
                   ) : (
-                    project.budgetAmount > 0 ? money(project.budgetAmount) : "-"
+                    <div className={project.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#373455]"}>
+                      {project.budgetAmount > 0 ? money(project.budgetAmount) : "-"}
+                      {project.budgetAmount > 0 ? (
+                        <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                          {decimal(project.budgetUsed)}% used / {money(project.budgetRemaining)} left
+                        </div>
+                      ) : null}
+                    </div>
                   )}
                 </td>
                 <td>
                   {isEditing ? (
                     <input className="h-9 py-1.5" form={formId} name="estimatedContractValue" type="number" min="0" step="0.01" defaultValue={project.estimatedContractValue} aria-label={`Contract value for ${project.name}`} />
                   ) : (
-                    project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "-"
+                    <div className="font-bold text-[#373455]">
+                      {project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "-"}
+                      {project.estimatedProfitMargin ? <div className="mt-1 text-xs font-bold text-[#6b7188]">Target {decimal(project.estimatedProfitMargin)}%</div> : null}
+                    </div>
                   )}
                 </td>
-                <td>{project.estimatedProfitMargin ? `${decimal(project.estimatedProfitMargin)}%` : "-"}</td>
-                <td>{money(project.totalCost)}</td>
-                <td className={project.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
-                  {project.budgetAmount > 0 ? money(project.budgetRemaining) : "-"}
-                  {project.budgetAmount > 0 ? <div className="mt-1 text-xs text-[#6b7188]">{decimal(project.budgetUsed)}% used</div> : null}
-                </td>
+                <td className="font-bold">{money(project.totalCost)}</td>
                 <td>{money(project.invoiced)}</td>
-                <td className={project.profit >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{money(project.profit)}</td>
-                <td>{decimal(project.margin)}%</td>
+                <td className={`font-black ${profitClass(project)}`}>
+                  {money(project.profit)}
+                  <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                    Actual {decimal(project.margin)}%
+                    {project.estimatedProfitMargin ? ` / Target ${decimal(project.estimatedProfitMargin)}%` : ""}
+                  </div>
+                </td>
                 <td>
                   <div className="grid w-24 gap-2">
                     <button className="btn btn-small btn-edit w-full justify-center" type="button" onClick={() => setEditingId(isEditing ? null : project.id)}>
@@ -119,7 +129,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             );
           })}
           {!projects.length ? (
-            <tr><td colSpan={12} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
+            <tr><td colSpan={8} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
           ) : null}
         </tbody>
       </table>

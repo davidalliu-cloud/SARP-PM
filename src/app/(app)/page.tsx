@@ -22,6 +22,7 @@ type ProjectDashboardRow = {
     clientName: string | null;
     status: string;
     budgetAmount: number;
+    estimatedContractValue: number;
     invoices: { amount: number; isPaid: boolean }[];
   };
   totals: ReturnType<typeof projectTotals>;
@@ -69,6 +70,10 @@ function getPeriodRange(period: string) {
 function isInPeriod(date: Date, start: Date | null, end: Date | null) {
   if (!start || !end) return true;
   return date >= start && date < end;
+}
+
+function targetMargin(budgetAmount: number, contractValue: number) {
+  return contractValue > 0 ? ((contractValue - budgetAmount) / contractValue) * 100 : 0;
 }
 
 function BarRow({
@@ -184,12 +189,10 @@ function ProjectDashboardTable({
           <tr>
             <th>Project</th>
             <th>Attention</th>
-            <th>Budget used</th>
+            <th>Budget</th>
             <th>Cost</th>
             <th>Invoiced</th>
-            <th>Outstanding</th>
-            <th>Profit / loss</th>
-            <th>Margin</th>
+            <th>Profit / margin</th>
           </tr>
         </thead>
         <tbody>
@@ -198,6 +201,12 @@ function ProjectDashboardTable({
             const fullBudget = budgetTotals(row.project.budgetAmount, fullTotals.totalCost);
             const outstanding = row.project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
             const attention = projectAttention(row, fullTotals);
+            const target = targetMargin(row.project.budgetAmount, row.project.estimatedContractValue);
+            const profitTone = row.totals.profit < 0 || row.totals.margin < 0
+              ? "text-[#5b193f]"
+              : target > 0 && row.totals.margin < target
+                ? "text-[#c28a2c]"
+                : "text-[#285d59]";
 
             return (
               <tr key={row.project.id}>
@@ -212,19 +221,27 @@ function ProjectDashboardTable({
                 </td>
                 <td><span className={attention.className}>{attention.label}</span></td>
                 <td className={fullBudget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
-                  {row.project.budgetAmount > 0 ? `${decimal(fullBudget.budgetUsed)}%` : "-"}
+                  {row.project.budgetAmount > 0 ? money(row.project.budgetAmount) : "-"}
+                  {row.project.budgetAmount > 0 ? <div className="mt-1 text-xs font-bold text-[#6b7188]">{decimal(fullBudget.budgetUsed)}% used</div> : null}
                 </td>
                 <td className="font-bold">{money(row.totals.totalCost)}</td>
-                <td>{money(row.totals.invoiced)}</td>
-                <td className={outstanding > 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>{money(outstanding)}</td>
-                <td><ProfitLossValue value={row.totals.profit} /></td>
-                <td className={row.totals.margin >= 0 ? "font-bold text-[#285d59]" : "font-bold text-[#5b193f]"}>{decimal(row.totals.margin)}%</td>
+                <td>
+                  {money(row.totals.invoiced)}
+                  {outstanding > 0 ? <div className="mt-1 text-xs font-bold text-[#5b193f]">{money(outstanding)} open</div> : null}
+                </td>
+                <td className={`font-black ${profitTone}`}>
+                  {money(row.totals.profit)}
+                  <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                    Actual {decimal(row.totals.margin)}%
+                    {target ? ` / Target ${decimal(target)}%` : ""}
+                  </div>
+                </td>
               </tr>
             );
           })}
           {!rows.length ? (
             <tr>
-              <td colSpan={8} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
+              <td colSpan={6} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
             </tr>
           ) : null}
         </tbody>
