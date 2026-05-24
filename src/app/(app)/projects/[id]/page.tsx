@@ -13,6 +13,12 @@ import { InvoicesManager } from "./InvoicesManager";
 
 type PerformanceTone = "default" | "maroon" | "blue" | "green" | "amber";
 
+type GuidanceItem = {
+  title: string;
+  text: string;
+  tone: "maroon" | "amber" | "blue" | "green";
+};
+
 function budgetPressureTone(budgetAmount: number, budgetUsed: number, isOverBudget: boolean): PerformanceTone {
   if (budgetAmount <= 0) return "default";
   if (isOverBudget) return "maroon";
@@ -41,6 +47,13 @@ function performanceSummary(tone: PerformanceTone) {
   if (tone === "amber") return { label: "At risk", className: "status status-risk", text: "This project needs attention before it becomes underperforming." };
   if (tone === "maroon") return { label: "Underperforming", className: "status status-on-hold", text: "Budget, recovery, or margin has moved into a problem area." };
   return { label: "Tracking", className: "status status-finished", text: "Not enough pressure signals yet to classify this project." };
+}
+
+function guidanceToneClass(tone: GuidanceItem["tone"]) {
+  if (tone === "maroon") return "border-[#5b193f] bg-[#fff8fa]";
+  if (tone === "amber") return "border-[#c28a2c] bg-[#fffaf0]";
+  if (tone === "green") return "border-[#285d59] bg-[#f7fbfa]";
+  return "border-[#777da7] bg-[#f7f8fc]";
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -208,6 +221,93 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     return map;
   }, new Map<string, { category: string; entries: number; cost: number }>()).values())
     .sort((a, b) => b.cost - a.cost);
+  const largestCostGroup = [
+    { label: "products", value: totals.productCost },
+    { label: "labour", value: totals.labourCost },
+    { label: "expenses", value: totals.expenseCost },
+  ].sort((a, b) => b.value - a.value)[0];
+  const guidanceItems: GuidanceItem[] = [];
+
+  if (projectTone === "green") {
+    guidanceItems.push({
+      title: "Keep the control rhythm",
+      text: "Continue daily cost capture, weekly review of budget used, and quick invoice follow-up. Strong projects stay strong when small variances are caught early.",
+      tone: "green",
+    });
+  }
+
+  if (budget.isOverBudget || budget.budgetUsed >= 85) {
+    guidanceItems.push({
+      title: budget.isOverBudget ? "Recover the budget position" : "Protect the remaining budget",
+      text: budget.isOverBudget
+        ? `Costs are ${money(Math.abs(budget.budgetRemaining))} over budget. Freeze non-essential purchases, confirm remaining scope, and separate any client-driven changes so they can be priced or claimed.`
+        : `${decimal(budget.budgetUsed)}% of the budget is already used. Review the remaining work before approving more material, overtime, or subcontract labour.`,
+      tone: budget.isOverBudget ? "maroon" : "amber",
+    });
+  }
+
+  if (totals.invoiced > 0 && calculatedTargetMargin > 0 && totals.margin < calculatedTargetMargin) {
+    guidanceItems.push({
+      title: "Close the margin gap",
+      text: `Actual margin is ${decimal(totals.margin)}% versus a target of ${decimal(calculatedTargetMargin)}%. Focus first on ${largestCostGroup.label}, because it is currently the largest cost group on this project.`,
+      tone: totals.margin < 0 ? "maroon" : "amber",
+    });
+  }
+
+  if (totals.totalCost > 0 && totals.invoiced < totals.totalCost) {
+    guidanceItems.push({
+      title: "Improve cost recovery",
+      text: `Invoices currently recover ${decimal((totals.invoiced / totals.totalCost) * 100)}% of recorded cost. Check whether completed work, variations, and monthly quantities have been invoiced fully.`,
+      tone: totals.invoiced / totals.totalCost < 0.8 ? "maroon" : "amber",
+    });
+  }
+
+  if (overdueInvoices.length) {
+    guidanceItems.push({
+      title: "Escalate overdue payment",
+      text: `${overdueInvoices.length} invoice${overdueInvoices.length === 1 ? " is" : "s are"} overdue. Confirm receipt with the client, agree a payment date, and avoid carrying additional unfunded work without management approval.`,
+      tone: "maroon",
+    });
+  } else if (outstandingInvoices > 0) {
+    guidanceItems.push({
+      title: "Protect cash flow",
+      text: `${money(outstandingInvoices)} is still unpaid. Follow up before it becomes overdue and keep proof of submitted invoices, site records, and approvals attached to the project.`,
+      tone: "amber",
+    });
+  }
+
+  if (totals.productCost > totals.totalCost * 0.45 && productUsageSummary[0]) {
+    guidanceItems.push({
+      title: "Control material consumption",
+      text: `${productUsageSummary[0].name} is the highest material cost. Compare actual quantity against expected usage, check waste, and confirm site stock before ordering more.`,
+      tone: "blue",
+    });
+  }
+
+  if (totals.labourCost > totals.totalCost * 0.45) {
+    guidanceItems.push({
+      title: "Review productivity",
+      text: "Labour is taking the largest share of cost. Check daily output, crew size, waiting time, rework, and whether external m2 teams would be more efficient for repetitive areas.",
+      tone: "blue",
+    });
+  }
+
+  if (totals.expenseCost > totals.totalCost * 0.15 && expenseSummary[0]) {
+    guidanceItems.push({
+      title: "Tighten indirect expenses",
+      text: `${expenseSummary[0].category} is the highest expense category. Review whether it belongs to project cost, variation work, or avoidable site support spend.`,
+      tone: "blue",
+    });
+  }
+
+  if (!guidanceItems.length) {
+    guidanceItems.push({
+      title: "Add planning data",
+      text: "Add budget and contract value, then keep daily costs and invoices up to date. The app will give stronger guidance once it has enough project control data.",
+      tone: "blue",
+    });
+  }
+
   const invoices = project.invoices.map((invoice) => ({
     id: invoice.id,
     projectId: invoice.projectId,
@@ -272,6 +372,24 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <div className="mt-1 font-black text-[#373455]">{summary.text}</div>
           </div>
           <span className={summary.className}>{summary.label}</span>
+        </div>
+      </section>
+
+      <section className="panel mb-4 p-4">
+        <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="text-xs font-black uppercase text-[#5b193f]">Recovery guidance</div>
+            <h2 className="text-xl font-black">Recommended actions</h2>
+          </div>
+          <span className={summary.className}>{summary.label}</span>
+        </div>
+        <div className="grid gap-3 lg:grid-cols-2">
+          {guidanceItems.slice(0, 6).map((item) => (
+            <div key={item.title} className={`rounded-lg border-l-4 p-3 ${guidanceToneClass(item.tone)}`}>
+              <div className="text-sm font-black text-[#373455]">{item.title}</div>
+              <p className="mt-1 text-sm font-semibold leading-6 text-[#6b7188]">{item.text}</p>
+            </div>
+          ))}
         </div>
       </section>
 
