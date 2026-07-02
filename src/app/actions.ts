@@ -548,6 +548,7 @@ export async function createAttachment(formData: FormData) {
   });
 
   revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/projects/${projectId}/attachments`);
 }
 
 export async function deleteAttachment(formData: FormData) {
@@ -559,4 +560,5 @@ export async function deleteAttachment(formData: FormData) {
   await prisma.attachment.delete({ where: { id } });
 
   revalidatePath(`/projects/${projectId}`);
+  revalidatePath(`/projects/${projectId}/attachments`);
 }

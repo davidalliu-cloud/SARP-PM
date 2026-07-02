@@ -358,7 +358,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="flex min-w-max gap-2">
           <a href="#overview" className="btn btn-small btn-secondary">Overview</a>
           <a href="#daily-entry" className="btn btn-small btn-secondary">Daily entry</a>
-          <a href="#attachments" className="btn btn-small btn-secondary">Attachments</a>
+          <Link href={`/projects/${project.id}/attachments`} className="btn btn-small btn-secondary">Attachments</Link>
           <a href="#daily-records" className="btn btn-small btn-secondary">Daily records</a>
           <a href="#invoices" className="btn btn-small btn-secondary">Invoices</a>
           <a href="#cost-summary" className="btn btn-small btn-secondary">Cost summary</a>

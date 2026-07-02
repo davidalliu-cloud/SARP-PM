@@ -58,7 +58,10 @@ export function AttachmentsPanel({
           <div className="text-xs font-black uppercase text-[#5b193f]">Documents</div>
           <h2 className="text-xl font-black">Receipts and attachments</h2>
         </div>
-        <div className="text-sm font-bold text-[#6b7188]">{attachments.length} files</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="text-sm font-bold text-[#6b7188]">{attachments.length} files</div>
+          <Link href={`/projects/${projectId}/attachments`} className="btn btn-small btn-edit">Open viewer</Link>
+        </div>
       </div>
 
       <form action={createAttachment} className="grid gap-3 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] p-4 lg:grid-cols-2">
@@ -123,7 +126,8 @@ export function AttachmentsPanel({
                 {attachment.label ? <div className="mt-2 text-sm text-[#373455]">{attachment.label}</div> : null}
               </div>
               <div className="flex flex-wrap gap-2 sm:justify-end">
-                <Link href={`/api/attachments/${attachment.id}`} className="btn btn-small btn-edit">Download</Link>
+                <Link href={`/projects/${projectId}/attachments?category=${encodeURIComponent(attachment.category)}&file=${attachment.id}`} className="btn btn-small btn-edit">View</Link>
+                <Link href={`/api/attachments/${attachment.id}?download=1`} className="btn btn-small btn-save">Download</Link>
                 <form action={deleteAttachment}>
                   <input type="hidden" name="id" value={attachment.id} />
                   <input type="hidden" name="projectId" value={projectId} />
