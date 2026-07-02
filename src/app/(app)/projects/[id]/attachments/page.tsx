@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { createAttachment, deleteAttachment } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
+import { attachmentCategoryOptions } from "@/lib/attachment-categories";
 import { prisma } from "@/lib/prisma";
 
 type AttachmentRow = {
@@ -73,11 +74,11 @@ export default async function ProjectAttachmentsPage({
 
   if (!project) notFound();
 
-  const categories = Array.from(new Set(project.attachments.map((attachment) => attachment.category))).sort((a, b) => a.localeCompare(b));
-  const selectedCategory = query.category && categories.includes(query.category) ? query.category : categories[0] || "Receipt";
+  const existingCategories = Array.from(new Set(project.attachments.map((attachment) => attachment.category))).sort((a, b) => a.localeCompare(b));
+  const uploadCategories = attachmentCategoryOptions(existingCategories);
+  const selectedCategory = query.category && uploadCategories.includes(query.category) ? query.category : uploadCategories[0];
   const categoryFiles = project.attachments.filter((attachment) => attachment.category === selectedCategory);
   const selectedAttachment = categoryFiles.find((attachment) => attachment.id === query.file) || categoryFiles[0] || null;
-  const uploadCategories = Array.from(new Set(["Receipt", "Invoice", "Delivery note", "Site photo", "Product purchase", "Tool purchase", "Other", ...categories]));
 
   return (
     <>
@@ -212,7 +213,7 @@ export default async function ProjectAttachmentsPage({
             </label>
             <label className="lg:col-span-2">
               Note
-              <input name="label" placeholder="Receipt for tools, delivery note, site photo description" />
+              <input name="label" placeholder="Drawing revision, contract note, invoice reference, receipt details" />
             </label>
             <div className="flex items-center justify-between gap-3 lg:col-span-2">
               <div className="text-xs font-bold text-[#6b7188]">Maximum upload size: 8 MB per file.</div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { createAttachment, deleteAttachment } from "@/app/actions";
+import { attachmentCategoryOptions } from "@/lib/attachment-categories";
 
 type AttachmentRow = {
   id: string;
@@ -51,6 +52,8 @@ export function AttachmentsPanel({
   dailyRecords: DailyRecordOption[];
   invoices: InvoiceOption[];
 }) {
+  const categoryOptions = attachmentCategoryOptions(attachments.map((attachment) => attachment.category));
+
   return (
     <div className="panel p-4">
       <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
@@ -72,14 +75,8 @@ export function AttachmentsPanel({
         </label>
         <label>
           Category
-          <select name="category" defaultValue="Receipt">
-            <option value="Receipt">Receipt</option>
-            <option value="Invoice">Invoice</option>
-            <option value="Delivery note">Delivery note</option>
-            <option value="Site photo">Site photo</option>
-            <option value="Product purchase">Product purchase</option>
-            <option value="Tool purchase">Tool purchase</option>
-            <option value="Other">Other</option>
+          <select name="category" defaultValue="Drawings">
+            {categoryOptions.map((category) => <option key={category} value={category}>{category}</option>)}
           </select>
         </label>
         <label>
@@ -102,7 +99,7 @@ export function AttachmentsPanel({
         </label>
         <label className="lg:col-span-2">
           Note
-          <input name="label" placeholder="Receipt for tools, delivery note, site photo description" />
+          <input name="label" placeholder="Drawing revision, contract note, invoice reference, receipt details" />
         </label>
         <div className="flex items-center justify-between gap-3 lg:col-span-2">
           <div className="text-xs font-bold text-[#6b7188]">Maximum upload size: 8 MB per file.</div>
