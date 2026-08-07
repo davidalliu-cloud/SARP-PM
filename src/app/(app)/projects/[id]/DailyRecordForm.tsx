@@ -1,7 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { createDailyRecord } from "@/app/actions";
+import { useModalClose } from "@/components/Modal";
 import { dateInputValue } from "@/lib/format";
 
 type ProductOption = {
@@ -62,6 +63,8 @@ export function DailyRecordForm({
   employees: EmployeeOption[];
   expenseTypes: ExpenseTypeOption[];
 }) {
+  const close = useModalClose();
+  const [pending, startTransition] = useTransition();
   const [productRows, setProductRows] = useState([{ id: "p-0", productId: products[0]?.id ?? "", quantity: 1, costPerUnit: productCost(products[0]) }]);
   const [labourRows, setLabourRows] = useState([newLabourRow("l-0", employees)]);
   const [expenseRows, setExpenseRows] = useState([{ id: "e-0", expenseTypeId: expenseTypes[0]?.id ?? "", description: "", amount: expenseTypes[0]?.defaultAmount ?? 0 }]);
@@ -74,7 +77,15 @@ export function DailyRecordForm({
   const expenseTotal = expenseRows.reduce((sum, row) => sum + row.amount, 0);
 
   return (
-    <form action={createDailyRecord} className="panel grid gap-5 p-5">
+    <form
+      action={(formData) =>
+        startTransition(async () => {
+          await createDailyRecord(formData);
+          close();
+        })
+      }
+      className="grid gap-5"
+    >
       <input type="hidden" name="projectId" value={projectId} />
       <div className="grid gap-4 md:grid-cols-[220px_220px_1fr]">
         <label>
@@ -284,11 +295,13 @@ export function DailyRecordForm({
         </div>
       </div>
 
-      <div className="flex flex-col gap-3 border-t border-[#d7e1e5] pt-4 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-center md:justify-between">
         <div className="text-sm font-bold text-[#373455]">
           Daily total: <span className="text-[#373455]">EUR {(productTotal + labourTotal + expenseTotal).toFixed(2)}</span>
         </div>
-        <button className="btn btn-small btn-save" type="submit" disabled={!products.length || !employees.length}>Save daily record</button>
+        <button className="btn btn-primary" type="submit" disabled={pending || !products.length || !employees.length}>
+          {pending ? "Saving…" : "Save daily record"}
+        </button>
       </div>
     </form>
   );

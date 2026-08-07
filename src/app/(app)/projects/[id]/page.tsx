@@ -1,14 +1,16 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { createInvoice, updateProjectBudget, updateProjectStatus } from "@/app/actions";
+import { updateProjectBudget, updateProjectStatus } from "@/app/actions";
+import { Modal } from "@/components/Modal";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
-import { addDays, dateInputValue, daysUntil, decimal, invoiceDueDate, money, monthInputValue } from "@/lib/format";
+import { addDays, daysUntil, decimal, invoiceDueDate, money } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
 import { AttachmentsPanel } from "./AttachmentsPanel";
 import { DailyRecordForm } from "./DailyRecordForm";
 import { DailyRecordsManager } from "./DailyRecordsManager";
+import { InvoiceForm } from "./InvoiceForm";
 import { InvoicesManager } from "./InvoicesManager";
 
 type PerformanceTone = "default" | "maroon" | "blue" | "green" | "amber";
@@ -354,42 +356,45 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </PageTitle>
 
-      <nav className="sticky top-0 z-10 mb-5 overflow-x-auto border-y border-[#d7e1e5] bg-[#f3f7f3]/95 py-3 backdrop-blur">
-        <div className="flex min-w-max gap-2">
-          <a href="#overview" className="btn btn-small btn-secondary">Overview</a>
-          <a href="#daily-entry" className="btn btn-small btn-secondary">Daily entry</a>
-          <Link href={`/projects/${project.id}/attachments`} className="btn btn-small btn-secondary">Attachments</Link>
-          <a href="#daily-records" className="btn btn-small btn-secondary">Daily records</a>
-          <a href="#invoices" className="btn btn-small btn-secondary">Invoices</a>
-          <a href="#cost-summary" className="btn btn-small btn-secondary">Cost summary</a>
-        </div>
-      </nav>
-
-      <section id="overview" className={`scroll-mt-24 mb-4 rounded-lg border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-[#5b193f]" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <div className="text-xs font-black uppercase text-[#6b7188]">Project performance</div>
-            <div className="mt-1 font-black text-[#373455]">{summary.text}</div>
-          </div>
-          <span className={summary.className}>{summary.label}</span>
-        </div>
+      {/* Action bar — data entry lives in pop-up windows so the page stays readable. */}
+      <section className="mb-6 flex flex-wrap items-center gap-2 border-b border-line pb-6">
+        {products.length && employees.length && expenseTypes.length ? (
+          <Modal
+            triggerLabel="+ Add materials & labour"
+            triggerClassName="btn btn-primary"
+            eyebrow="Daily cost record"
+            title="Add materials & labour"
+            description="Record products used, employees and external teams, and site expenses for a day."
+            size="xl"
+          >
+            <DailyRecordForm projectId={project.id} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
+          </Modal>
+        ) : (
+          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one product, employee, and expense option first">
+            + Add materials & labour
+          </span>
+        )}
+        <Modal
+          triggerLabel="+ Add invoice"
+          triggerClassName="btn btn-secondary"
+          eyebrow="Billing"
+          title="Add invoice"
+          description="Record an invoice raised against this project."
+          size="lg"
+        >
+          <InvoiceForm projectId={project.id} />
+        </Modal>
+        <Link href={`/projects/${project.id}/attachments`} className="btn btn-secondary">Attachments</Link>
+        <Link href={`/projects/${project.id}/monthly`} className="btn btn-secondary">Monthly report</Link>
       </section>
 
-      <section className="panel mb-4 p-4">
-        <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+      <section className={`mb-6 rounded-xl border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-[#5b193f]" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-xs font-black uppercase text-[#5b193f]">Recovery guidance</div>
-            <h2 className="text-xl font-black">Recommended actions</h2>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Project performance</div>
+            <div className="mt-1 font-bold text-ink">{summary.text}</div>
           </div>
           <span className={summary.className}>{summary.label}</span>
-        </div>
-        <div className="grid gap-3 lg:grid-cols-2">
-          {guidanceItems.slice(0, 6).map((item) => (
-            <div key={item.title} className={`rounded-lg border-l-4 p-3 ${guidanceToneClass(item.tone)}`}>
-              <div className="text-sm font-black text-[#373455]">{item.title}</div>
-              <p className="mt-1 text-sm font-semibold leading-6 text-[#6b7188]">{item.text}</p>
-            </div>
-          ))}
         </div>
       </section>
 
@@ -408,78 +413,20 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <StatCard label="Profit margin" value={`${decimal(totals.margin)}%`} detail={money(totals.profit)} tone={marginTone} />
       </section>
 
-      <section className="mt-6 grid gap-5">
-        <div className="grid gap-5 2xl:grid-cols-[minmax(0,1fr)_420px]">
-          <div id="daily-entry" className="scroll-mt-24">
-            <h2 className="mb-3 text-xl font-black">Add daily cost record</h2>
-            {products.length && employees.length && expenseTypes.length ? (
-              <DailyRecordForm projectId={project.id} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
-            ) : (
-              <div className="panel p-5 font-bold text-[#5b193f]">Add at least one product, employee, and expense option before entering daily costs.</div>
-            )}
-          </div>
-
-          <div className="panel grid content-start gap-4 p-5">
+      <section className="mt-8 grid gap-5">
+        <div className="panel p-4">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="text-xs font-black uppercase text-[#5b193f]">Billing</div>
-              <h2 className="mt-1 text-xl font-black">Add invoice</h2>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-lab-burgundy">Site history</div>
+              <h2 className="text-xl font-bold text-ink">Materials &amp; labour entries</h2>
             </div>
-            <form action={createInvoice} className="grid gap-4">
-              <input type="hidden" name="projectId" value={project.id} />
-              <label>Invoice date<input name="invoiceDate" type="date" required defaultValue={dateInputValue()} /></label>
-              <label>Month covered<input name="monthCovered" type="month" required defaultValue={monthInputValue()} /></label>
-              <label>Invoice number<input name="invoiceNo" placeholder="Optional" /></label>
-              <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required placeholder="4200.00" /></label>
-              <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(addDays(new Date(), 30))} /></label>
-              <label>
-                Paid status
-                <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">
-                  <input className="size-4 w-auto" name="isPaid" type="checkbox" />
-                  Invoice has been paid
-                </span>
-              </label>
-              <label>Paid date<input name="paidDate" type="date" defaultValue={dateInputValue()} /></label>
-              <label>Notes<textarea name="notes" rows={3} placeholder="Optional invoice notes" /></label>
-              <button className="btn btn-small btn-save justify-self-start" type="submit">Save invoice</button>
-            </form>
+            <div className="text-sm font-semibold text-muted">{dailyRecords.length} daily records</div>
           </div>
-        </div>
-
-        <div id="attachments" className="scroll-mt-24">
-          <AttachmentsPanel
-            projectId={project.id}
-            attachments={project.attachments}
-            dailyRecords={project.dailyRecords.map((record) => ({ id: record.id, date: record.date }))}
-            invoices={project.invoices.map((invoice) => ({ id: invoice.id, invoiceNo: invoice.invoiceNo, monthCovered: invoice.monthCovered }))}
-          />
-        </div>
-
-        <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_430px]">
-          <div id="daily-records" className="panel scroll-mt-24 p-4">
-            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Site history</div>
-                <h2 className="text-xl font-black">Daily records</h2>
-              </div>
-              <div className="text-sm font-bold text-[#6b7188]">{dailyRecords.length} records</div>
-            </div>
-            <DailyRecordsManager projectId={project.id} records={dailyRecords} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
-          </div>
-
-          <div id="invoices" className="panel scroll-mt-24 p-4">
-            <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Billing history</div>
-                <h2 className="text-xl font-black">Invoices</h2>
-              </div>
-              <div className="text-sm font-bold text-[#6b7188]">{money(totals.invoiced)} invoiced</div>
-            </div>
-            <InvoicesManager invoices={invoices} />
-          </div>
+          <DailyRecordsManager projectId={project.id} records={dailyRecords} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
         </div>
       </section>
 
-      <section id="cost-summary" className="mt-6 grid scroll-mt-24 gap-5">
+      <section className="mt-8 grid gap-5">
         <div className="panel p-4">
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -651,6 +598,44 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             </div>
           </div>
         ) : null}
+      </section>
+
+      <section className="mt-8 grid gap-5">
+        <div className="panel p-4">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-lab-burgundy">Billing history</div>
+              <h2 className="text-xl font-bold text-ink">Invoices</h2>
+            </div>
+            <div className="text-sm font-semibold text-muted">{money(totals.invoiced)} invoiced</div>
+          </div>
+          <InvoicesManager invoices={invoices} />
+        </div>
+
+        <AttachmentsPanel
+          projectId={project.id}
+          attachments={project.attachments}
+          dailyRecords={project.dailyRecords.map((record) => ({ id: record.id, date: record.date }))}
+          invoices={project.invoices.map((invoice) => ({ id: invoice.id, invoiceNo: invoice.invoiceNo, monthCovered: invoice.monthCovered }))}
+        />
+
+        <div className="panel p-4">
+          <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-lab-burgundy">Recovery guidance</div>
+              <h2 className="text-xl font-bold text-ink">Recommended actions</h2>
+            </div>
+            <span className={summary.className}>{summary.label}</span>
+          </div>
+          <div className="grid gap-3 lg:grid-cols-2">
+            {guidanceItems.slice(0, 6).map((item) => (
+              <div key={item.title} className={`rounded-lg border-l-4 p-3 ${guidanceToneClass(item.tone)}`}>
+                <div className="text-sm font-bold text-ink">{item.title}</div>
+                <p className="mt-1 text-sm leading-6 text-muted">{item.text}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </section>
     </>
   );
