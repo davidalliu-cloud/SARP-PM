@@ -8,10 +8,11 @@ import { addDays, daysUntil, decimal, invoiceDueDate, money } from "@/lib/format
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
 import { AttachmentsPanel } from "./AttachmentsPanel";
-import { DailyRecordForm } from "./DailyRecordForm";
 import { DailyRecordsManager } from "./DailyRecordsManager";
 import { InvoiceForm } from "./InvoiceForm";
 import { InvoicesManager } from "./InvoicesManager";
+import { LabourRecordForm } from "./LabourRecordForm";
+import { MaterialsRecordForm } from "./MaterialsRecordForm";
 
 type PerformanceTone = "default" | "maroon" | "blue" | "green" | "amber";
 
@@ -358,20 +359,36 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {/* Action bar — data entry lives in pop-up windows so the page stays readable. */}
       <section className="mb-6 flex flex-wrap items-center gap-2 border-b border-line pb-6">
-        {products.length && employees.length && expenseTypes.length ? (
+        {products.length ? (
           <Modal
-            triggerLabel="+ Add materials & labour"
+            triggerLabel="+ Add materials"
             triggerClassName="btn btn-primary"
             eyebrow="Daily cost record"
-            title="Add materials & labour"
-            description="Record products used, employees and external teams, and site expenses for a day."
+            title="Add materials"
+            description="Record products used on site for a day."
             size="xl"
           >
-            <DailyRecordForm projectId={project.id} products={productsWithLatestCosts} employees={employees} expenseTypes={expenseTypes} />
+            <MaterialsRecordForm projectId={project.id} products={productsWithLatestCosts} />
           </Modal>
         ) : (
-          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one product, employee, and expense option first">
-            + Add materials & labour
+          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one product first">
+            + Add materials
+          </span>
+        )}
+        {employees.length && expenseTypes.length ? (
+          <Modal
+            triggerLabel="+ Add labour"
+            triggerClassName="btn btn-primary"
+            eyebrow="Daily cost record"
+            title="Add labour"
+            description="Record employees, external teams, and site expenses for a day."
+            size="xl"
+          >
+            <LabourRecordForm projectId={project.id} employees={employees} expenseTypes={expenseTypes} />
+          </Modal>
+        ) : (
+          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one employee and expense option first">
+            + Add labour
           </span>
         )}
         <Modal
