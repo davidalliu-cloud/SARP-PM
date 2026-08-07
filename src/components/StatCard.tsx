@@ -11,19 +11,26 @@ export function StatCard({
   tone?: "default" | "maroon" | "blue" | "green" | "amber";
   detail?: string;
 }) {
-  const colors = {
-    default: "border-[#bdc8d0]",
-    maroon: "border-[#5b193f]",
-    blue: "border-[#777da7]",
-    green: "border-[#e6f8f6]",
-    amber: "border-[#c28a2c]",
-  };
+  const dot = {
+    default: "bg-lab-steel",
+    maroon: "bg-lab-burgundy",
+    blue: "bg-lab-blue",
+    green: "bg-lab-green",
+    amber: "bg-lab-gold",
+  }[tone];
 
   return (
-    <div className={`panel border-t-4 p-4 ${colors[tone]}`}>
-      <div className="text-xs font-black uppercase text-[#6b7188]">{label}</div>
-      <div className="mt-2 text-2xl font-black tracking-tight text-[#373455]">{value}</div>
-      {detail ? <div className="mt-1 text-sm font-semibold text-[#6b7188]">{detail}</div> : null}
+    <div className="rounded-xl border border-line bg-white p-5">
+      <div className="flex items-center gap-2">
+        <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
+        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">
+          {label}
+        </span>
+      </div>
+      <div className="mt-4 text-3xl font-bold tracking-[-0.02em] text-ink">{value}</div>
+      {detail ? (
+        <div className="mt-2 text-xs uppercase tracking-[0.1em] text-muted">{detail}</div>
+      ) : null}
     </div>
   );
 }
