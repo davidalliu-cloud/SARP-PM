@@ -289,10 +289,6 @@ export default async function DashboardPage({
       const bAttention = projectAttention(b, fullTotalsByProjectId.get(b.project.id) ?? b.totals);
       return aAttention.rank - bAttention.rank || b.totals.totalCost - a.totals.totalCost;
     });
-  const finishedProjectRows = rows
-    .filter((row) => row.project.status === "FINISHED")
-    .sort((a, b) => b.totals.invoiced - a.totals.invoiced || b.totals.profit - a.totals.profit);
-
   const activeProjects = projects.filter((project) => project.status === "ACTIVE").length;
   const totalCost = rows.reduce((sum, row) => sum + row.totals.totalCost, 0);
   const totalBudget = projects.reduce((sum, project) => sum + project.budgetAmount, 0);
@@ -654,24 +650,6 @@ export default async function DashboardPage({
             rows={activeProjectRows}
             fullTotalsByProjectId={fullTotalsByProjectId}
             emptyText="No active projects found. Change a project status to Active when work starts."
-          />
-        </div>
-      </section>
-
-      <section className="mt-6">
-        <div className="panel border-t-4 border-[#bdc8d0] p-4">
-          <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <div className="text-xs font-black uppercase text-[#6b7188]">Closed work</div>
-              <h2 className="text-lg font-black">Finished projects</h2>
-              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Kept separate so completed jobs do not distract from current site work.</p>
-            </div>
-            <span className="status status-finished">{finishedProjectRows.length} finished</span>
-          </div>
-          <ProjectDashboardTable
-            rows={finishedProjectRows}
-            fullTotalsByProjectId={fullTotalsByProjectId}
-            emptyText="No finished projects in this view."
           />
         </div>
       </section>

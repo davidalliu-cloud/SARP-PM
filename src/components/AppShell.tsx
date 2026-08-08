@@ -2,7 +2,9 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import type { User } from "@prisma/client";
 import { logout } from "@/app/login/actions";
+import { prisma } from "@/lib/prisma";
 import { SidebarNav } from "@/components/SidebarNav";
+import { SidebarProjects } from "@/components/SidebarProjects";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
@@ -15,7 +17,31 @@ const navItems = [
   { href: "/users", label: "Users" },
 ];
 
-export function AppShell({ children, user }: { children: ReactNode; user: User }) {
+// Groups always shown; "On hold" only appears when such projects exist so none are hidden.
+const projectGroupDefs = [
+  { key: "ACTIVE", label: "Active", alwaysShow: true },
+  { key: "NOT_STARTED", label: "Will start", alwaysShow: true },
+  { key: "ON_HOLD", label: "On hold", alwaysShow: false },
+  { key: "FINISHED", label: "Finished", alwaysShow: true },
+];
+
+export async function AppShell({ children, user }: { children: ReactNode; user: User }) {
+  const projects = await prisma.project.findMany({
+    select: { id: true, name: true, status: true },
+    orderBy: { name: "asc" },
+  });
+  const projectGroups = projectGroupDefs
+    .map((group) => ({
+      key: group.key,
+      label: group.label,
+      alwaysShow: group.alwaysShow,
+      projects: projects
+        .filter((project) => project.status === group.key)
+        .map((project) => ({ id: project.id, name: project.name })),
+    }))
+    .filter((group) => group.alwaysShow || group.projects.length > 0)
+    .map(({ key, label, projects }) => ({ key, label, projects }));
+
   return (
     <div className="min-h-screen">
       <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-72 overflow-y-auto border-r border-line bg-white lg:block">
@@ -38,6 +64,7 @@ export function AppShell({ children, user }: { children: ReactNode; user: User }
           </div>
         </div>
         <SidebarNav items={navItems} />
+        <SidebarProjects groups={projectGroups} />
       </aside>
 
       <div className="lg:pl-72">
