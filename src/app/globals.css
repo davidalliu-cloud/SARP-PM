@@ -67,10 +67,9 @@ h3 {
   letter-spacing: -0.02em;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
+/* Note: no custom `a { color }` rule here. Tailwind Preflight already sets
+   `a { color: inherit }` in the base layer, so text-* utilities (incl.
+   hover:text-white) win. An unlayered rule here would override them. */
 
 input,
 select,
