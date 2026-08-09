@@ -5,6 +5,22 @@ import type { Dispatch, SetStateAction } from "react";
 import { deleteDailyRecord, updateDailyRecord } from "@/app/actions";
 import { formatDate, formatNumber, money } from "@/lib/format";
 
+// Temporary review aid: FutureERP-synced records flagged as duplicates
+// (20 confirmed duplicates + 2 reversal-pair lines) are shown in red so they
+// are easy to spot. Remove once the cleanup is done.
+const DUPLICATE_ERP_NOTES = new Set(
+  [
+    "INV3496", "INV3448", "INV3413", "INV3370", "INV3004",
+    "INV1380", "INV1359", "INV1332",
+    "INV1659", "INV1669", "INV1635",
+    "INV1507", "INV1486", "INV1485",
+    "INV1456", "INV1447",
+    "INV1279", "INV1280",
+    "INV1251", "INV1252",
+    "INV1269", "INV1278",
+  ].map((inv) => `Synced from FutureERP ${inv}`),
+);
+
 type ProductOption = {
   id: string;
   name: string;
@@ -160,10 +176,11 @@ export function DailyRecordsManager({
             const labourCost = labourTotal(record.labourItems);
             const expenses = expenseTotal(record.expenseItems);
             const isEditing = editingId === record.id;
+            const isDuplicate = DUPLICATE_ERP_NOTES.has((record.notes || "").trim());
 
             return (
               <Fragment key={record.id}>
-                <tr>
+                <tr className={isDuplicate ? "text-[#c0362c]" : undefined}>
                   <td className="font-bold">{displayDate(record.date)}</td>
                   <td>{record.clientName || "-"}</td>
                   <td>{record.productItems.map((item) => `${item.productName} (${item.quantity} ${item.unit})`).join(", ") || "-"}</td>
