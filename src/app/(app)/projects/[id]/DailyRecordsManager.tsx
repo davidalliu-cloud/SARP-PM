@@ -123,7 +123,7 @@ export function DailyRecordsManager({
 
   if (!records.length) {
     return (
-      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
+      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
         No daily records saved for this project yet.
       </div>
     );
@@ -197,7 +197,7 @@ export function DailyRecordsManager({
                 </tr>
                 {isEditing ? (
                   <tr>
-                    <td colSpan={12} className="bg-[#f3f7f3]">
+                    <td colSpan={12} className="bg-[#f1f3f5]">
                       <DailyRecordEditForm
                         record={record}
                         products={products}
@@ -341,7 +341,7 @@ function EditableProductRows({
               Cost per unit
               <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
             </label>
-            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
               <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.quantity * row.costPerUnit)}</div>
             </div>
@@ -425,7 +425,7 @@ function EditableLabourRows({
               <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
               {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
             </label>
-            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
               <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage)}</div>
             </div>
@@ -483,7 +483,7 @@ function EditableExpenseRows({
               Amount
               <input name="expenseAmount" type="number" min="0" step="0.01" value={row.amount} onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, amount: Number(event.target.value) } : item))} />
             </label>
-            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+            <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
               <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
               <div className="font-black">{money(row.amount)}</div>
             </div>

@@ -65,7 +65,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
 
   if (!invoices.length) {
     return (
-      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
+      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
         No invoices saved for this project yet.
       </div>
     );
@@ -155,7 +155,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Client<input name="clientName" defaultValue={invoice.clientName} placeholder="Project's default client" /></label>
                 <label className="md:col-span-2">
                   Paid status
-                  <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">
+                  <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2 text-sm font-bold text-[#373455]">
                     <input className="size-4 w-auto" name="isPaid" type="checkbox" defaultChecked={invoice.isPaid} />
                     Invoice has been paid
                   </span>
@@ -172,7 +172,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         );
       })}
       {!filteredInvoices.length ? (
-        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
+        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
           No invoices match your search.
         </div>
       ) : null}
