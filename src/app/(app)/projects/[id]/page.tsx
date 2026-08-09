@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
 import { AttachmentsPanel } from "./AttachmentsPanel";
 import { DailyRecordsManager } from "./DailyRecordsManager";
+import { ExpenseRecordForm } from "./ExpenseRecordForm";
 import { InvoiceForm } from "./InvoiceForm";
 import { InvoicesManager } from "./InvoicesManager";
 import { LabourRecordForm } from "./LabourRecordForm";
@@ -385,20 +386,36 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             + Add materials
           </span>
         )}
-        {employees.length && expenseTypes.length ? (
+        {employees.length ? (
           <Modal
             triggerLabel="+ Add labour"
             triggerClassName="btn btn-primary"
             eyebrow="Daily cost record"
             title="Add labour"
-            description="Record employees, external teams, and site expenses for a day."
+            description="Record employees and external teams for a day."
             size="xl"
           >
-            <LabourRecordForm projectId={project.id} employees={employees} expenseTypes={expenseTypes} defaultClientName={project.clientName || undefined} />
+            <LabourRecordForm projectId={project.id} employees={employees} defaultClientName={project.clientName || undefined} />
           </Modal>
         ) : (
-          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one employee and expense option first">
+          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one employee first">
             + Add labour
+          </span>
+        )}
+        {expenseTypes.length ? (
+          <Modal
+            triggerLabel="+ Add expense"
+            triggerClassName="btn btn-primary"
+            eyebrow="Daily cost record"
+            title="Add expense"
+            description="Record site expenses for a day."
+            size="lg"
+          >
+            <ExpenseRecordForm projectId={project.id} expenseTypes={expenseTypes} defaultClientName={project.clientName || undefined} />
+          </Modal>
+        ) : (
+          <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one expense option first">
+            + Add expense
           </span>
         )}
         <Modal
