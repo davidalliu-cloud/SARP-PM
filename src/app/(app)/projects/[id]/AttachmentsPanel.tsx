@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createAttachment, deleteAttachment } from "@/app/actions";
 import { attachmentCategoryOptions } from "@/lib/attachment-categories";
+import { formatDate } from "@/lib/format";
 
 type AttachmentRow = {
   id: string;
@@ -36,7 +37,7 @@ function relatedLabel(attachment: AttachmentRow) {
     return `Invoice ${attachment.invoice.invoiceNo || attachment.invoice.monthCovered}`;
   }
   if (attachment.dailyRecord) {
-    return `Daily record ${attachment.dailyRecord.date.toLocaleDateString()}`;
+    return `Daily record ${formatDate(attachment.dailyRecord.date)}`;
   }
   return "Project file";
 }
@@ -67,7 +68,7 @@ export function AttachmentsPanel({
         </div>
       </div>
 
-      <form action={createAttachment} className="grid gap-3 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] p-4 lg:grid-cols-2">
+      <form action={createAttachment} className="grid gap-3 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] p-4 lg:grid-cols-2">
         <input type="hidden" name="projectId" value={projectId} />
         <label>
           File
@@ -84,7 +85,7 @@ export function AttachmentsPanel({
           <select name="dailyRecordId" defaultValue="">
             <option value="">No daily record</option>
             {dailyRecords.map((record) => (
-              <option key={record.id} value={record.id}>{record.date.toLocaleDateString()}</option>
+              <option key={record.id} value={record.id}>{formatDate(record.date)}</option>
             ))}
           </select>
         </label>
@@ -118,7 +119,7 @@ export function AttachmentsPanel({
                 </div>
                 <div className="mt-2 truncate font-black text-[#373455]">{attachment.fileName}</div>
                 <div className="mt-1 text-sm font-semibold text-[#6b7188]">
-                  {fileSize(attachment.size)} / {attachment.createdAt.toLocaleDateString()}
+                  {fileSize(attachment.size)} / {formatDate(attachment.createdAt)}
                 </div>
                 {attachment.label ? <div className="mt-2 text-sm text-[#373455]">{attachment.label}</div> : null}
               </div>
@@ -135,7 +136,7 @@ export function AttachmentsPanel({
           </div>
         ))}
         {!attachments.length ? (
-          <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
+          <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
             No receipts or attachments uploaded for this project yet.
           </div>
         ) : null}

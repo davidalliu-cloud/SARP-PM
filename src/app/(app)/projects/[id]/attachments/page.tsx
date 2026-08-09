@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { createAttachment, deleteAttachment } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { attachmentCategoryOptions } from "@/lib/attachment-categories";
+import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
 type AttachmentRow = {
@@ -25,7 +26,7 @@ function fileSize(size: number) {
 
 function relatedLabel(attachment: AttachmentRow) {
   if (attachment.invoice) return `Invoice ${attachment.invoice.invoiceNo || attachment.invoice.monthCovered}`;
-  if (attachment.dailyRecord) return `Daily record ${attachment.dailyRecord.date.toLocaleDateString()}`;
+  if (attachment.dailyRecord) return `Daily record ${formatDate(attachment.dailyRecord.date)}`;
   return "Project file";
 }
 
@@ -118,7 +119,7 @@ export default async function ProjectAttachmentsPage({
                 <h2 className="text-xl font-black">{selectedAttachment ? selectedAttachment.fileName : "No document selected"}</h2>
                 {selectedAttachment ? (
                   <div className="mt-1 text-sm font-semibold text-[#6b7188]">
-                    {relatedLabel(selectedAttachment)} / {fileSize(selectedAttachment.size)} / {selectedAttachment.createdAt.toLocaleDateString()}
+                    {relatedLabel(selectedAttachment)} / {fileSize(selectedAttachment.size)} / {formatDate(selectedAttachment.createdAt)}
                   </div>
                 ) : null}
               </div>
@@ -151,7 +152,7 @@ export default async function ProjectAttachmentsPage({
                   );
                 })}
                 {!categoryFiles.length ? (
-                  <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f3f7f3] p-4 text-sm font-bold text-[#6b7188]">
+                  <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
                     No files in this category yet.
                   </div>
                 ) : null}
@@ -198,7 +199,7 @@ export default async function ProjectAttachmentsPage({
               <select name="dailyRecordId" defaultValue="">
                 <option value="">No daily record</option>
                 {project.dailyRecords.map((record) => (
-                  <option key={record.id} value={record.id}>{record.date.toLocaleDateString()}</option>
+                  <option key={record.id} value={record.id}>{formatDate(record.date)}</option>
                 ))}
               </select>
             </label>
