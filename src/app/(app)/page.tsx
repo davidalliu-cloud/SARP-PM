@@ -23,7 +23,7 @@ type ProjectDashboardRow = {
     status: string;
     budgetAmount: number;
     estimatedContractValue: number;
-    invoices: { amount: number; isPaid: boolean }[];
+    invoices: { amount: number; isPaid: boolean; invoiceDate: Date; dueDate: Date | null }[];
   };
   totals: ReturnType<typeof projectTotals>;
 };
@@ -146,40 +146,45 @@ function ActionRequiredCard({ item }: { item: ActionItem }) {
   );
 }
 
-function projectAttention(row: ProjectDashboardRow, fullTotals: ReturnType<typeof projectTotals>) {
-  const fullBudget = budgetTotals(row.project.budgetAmount, fullTotals.totalCost);
-  const outstanding = row.project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
+// Whole-project (to-date) health signal that drives the row's headline flag.
+function projectAttention(
+  project: ProjectDashboardRow["project"],
+  totals: ReturnType<typeof projectTotals>,
+) {
+  const budget = budgetTotals(project.budgetAmount, totals.totalCost);
+  const target = targetMargin(project.budgetAmount, project.estimatedContractValue);
+  const unbilled = totals.totalCost - totals.invoiced;
+  const costRecovery = totals.totalCost > 0 ? totals.invoiced / totals.totalCost : 1;
+  const unpaid = project.invoices.filter((invoice) => !invoice.isPaid);
+  const hasOverdue = unpaid.some((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0);
 
-  if (fullBudget.isOverBudget) {
+  // Spending past the budget — the hardest stop.
+  if (budget.isOverBudget) {
     return { label: "Over budget", className: "status status-on-hold", rank: 1 };
   }
-
-  if (row.totals.profit < 0) {
-    return { label: "Loss this period", className: "status status-on-hold", rank: 2 };
+  // Invoicing has caught up to cost, but margin is still short of what was priced.
+  if (totals.invoiced > 0 && target > 0 && costRecovery >= 0.85 && totals.margin < target) {
+    return { label: "Below target margin", className: "status status-risk", rank: 2 };
   }
-
-  if (outstanding > 0) {
-    return { label: "Payment open", className: "status status-risk", rank: 3 };
+  // Cash raised but overdue from the client.
+  if (hasOverdue) {
+    return { label: "Payment overdue", className: "status status-on-hold", rank: 3 };
   }
-
-  if (row.project.budgetAmount <= 0) {
-    return { label: "Budget missing", className: "status status-finished", rank: 4 };
+  // Work recorded but not yet invoiced — revenue to claim.
+  if (unbilled > 0 && costRecovery < 0.85 && totals.totalCost > 0) {
+    return { label: "Unbilled work", className: "status status-risk", rank: 4 };
   }
-
-  if (row.totals.invoiced > 0 && row.totals.margin < 10) {
-    return { label: "Low margin", className: "status status-risk", rank: 5 };
+  if (project.budgetAmount <= 0) {
+    return { label: "No budget set", className: "status status-finished", rank: 5 };
   }
-
   return { label: "On track", className: "status status-active", rank: 6 };
 }
 
 function ProjectDashboardTable({
   rows,
-  fullTotalsByProjectId,
   emptyText,
 }: {
   rows: ProjectDashboardRow[];
-  fullTotalsByProjectId: Map<string, ReturnType<typeof projectTotals>>;
   emptyText: string;
 }) {
   return (
@@ -189,29 +194,37 @@ function ProjectDashboardTable({
           <tr>
             <th>Project</th>
             <th>Attention</th>
-            <th>Budget</th>
-            <th>Cost</th>
+            <th>Budget used</th>
+            <th>Cost to date</th>
             <th>Invoiced</th>
-            <th>Profit / margin</th>
+            <th>Unbilled</th>
+            <th>Margin vs target</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row) => {
-            const fullTotals = fullTotalsByProjectId.get(row.project.id) ?? row.totals;
-            const fullBudget = budgetTotals(row.project.budgetAmount, fullTotals.totalCost);
-            const outstanding = row.project.invoices.filter((invoice) => !invoice.isPaid).reduce((sum, invoice) => sum + invoice.amount, 0);
-            const attention = projectAttention(row, fullTotals);
+            const totals = row.totals; // whole-project (to date)
+            const budget = budgetTotals(row.project.budgetAmount, totals.totalCost);
             const target = targetMargin(row.project.budgetAmount, row.project.estimatedContractValue);
-            const profitTone = row.totals.profit < 0 || row.totals.margin < 0
-              ? "text-[#5b193f]"
-              : target > 0 && row.totals.margin < target
-                ? "text-[#c28a2c]"
-                : "text-[#285d59]";
+            const attention = projectAttention(row.project, totals);
+            const unbilled = totals.totalCost - totals.invoiced;
+            const unpaid = row.project.invoices.filter((invoice) => !invoice.isPaid);
+            const outstanding = unpaid.reduce((sum, invoice) => sum + invoice.amount, 0);
+            const overdueAmount = unpaid
+              .filter((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0)
+              .reduce((sum, invoice) => sum + invoice.amount, 0);
+            const marginTone = totals.invoiced <= 0
+              ? "text-[#6b7188]"
+              : totals.margin < 0
+                ? "text-[#5b193f]"
+                : target > 0 && totals.margin < target
+                  ? "text-[#c28a2c]"
+                  : "text-[#285d59]";
 
             return (
               <tr key={row.project.id}>
                 <td>
-                  <Link href={`/projects/${row.project.id}`} className="font-black text-[#373455] hover:text-[#5b193f] hover:underline">
+                  <Link href={`/projects/${row.project.id}`} className="font-black text-ink hover:text-[#5b193f] hover:underline">
                     {row.project.name}
                   </Link>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
@@ -220,28 +233,52 @@ function ProjectDashboardTable({
                   </div>
                 </td>
                 <td><span className={attention.className}>{attention.label}</span></td>
-                <td className={fullBudget.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#285d59]"}>
-                  {row.project.budgetAmount > 0 ? money(row.project.budgetAmount) : "-"}
-                  {row.project.budgetAmount > 0 ? <div className="mt-1 text-xs font-bold text-[#6b7188]">{decimal(fullBudget.budgetUsed)}% used</div> : null}
+                <td className="font-bold">
+                  {row.project.budgetAmount > 0 ? (
+                    <>
+                      <span className={budget.isOverBudget ? "text-[#5b193f]" : "text-[#285d59]"}>{decimal(budget.budgetUsed)}%</span>
+                      <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                        {budget.isOverBudget ? `${money(Math.abs(budget.budgetRemaining))} over` : `${money(budget.budgetRemaining)} left`}
+                      </div>
+                    </>
+                  ) : (
+                    <span className="font-semibold text-[#6b7188]">Not set</span>
+                  )}
                 </td>
-                <td className="font-bold">{money(row.totals.totalCost)}</td>
+                <td className="font-bold">{money(totals.totalCost)}</td>
                 <td>
-                  {money(row.totals.invoiced)}
-                  {outstanding > 0 ? <div className="mt-1 text-xs font-bold text-[#5b193f]">{money(outstanding)} open</div> : null}
+                  {money(totals.invoiced)}
+                  {overdueAmount > 0 ? (
+                    <div className="mt-1 text-xs font-bold text-[#5b193f]">{money(overdueAmount)} overdue</div>
+                  ) : outstanding > 0 ? (
+                    <div className="mt-1 text-xs font-bold text-[#6b7188]">{money(outstanding)} open</div>
+                  ) : null}
                 </td>
-                <td className={`font-black ${profitTone}`}>
-                  {money(row.totals.profit)}
-                  <div className="mt-1 text-xs font-bold text-[#6b7188]">
-                    Actual {decimal(row.totals.margin)}%
-                    {target ? ` / Target ${decimal(target)}%` : ""}
-                  </div>
+                <td className="font-bold">
+                  {Math.abs(unbilled) < 1 ? (
+                    <span className="text-[#6b7188]">-</span>
+                  ) : unbilled > 0 ? (
+                    <>
+                      <span className="text-[#c28a2c]">{money(unbilled)}</span>
+                      <div className="mt-1 text-xs font-bold text-[#6b7188]">to invoice</div>
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[#285d59]">{money(Math.abs(unbilled))}</span>
+                      <div className="mt-1 text-xs font-bold text-[#6b7188]">billed ahead</div>
+                    </>
+                  )}
+                </td>
+                <td className={`font-black ${marginTone}`}>
+                  {totals.invoiced > 0 ? `${decimal(totals.margin)}%` : "-"}
+                  <div className="mt-1 text-xs font-bold text-[#6b7188]">{target > 0 ? `Target ${decimal(target)}%` : "No target"}</div>
                 </td>
               </tr>
             );
           })}
           {!rows.length ? (
             <tr>
-              <td colSpan={6} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
+              <td colSpan={7} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
             </tr>
           ) : null}
         </tbody>
@@ -271,7 +308,6 @@ export default async function DashboardPage({
     project,
     totals: projectTotals(project.dailyRecords, project.invoices),
   }));
-  const fullTotalsByProjectId = new Map(allRows.map((row) => [row.project.id, row.totals]));
   const rows = projects.map((project) => {
     const periodDailyRecords = project.dailyRecords.filter((record) => isInPeriod(record.date, periodRange.start, periodRange.end));
     const periodInvoices = project.invoices.filter((invoice) => isInPeriod(invoice.invoiceDate, periodRange.start, periodRange.end));
@@ -282,11 +318,13 @@ export default async function DashboardPage({
       totals: projectTotals(periodDailyRecords, periodInvoices),
     };
   });
-  const activeProjectRows = rows
+  // Whole-project (to-date) health for the Active projects table — independent
+  // of the period filter above, so cost/invoiced/margin reflect the real project.
+  const activeProjectRows = allRows
     .filter((row) => row.project.status === "ACTIVE")
     .sort((a, b) => {
-      const aAttention = projectAttention(a, fullTotalsByProjectId.get(a.project.id) ?? a.totals);
-      const bAttention = projectAttention(b, fullTotalsByProjectId.get(b.project.id) ?? b.totals);
+      const aAttention = projectAttention(a.project, a.totals);
+      const bAttention = projectAttention(b.project, b.totals);
       return aAttention.rank - bAttention.rank || b.totals.totalCost - a.totals.totalCost;
     });
   const activeProjects = projects.filter((project) => project.status === "ACTIVE").length;
@@ -642,13 +680,12 @@ export default async function DashboardPage({
             <div>
               <div className="text-xs font-black uppercase text-[#5b193f]">Current work</div>
               <h2 className="text-lg font-black">Active projects</h2>
-              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Sorted by what needs attention first, then by current period cost.</p>
+              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Whole-project figures to date — budget burn, unbilled work, and margin vs the price you set. Sorted by what needs attention first.</p>
             </div>
             <Link href="/projects" className="text-sm font-black text-[#777da7]">View all</Link>
           </div>
           <ProjectDashboardTable
             rows={activeProjectRows}
-            fullTotalsByProjectId={fullTotalsByProjectId}
             emptyText="No active projects found. Change a project status to Active when work starts."
           />
         </div>
