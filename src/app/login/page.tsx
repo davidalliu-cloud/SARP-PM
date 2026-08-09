@@ -13,7 +13,7 @@ export default async function LoginPage({
   const { error } = await searchParams;
 
   return (
-    <main className="grid min-h-screen place-items-center bg-white px-5 py-10">
+    <main className="grid min-h-screen place-items-center bg-[#f5f6f8] px-5 py-10">
       <form action={login} className="panel grid w-full max-w-md gap-4 p-8 shadow-[0_16px_34px_rgba(55,52,85,0.10)]">
         <div>
           <div className="mb-6 border-b border-line pb-6">

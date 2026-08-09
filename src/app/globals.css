@@ -38,7 +38,8 @@
 }
 
 :root {
-  --background: #ffffff;
+  /* Soft grey app canvas; white cards/sidebar/header lift off it. */
+  --background: #f5f6f8;
   --foreground: #373455;
   --panel: #ffffff;
   --line: #e3e3e3;
@@ -46,6 +47,7 @@
   --charcoal: #373455;
   --maroon: #5b193f;
   --blue: #777da7;
+  --card-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.03);
 }
 
 * {
@@ -55,7 +57,7 @@
 body {
   margin: 0;
   color: var(--foreground);
-  background: #ffffff;
+  background: var(--background);
   font-family: -apple-system, "Helvetica Neue", "Avenir Next", "Segoe UI",
     Arial, sans-serif;
 }
@@ -189,18 +191,25 @@ button {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: var(--panel);
+  box-shadow: var(--card-shadow);
 }
 
 .surface-card {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: #fff;
+  box-shadow: var(--card-shadow);
 }
 
 .soft-panel {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: #fafafa;
+}
+
+/* Subtle lift for white cards sitting on the grey canvas. */
+.card-elevated {
+  box-shadow: var(--card-shadow);
 }
 
 /* ------------------------------------------------------------------ *
