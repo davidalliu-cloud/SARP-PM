@@ -474,7 +474,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </tr>
                 ))}
                 {productUsageSummary.length ? (
-                  <tr className="bg-[#f3f7f3] font-black">
+                  <tr className="bg-[#f1f3f5] font-black">
                     <td>Total products</td>
                     <td>-</td>
                     <td>{money(totals.productCost)}</td>
@@ -520,7 +520,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </tr>
                   ))}
                   {employeeLabourSummary.length ? (
-                    <tr className="bg-[#f3f7f3] font-black">
+                    <tr className="bg-[#f1f3f5] font-black">
                       <td>Total employee labour</td>
                       <td>{decimal(employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0), 1)}</td>
                       <td>{money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</td>
@@ -563,7 +563,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </tr>
                   ))}
                   {expenseSummary.length ? (
-                    <tr className="bg-[#f3f7f3] font-black">
+                    <tr className="bg-[#f1f3f5] font-black">
                       <td>Total expenses</td>
                       <td>{expenseSummary.reduce((sum, item) => sum + item.entries, 0)}</td>
                       <td>{money(totals.expenseCost)}</td>

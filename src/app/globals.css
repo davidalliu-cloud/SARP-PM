@@ -22,7 +22,7 @@
   --color-lab-purple: #7b1e7a;
   --color-lab-burgundy: #5b193f;
   --color-lab-mist: #e6f8f6;
-  --color-lab-porcelain: #f3f7f3;
+  --color-lab-porcelain: #f1f3f5;
   --color-lab-steel: #bdc8d0;
   --color-lab-cream: #f6efe4;
   --color-lab-sand: #e9d8be;
@@ -38,8 +38,7 @@
 }
 
 :root {
-  /* Soft grey app canvas; white cards/sidebar/header lift off it. */
-  --background: #f5f6f8;
+  --background: #ffffff;
   --foreground: #373455;
   --panel: #ffffff;
   --line: #e3e3e3;
@@ -47,7 +46,8 @@
   --charcoal: #373455;
   --maroon: #5b193f;
   --blue: #777da7;
-  --card-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.03);
+  /* Light grey tint for total rows / helper boxes (replaces old #f3f7f3). */
+  --tint: #f1f3f5;
 }
 
 * {
@@ -191,25 +191,18 @@ button {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: var(--panel);
-  box-shadow: var(--card-shadow);
 }
 
 .surface-card {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: #fff;
-  box-shadow: var(--card-shadow);
 }
 
 .soft-panel {
   border: 1px solid var(--line);
   border-radius: 0.75rem;
   background: #fafafa;
-}
-
-/* Subtle lift for white cards sitting on the grey canvas. */
-.card-elevated {
-  box-shadow: var(--card-shadow);
 }
 
 /* ------------------------------------------------------------------ *

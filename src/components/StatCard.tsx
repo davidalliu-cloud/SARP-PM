@@ -20,7 +20,7 @@ export function StatCard({
   }[tone];
 
   return (
-    <div className="card-elevated rounded-xl border border-line bg-white p-5">
+    <div className="rounded-xl border border-line bg-white p-5">
       <div className="flex items-center gap-2">
         <span className={`h-1.5 w-1.5 rounded-full ${dot}`} />
         <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">

@@ -91,7 +91,7 @@ export function MaterialsRecordForm({
                   Cost per unit
                   <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
                 </label>
-                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
                   <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                   <div className="font-black">EUR {(row.quantity * row.costPerUnit).toFixed(2)} {selected?.unit ? `/${selected.unit}` : ""}</div>
                 </div>

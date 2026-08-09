@@ -149,7 +149,7 @@ export function LabourRecordForm({
                   <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
                   {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
                 </label>
-                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+                <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
                   <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                   <div className="font-black">EUR {(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage).toFixed(2)}</div>
                 </div>
@@ -212,7 +212,7 @@ export function LabourRecordForm({
                   onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, amount: Number(event.target.value) } : item))}
                 />
               </label>
-              <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2">
+              <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
                 <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
                 <div className="font-black">EUR {row.amount.toFixed(2)}</div>
               </div>
