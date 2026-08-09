@@ -11,6 +11,17 @@ export function decimal(value: number, digits = 1) {
   return value.toFixed(digits);
 }
 
+// Fixed locale so date/number rendering is identical on server (Node) and
+// client (browser). Without this, SSR and hydration disagree and React throws
+// "Hydration failed because the server rendered text didn't match the client".
+export function formatDate(value: Date | string | number) {
+  return new Intl.DateTimeFormat("en-GB").format(new Date(value));
+}
+
+export function formatNumber(value: number) {
+  return new Intl.NumberFormat("en-GB").format(value || 0);
+}
+
 export function dateInputValue(value = new Date()) {
   return value.toISOString().slice(0, 10);
 }
