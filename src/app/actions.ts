@@ -345,6 +345,7 @@ export async function createDailyRecord(formData: FormData) {
       projectId,
       date: new Date(text(formData, "date")),
       completedAreaM2: numberValue(formData.get("completedAreaM2")),
+      clientName: text(formData, "clientName") || null,
       notes: text(formData, "notes") || null,
       productItems: { create: items.productItems },
       labourItems: { create: items.labourItems },
@@ -369,6 +370,7 @@ export async function updateDailyRecord(formData: FormData) {
     data: {
       date: new Date(text(formData, "date")),
       completedAreaM2: numberValue(formData.get("completedAreaM2")),
+      clientName: text(formData, "clientName") || null,
       notes: text(formData, "notes") || null,
       productItems: {
         deleteMany: {},
@@ -421,6 +423,7 @@ export async function createInvoice(formData: FormData) {
       dueDate: invoiceDueDate(invoiceDate, formData),
       isPaid,
       paidDate: isPaid ? new Date(paidDate || new Date()) : null,
+      clientName: text(formData, "clientName") || null,
       notes: text(formData, "notes") || null,
     },
   });
@@ -450,6 +453,7 @@ export async function updateInvoice(formData: FormData) {
       dueDate: invoiceDueDate(invoiceDate, formData),
       isPaid,
       paidDate: isPaid ? new Date(paidDate || new Date()) : null,
+      clientName: text(formData, "clientName") || null,
       notes: text(formData, "notes") || null,
     },
   });

@@ -94,6 +94,7 @@ model DailyRecord {
   project      Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
   date         DateTime
   completedAreaM2 Float       @default(0)
+  clientName   String?
   notes        String?
   productItems ProductUsageItem[]
   labourItems  LabourEntryItem[]
@@ -148,6 +149,7 @@ model Invoice {
   dueDate      DateTime?
   isPaid       Boolean  @default(false)
   paidDate     DateTime?
+  clientName   String?
   notes        String?
   attachments  Attachment[]
   createdAt    DateTime @default(now())

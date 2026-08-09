@@ -44,10 +44,12 @@ export function LabourRecordForm({
   projectId,
   employees,
   expenseTypes,
+  defaultClientName,
 }: {
   projectId: string;
   employees: EmployeeOption[];
   expenseTypes: ExpenseTypeOption[];
+  defaultClientName?: string;
 }) {
   const close = useModalClose();
   const [pending, startTransition] = useTransition();
@@ -70,7 +72,7 @@ export function LabourRecordForm({
       className="grid gap-5"
     >
       <input type="hidden" name="projectId" value={projectId} />
-      <div className="grid gap-4 md:grid-cols-[220px_220px_1fr]">
+      <div className="grid gap-4 md:grid-cols-[220px_220px_1fr_1fr]">
         <label>
           Date
           <input name="date" type="date" required defaultValue={dateInputValue()} />
@@ -78,6 +80,10 @@ export function LabourRecordForm({
         <label>
           Completed area m2
           <input name="completedAreaM2" type="number" min="0" step="0.01" placeholder="85" />
+        </label>
+        <label>
+          Client
+          <input name="clientName" placeholder={defaultClientName || "Project's default client"} defaultValue={defaultClientName || ""} />
         </label>
         <label>
           Notes

@@ -3,7 +3,7 @@
 import { Fragment, useMemo, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { deleteDailyRecord, updateDailyRecord } from "@/app/actions";
-import { money } from "@/lib/format";
+import { formatDate, formatNumber, money } from "@/lib/format";
 
 type ProductOption = {
   id: string;
@@ -59,6 +59,7 @@ export type DailyRecordRow = {
   projectId: string;
   date: string;
   completedAreaM2: number;
+  clientName: string;
   notes: string;
   productItems: ProductRow[];
   labourItems: LabourRow[];
@@ -70,7 +71,7 @@ function dateInputValue(value: string) {
 }
 
 function displayDate(value: string) {
-  return new Date(value).toLocaleDateString();
+  return formatDate(value);
 }
 
 function productTotal(items: ProductRow[]) {
@@ -110,6 +111,7 @@ export function DailyRecordsManager({
     return records.filter((record) => {
       const searchable = [
         displayDate(record.date),
+        record.clientName,
         record.notes,
         ...record.productItems.map((item) => `${item.productName} ${item.quantity} ${item.unit}`),
         ...record.labourItems.map((item) => item.labourType === "external" ? `${item.externalTeamName} ${item.squareMeters}` : item.employeeName),
@@ -139,6 +141,7 @@ export function DailyRecordsManager({
           <thead>
             <tr>
               <th>Date</th>
+              <th>Client</th>
               <th>Products</th>
               <th>Area</th>
               <th>Labour</th>
@@ -162,8 +165,9 @@ export function DailyRecordsManager({
               <Fragment key={record.id}>
                 <tr>
                   <td className="font-bold">{displayDate(record.date)}</td>
+                  <td>{record.clientName || "-"}</td>
                   <td>{record.productItems.map((item) => `${item.productName} (${item.quantity} ${item.unit})`).join(", ") || "-"}</td>
-                  <td>{record.completedAreaM2 > 0 ? `${record.completedAreaM2.toLocaleString()} m2` : "-"}</td>
+                  <td>{record.completedAreaM2 > 0 ? `${formatNumber(record.completedAreaM2)} m2` : "-"}</td>
                   <td>{record.labourItems.map((item) => item.labourType === "external" ? `${item.externalTeamName} (${item.squareMeters} m2)` : item.employeeName).join(", ") || "-"}</td>
                   <td>{record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join(", ") || "-"}</td>
                   <td>{money(productCost)}</td>
@@ -193,7 +197,7 @@ export function DailyRecordsManager({
                 </tr>
                 {isEditing ? (
                   <tr>
-                    <td colSpan={11} className="bg-[#f3f7f3]">
+                    <td colSpan={12} className="bg-[#f3f7f3]">
                       <DailyRecordEditForm
                         record={record}
                         products={products}
@@ -209,7 +213,7 @@ export function DailyRecordsManager({
             );
           })}
             {!filteredRecords.length ? (
-              <tr><td colSpan={11} className="py-8 text-center font-bold text-[#6b7188]">No daily records match your search.</td></tr>
+              <tr><td colSpan={12} className="py-8 text-center font-bold text-[#6b7188]">No daily records match your search.</td></tr>
             ) : null}
           </tbody>
         </table>
@@ -258,7 +262,7 @@ function DailyRecordEditForm({
     >
       <input type="hidden" name="recordId" value={record.id} />
       <input type="hidden" name="projectId" value={record.projectId} />
-      <div className="grid gap-3 md:grid-cols-[220px_220px_1fr]">
+      <div className="grid gap-3 md:grid-cols-[220px_220px_1fr_1fr]">
         <label>
           Date
           <input name="date" type="date" required defaultValue={dateInputValue(record.date)} />
@@ -266,6 +270,10 @@ function DailyRecordEditForm({
         <label>
           Completed area m2
           <input name="completedAreaM2" type="number" min="0" step="0.01" defaultValue={record.completedAreaM2} />
+        </label>
+        <label>
+          Client
+          <input name="clientName" defaultValue={record.clientName} placeholder="Project's default client" />
         </label>
         <label>
           Notes

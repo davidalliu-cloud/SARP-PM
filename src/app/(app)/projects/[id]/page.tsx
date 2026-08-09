@@ -133,6 +133,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     projectId: record.projectId,
     date: record.date.toISOString(),
     completedAreaM2: record.completedAreaM2,
+    clientName: record.clientName || "",
     notes: record.notes || "",
     productItems: record.productItems.map((item) => ({
       id: item.id,
@@ -321,12 +322,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     dueDate: invoice.dueDate?.toISOString() || addDays(invoice.invoiceDate, 30).toISOString(),
     isPaid: invoice.isPaid,
     paidDate: invoice.paidDate?.toISOString() || "",
+    clientName: invoice.clientName || "",
     notes: invoice.notes || "",
   }));
 
+  const otherClients = Array.from(new Set([
+    ...dailyRecords.map((record) => record.clientName).filter(Boolean),
+    ...invoices.map((invoice) => invoice.clientName).filter(Boolean),
+  ])).filter((name) => name !== project.clientName);
+  const projectEyebrow = otherClients.length
+    ? `${project.clientName || "Project"} (also billing: ${otherClients.join(", ")})`
+    : project.clientName || "Project";
+
   return (
     <>
-      <PageTitle eyebrow={project.clientName || "Project"} title={project.name}>
+      <PageTitle eyebrow={projectEyebrow} title={project.name}>
         <div className="flex flex-wrap items-end gap-2">
           <form action={updateProjectBudget} className="flex items-end gap-2">
             <input type="hidden" name="id" value={project.id} />
@@ -368,7 +378,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             description="Record products used on site for a day."
             size="xl"
           >
-            <MaterialsRecordForm projectId={project.id} products={productsWithLatestCosts} />
+            <MaterialsRecordForm projectId={project.id} products={productsWithLatestCosts} defaultClientName={project.clientName || undefined} />
           </Modal>
         ) : (
           <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one product first">
@@ -384,7 +394,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             description="Record employees, external teams, and site expenses for a day."
             size="xl"
           >
-            <LabourRecordForm projectId={project.id} employees={employees} expenseTypes={expenseTypes} />
+            <LabourRecordForm projectId={project.id} employees={employees} expenseTypes={expenseTypes} defaultClientName={project.clientName || undefined} />
           </Modal>
         ) : (
           <span className="btn btn-primary cursor-not-allowed opacity-60" title="Add at least one employee and expense option first">
@@ -399,7 +409,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           description="Record an invoice raised against this project."
           size="lg"
         >
-          <InvoiceForm projectId={project.id} />
+          <InvoiceForm projectId={project.id} defaultClientName={project.clientName || undefined} />
         </Modal>
         <Link href={`/projects/${project.id}/attachments`} className="btn btn-secondary">Attachments</Link>
         <Link href={`/projects/${project.id}/monthly`} className="btn btn-secondary">Monthly report</Link>

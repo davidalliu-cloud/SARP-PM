@@ -20,9 +20,11 @@ function productCost(product?: ProductOption) {
 export function MaterialsRecordForm({
   projectId,
   products,
+  defaultClientName,
 }: {
   projectId: string;
   products: ProductOption[];
+  defaultClientName?: string;
 }) {
   const close = useModalClose();
   const [pending, startTransition] = useTransition();
@@ -42,10 +44,14 @@ export function MaterialsRecordForm({
       className="grid gap-5"
     >
       <input type="hidden" name="projectId" value={projectId} />
-      <div className="grid gap-4 md:grid-cols-[220px_1fr]">
+      <div className="grid gap-4 md:grid-cols-[220px_1fr_1fr]">
         <label>
           Date
           <input name="date" type="date" required defaultValue={dateInputValue()} />
+        </label>
+        <label>
+          Client
+          <input name="clientName" placeholder={defaultClientName || "Project's default client"} defaultValue={defaultClientName || ""} />
         </label>
         <label>
           Notes

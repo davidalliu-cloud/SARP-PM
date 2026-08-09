@@ -16,6 +16,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
       dueDate: body.dueDate ? new Date(body.dueDate) : addDays(invoiceDate, 30),
       isPaid: Boolean(body.isPaid),
       paidDate: body.isPaid ? (body.paidDate ? new Date(body.paidDate) : new Date()) : null,
+      clientName: body.clientName || null,
       notes: body.notes || null,
     },
   });

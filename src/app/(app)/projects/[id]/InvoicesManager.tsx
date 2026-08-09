@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { deleteInvoice, markInvoicePaid, markInvoiceUnpaid, updateInvoice } from "@/app/actions";
-import { daysSince, daysUntil, invoiceAgeLabel, invoiceDueDate, money } from "@/lib/format";
+import { daysSince, daysUntil, formatDate, invoiceAgeLabel, invoiceDueDate, money } from "@/lib/format";
 
 export type InvoiceRow = {
   id: string;
@@ -14,6 +14,7 @@ export type InvoiceRow = {
   dueDate: string;
   isPaid: boolean;
   paidDate: string;
+  clientName: string;
   notes: string;
 };
 
@@ -22,7 +23,7 @@ function dateInputValue(value: string) {
 }
 
 function displayDate(value: string) {
-  return new Date(value).toLocaleDateString();
+  return formatDate(value);
 }
 
 function invoiceStatusClass(invoice: InvoiceRow) {
@@ -56,6 +57,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         invoice.amount,
         invoiceStatusLabel(invoice),
         invoice.paidDate ? displayDate(invoice.paidDate) : "",
+        invoice.clientName,
         invoice.notes,
       ].join(" ").toLowerCase().includes(normalizedQuery);
     });
@@ -83,7 +85,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
           <div key={invoice.id} className="rounded-lg border border-[#d7e1e5] bg-white p-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="font-black">{invoice.invoiceNo || "Invoice"}</div>
+                <div className="font-black">{invoice.invoiceNo || "Invoice"}{invoice.clientName ? ` — ${invoice.clientName}` : ""}</div>
                 <div className="mt-1 text-sm font-semibold text-[#6b7188]">
                   {invoice.monthCovered} / Issued {displayDate(invoice.invoiceDate)} / Due {displayDate(invoice.dueDate)}
                 </div>
@@ -150,6 +152,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Invoice number<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder="Optional" /></label>
                 <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
                 <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(invoice.dueDate)} /></label>
+                <label>Client<input name="clientName" defaultValue={invoice.clientName} placeholder="Project's default client" /></label>
                 <label className="md:col-span-2">
                   Paid status
                   <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f3f7f3] px-3 py-2 text-sm font-bold text-[#373455]">
