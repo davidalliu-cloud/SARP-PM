@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { deleteDailyRecord, updateDailyRecord } from "@/app/actions";
 import { formatDate, formatNumber, money } from "@/lib/format";
@@ -152,88 +152,102 @@ export function DailyRecordsManager({
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Date, product, employee, expense, or note" />
       </label>
       <div className="text-xs font-bold text-[#6b7188]">Showing {filteredRecords.length} of {records.length} records</div>
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Client</th>
-              <th>Products</th>
-              <th>Area</th>
-              <th>Labour</th>
-              <th>Expenses</th>
-              <th>Product cost</th>
-              <th>Labour cost</th>
-              <th>Expense cost</th>
-              <th>Daily total</th>
-              <th>Notes</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredRecords.map((record) => {
-            const productCost = productTotal(record.productItems);
-            const labourCost = labourTotal(record.labourItems);
-            const expenses = expenseTotal(record.expenseItems);
-            const isEditing = editingId === record.id;
-            const isDuplicate = DUPLICATE_ERP_NOTES.has((record.notes || "").trim());
+      <div className="grid gap-3">
+        {filteredRecords.map((record) => {
+          const productCost = productTotal(record.productItems);
+          const labourCost = labourTotal(record.labourItems);
+          const expenses = expenseTotal(record.expenseItems);
+          const total = productCost + labourCost + expenses;
+          const isEditing = editingId === record.id;
+          const isDuplicate = DUPLICATE_ERP_NOTES.has((record.notes || "").trim());
 
-            return (
-              <Fragment key={record.id}>
-                <tr className={isDuplicate ? "text-[#c0362c]" : undefined}>
-                  <td className="font-bold">{displayDate(record.date)}</td>
-                  <td>{record.clientName || "-"}</td>
-                  <td>{record.productItems.map((item) => `${item.productName} (${item.quantity} ${item.unit})`).join(", ") || "-"}</td>
-                  <td>{record.completedAreaM2 > 0 ? `${formatNumber(record.completedAreaM2)} m2` : "-"}</td>
-                  <td>{record.labourItems.map((item) => item.labourType === "external" ? `${item.externalTeamName} (${item.squareMeters} m2)` : item.employeeName).join(", ") || "-"}</td>
-                  <td>{record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join(", ") || "-"}</td>
-                  <td>{money(productCost)}</td>
-                  <td>{money(labourCost)}</td>
-                  <td>{money(expenses)}</td>
-                  <td className="font-black">{money(productCost + labourCost + expenses)}</td>
-                  <td>{record.notes || "-"}</td>
-                  <td>
-                    <div className="flex flex-nowrap gap-2">
-                      <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : record.id)}>
-                        {isEditing ? "Cancel" : "Edit"}
-                      </button>
-                      <form
-                        action={deleteDailyRecord}
-                        onSubmit={(event) => {
-                          if (!window.confirm(`Delete daily record from ${displayDate(record.date)}? This cannot be undone.`)) {
-                            event.preventDefault();
-                          }
-                        }}
-                      >
-                        <input type="hidden" name="recordId" value={record.id} />
-                        <input type="hidden" name="projectId" value={projectId} />
-                        <button className="btn btn-small btn-delete" type="submit">Delete</button>
-                      </form>
+          const productsText = record.productItems.map((item) => `${item.productName} (${item.quantity} ${item.unit})`).join(", ");
+          const labourText = record.labourItems.map((item) => item.labourType === "external" ? `${item.externalTeamName} (${item.squareMeters} m2)` : item.employeeName).join(", ");
+          const expensesText = record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join(", ");
+
+          return (
+            <div
+              key={record.id}
+              className={`rounded-xl border p-4 ${isDuplicate ? "border-[#e7b4ad] bg-[#fdf3f2]" : "border-line bg-white"}`}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className={`text-sm font-black ${isDuplicate ? "text-[#c0362c]" : "text-ink"}`}>{displayDate(record.date)}</div>
+                  <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-muted">
+                    {record.clientName ? <span>{record.clientName}</span> : null}
+                    {record.completedAreaM2 > 0 ? <span>{formatNumber(record.completedAreaM2)} m²</span> : null}
+                    {isDuplicate ? <span className="rounded-full bg-[#f6d9d5] px-2 py-0.5 font-bold text-[#c0362c]">Possible duplicate</span> : null}
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="text-right">
+                    <div className="text-lg font-black text-ink">{money(total)}</div>
+                    <div className="text-[11px] font-semibold text-muted">
+                      Products {money(productCost)} · Labour {money(labourCost)} · Expenses {money(expenses)}
                     </div>
-                  </td>
-                </tr>
-                {isEditing ? (
-                  <tr>
-                    <td colSpan={12} className="bg-[#f1f3f5]">
-                      <DailyRecordEditForm
-                        record={record}
-                        products={products}
-                        employees={employees}
-                        expenseTypes={expenseTypes}
-                        onCancel={() => setEditingId(null)}
-                        onSaved={() => setEditingId(null)}
-                      />
-                    </td>
-                  </tr>
-                ) : null}
-              </Fragment>
-            );
-          })}
-            {!filteredRecords.length ? (
-              <tr><td colSpan={12} className="py-8 text-center font-bold text-[#6b7188]">No daily records match your search.</td></tr>
-            ) : null}
-          </tbody>
-        </table>
+                  </div>
+                  <div className="flex shrink-0 gap-2">
+                    <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : record.id)}>
+                      {isEditing ? "Cancel" : "Edit"}
+                    </button>
+                    <form
+                      action={deleteDailyRecord}
+                      onSubmit={(event) => {
+                        if (!window.confirm(`Delete daily record from ${displayDate(record.date)}? This cannot be undone.`)) {
+                          event.preventDefault();
+                        }
+                      }}
+                    >
+                      <input type="hidden" name="recordId" value={record.id} />
+                      <input type="hidden" name="projectId" value={projectId} />
+                      <button className="btn btn-small btn-delete" type="submit">Delete</button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-3 grid gap-3 border-t border-line pt-3 sm:grid-cols-3">
+                <div className="min-w-0">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Products</div>
+                  <div className="mt-1 break-words text-sm text-ink">{productsText || "—"}</div>
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Labour</div>
+                  <div className="mt-1 break-words text-sm text-ink">{labourText || "—"}</div>
+                </div>
+                <div className="min-w-0">
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Expenses</div>
+                  <div className="mt-1 break-words text-sm text-ink">{expensesText || "—"}</div>
+                </div>
+              </div>
+
+              {record.notes ? (
+                <div className="mt-3 break-words text-sm text-muted">
+                  <span className="font-semibold text-ink">Note: </span>
+                  {record.notes}
+                </div>
+              ) : null}
+
+              {isEditing ? (
+                <div className="mt-4 border-t border-line pt-4">
+                  <DailyRecordEditForm
+                    record={record}
+                    products={products}
+                    employees={employees}
+                    expenseTypes={expenseTypes}
+                    onCancel={() => setEditingId(null)}
+                    onSaved={() => setEditingId(null)}
+                  />
+                </div>
+              ) : null}
+            </div>
+          );
+        })}
+        {!filteredRecords.length ? (
+          <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-center text-sm font-bold text-[#6b7188]">
+            No daily records match your search.
+          </div>
+        ) : null}
       </div>
     </div>
   );
