@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
-type SidebarProject = { id: string; name: string };
+type SidebarProject = { id: string; name: string; dotClass?: string; dotTitle?: string };
 type ProjectGroup = { key: string; label: string; projects: SidebarProject[] };
 
 export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
@@ -68,13 +68,16 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
                         key={project.id}
                         href={`/projects/${project.id}`}
                         title={project.name}
-                        className={`block truncate rounded-md px-3 py-1.5 text-sm transition ${
+                        className={`flex items-center gap-2 truncate rounded-md px-3 py-1.5 text-sm transition ${
                           active
                             ? "bg-lab-burgundy/5 font-semibold text-lab-burgundy hover:bg-lab-burgundy hover:text-white"
                             : "text-ink hover:bg-lab-burgundy hover:text-white"
                         }`}
                       >
-                        {project.name}
+                        {project.dotClass ? (
+                          <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${project.dotClass}`} title={project.dotTitle} aria-hidden />
+                        ) : null}
+                        <span className="truncate">{project.name}</span>
                       </Link>
                     );
                   })}

@@ -1,4 +1,5 @@
 import type { DailyRecord, ExpenseItem, Invoice, LabourEntryItem, ProductUsageItem } from "@prisma/client";
+import { daysUntil, invoiceDueDate } from "@/lib/format";
 
 export type RecordWithItems = DailyRecord & {
   productItems: ProductUsageItem[];
@@ -45,4 +46,44 @@ export function budgetTotals(budgetAmount: number, totalCost: number) {
 
 export function monthKey(date: Date) {
   return date.toISOString().slice(0, 7);
+}
+
+export function targetMargin(budgetAmount: number, contractValue: number) {
+  return contractValue > 0 ? ((contractValue - budgetAmount) / contractValue) * 100 : 0;
+}
+
+export type AttentionProject = {
+  budgetAmount: number;
+  estimatedContractValue: number;
+  invoices: { amount: number; isPaid: boolean; invoiceDate: Date; dueDate: Date | null }[];
+};
+
+export type AttentionLevel = "critical" | "risk" | "ok" | "neutral";
+
+// Whole-project (to-date) health signal shared by the dashboard table and the
+// sidebar project list, so both agree on what "needs attention" means.
+export function projectAttention(project: AttentionProject, totals: ReturnType<typeof projectTotals>) {
+  const budget = budgetTotals(project.budgetAmount, totals.totalCost);
+  const target = targetMargin(project.budgetAmount, project.estimatedContractValue);
+  const unbilled = totals.totalCost - totals.invoiced;
+  const costRecovery = totals.totalCost > 0 ? totals.invoiced / totals.totalCost : 1;
+  const unpaid = project.invoices.filter((invoice) => !invoice.isPaid);
+  const hasOverdue = unpaid.some((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0);
+
+  if (budget.isOverBudget) {
+    return { label: "Over budget", className: "status status-on-hold", rank: 1, level: "critical" as AttentionLevel };
+  }
+  if (totals.invoiced > 0 && target > 0 && costRecovery >= 0.85 && totals.margin < target) {
+    return { label: "Below target margin", className: "status status-risk", rank: 2, level: "risk" as AttentionLevel };
+  }
+  if (hasOverdue) {
+    return { label: "Payment overdue", className: "status status-on-hold", rank: 3, level: "critical" as AttentionLevel };
+  }
+  if (unbilled > 0 && costRecovery < 0.85 && totals.totalCost > 0) {
+    return { label: "Unbilled work", className: "status status-risk", rank: 4, level: "risk" as AttentionLevel };
+  }
+  if (project.budgetAmount <= 0) {
+    return { label: "No budget set", className: "status status-finished", rank: 5, level: "neutral" as AttentionLevel };
+  }
+  return { label: "On track", className: "status status-active", rank: 6, level: "ok" as AttentionLevel };
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { updateProjectBasics } from "@/app/actions";
 import { DeleteProjectButton } from "@/components/DeleteProjectButton";
-import { decimal, money, statusClass, statusLabel } from "@/lib/format";
+import { decimal, formatDate, money, statusClass, statusLabel } from "@/lib/format";
 
 type ProjectRow = {
   id: string;
@@ -24,33 +24,68 @@ type ProjectRow = {
   margin: number;
 };
 
+type SortKey = "name" | "budgetAmount" | "estimatedContractValue" | "totalCost" | "invoiced" | "profit";
+
+const sortColumns: { key: SortKey; label: string }[] = [
+  { key: "name", label: "Project" },
+  { key: "budgetAmount", label: "Budget" },
+  { key: "estimatedContractValue", label: "Contract" },
+  { key: "totalCost", label: "Cost" },
+  { key: "invoiced", label: "Invoiced" },
+  { key: "profit", label: "Profit / margin" },
+];
+
 export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
   const [editingId, setEditingId] = useState<string | null>(null);
+  const [sortKey, setSortKey] = useState<SortKey>("profit");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   function profitClass(project: ProjectRow) {
     if (project.profit < 0 || project.margin < 0) return "text-[#5b193f]";
+    if (!project.invoiced) return "text-[#6b7188]";
     if (project.estimatedProfitMargin > 0 && project.margin >= project.estimatedProfitMargin) return "text-[#285d59]";
     if (project.estimatedProfitMargin > 0) return "text-[#c28a2c]";
     return "text-[#285d59]";
   }
+
+  function toggleSort(key: SortKey) {
+    if (key === sortKey) {
+      setSortDir((dir) => (dir === "asc" ? "desc" : "asc"));
+    } else {
+      setSortKey(key);
+      setSortDir(key === "name" ? "asc" : "asc");
+    }
+  }
+
+  const sortedProjects = [...projects].sort((a, b) => {
+    const dir = sortDir === "asc" ? 1 : -1;
+    if (sortKey === "name") return a.name.localeCompare(b.name) * dir;
+    return (a[sortKey] - b[sortKey]) * dir;
+  });
 
   return (
     <div className="panel table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Project</th>
-            <th>Status</th>
-            <th>Budget</th>
-            <th>Contract</th>
-            <th>Cost</th>
-            <th>Invoiced</th>
-            <th>Profit / margin</th>
+            {sortColumns.map((col) => (
+              <th key={col.key}>
+                <button
+                  type="button"
+                  onClick={() => toggleSort(col.key)}
+                  className="inline-flex items-center gap-1 font-black uppercase tracking-wide hover:text-[#5b193f]"
+                  title={`Sort by ${col.label}`}
+                >
+                  {col.label}
+                  {sortKey === col.key ? <span aria-hidden>{sortDir === "asc" ? "▲" : "▼"}</span> : null}
+                </button>
+              </th>
+            ))}
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          {projects.map((project) => {
+          {sortedProjects.map((project) => {
             const isEditing = editingId === project.id;
             const formId = `project-${project.id}`;
 
@@ -75,7 +110,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                         </span>
                       </Link>
                       <div className="mt-1 text-xs font-bold text-[#6b7188]">
-                        {project.clientName || "No client"} / Start {new Date(project.startDate).toLocaleDateString()}
+                        {project.clientName || "No client"} / Start {formatDate(project.startDate)}
                       </div>
                     </div>
                   )}

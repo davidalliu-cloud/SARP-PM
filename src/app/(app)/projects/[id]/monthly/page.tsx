@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
-import { decimal, money, monthInputValue } from "@/lib/format";
+import { decimal, formatDate, formatNumber, money, monthInputValue } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { monthKey, projectTotals, recordExpenseCost, recordLabourCost, recordProductCost, recordTotal } from "@/lib/totals";
 
@@ -104,8 +104,8 @@ export default async function MonthlyReportPage({
             <tbody>
               {records.map((record) => (
                 <tr key={record.id}>
-                  <td className="font-bold">{record.date.toLocaleDateString()}</td>
-                  <td>{record.completedAreaM2 > 0 ? `${record.completedAreaM2.toLocaleString()} m2` : "-"}</td>
+                  <td className="font-bold">{formatDate(record.date)}</td>
+                  <td>{record.completedAreaM2 > 0 ? `${formatNumber(record.completedAreaM2)} m2` : "-"}</td>
                   <td>{record.productItems.map((item) => `${item.product.name}: ${item.quantity} ${item.product.unit}`).join(", ") || "-"}</td>
                   <td>{record.labourItems.map((item) => item.employee?.name || item.employeeName || (item.externalTeamName ? `${item.externalTeamName} (${item.squareMeters || 0} m2)` : "Former employee")).join(", ") || "-"}</td>
                   <td>{record.expenseItems.map((item) => `${item.category}${item.description ? `: ${item.description}` : ""}`).join(", ") || "-"}</td>

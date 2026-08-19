@@ -3,7 +3,7 @@ import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
 import { daysSince, daysUntil, invoiceDueDate, money, decimal, statusClass, statusLabel } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
-import { budgetTotals, monthKey, projectTotals } from "@/lib/totals";
+import { budgetTotals, monthKey, projectAttention, projectTotals, targetMargin } from "@/lib/totals";
 
 type ActionItem = {
   id: string;
@@ -72,10 +72,6 @@ function isInPeriod(date: Date, start: Date | null, end: Date | null) {
   return date >= start && date < end;
 }
 
-function targetMargin(budgetAmount: number, contractValue: number) {
-  return contractValue > 0 ? ((contractValue - budgetAmount) / contractValue) * 100 : 0;
-}
-
 function BarRow({
   label,
   value,
@@ -102,7 +98,12 @@ function BarRow({
   );
 }
 
-function ProfitLossValue({ value }: { value: number }) {
+function ProfitLossValue({ value, invoiced }: { value: number; invoiced?: number }) {
+  // With no invoice raised yet, a negative "profit" is unbilled cost, not a real
+  // loss — say so instead of alarming with a red "Loss" figure.
+  if (invoiced === 0 && value < 0) {
+    return <span className="font-black text-[#6b7188]">Not yet invoiced ({money(Math.abs(value))} cost)</span>;
+  }
   const isProfit = value >= 0;
   return (
     <span className={isProfit ? "font-black text-[#285d59]" : "font-black text-[#5b193f]"}>
@@ -144,40 +145,6 @@ function ActionRequiredCard({ item }: { item: ActionItem }) {
       </div>
     </Link>
   );
-}
-
-// Whole-project (to-date) health signal that drives the row's headline flag.
-function projectAttention(
-  project: ProjectDashboardRow["project"],
-  totals: ReturnType<typeof projectTotals>,
-) {
-  const budget = budgetTotals(project.budgetAmount, totals.totalCost);
-  const target = targetMargin(project.budgetAmount, project.estimatedContractValue);
-  const unbilled = totals.totalCost - totals.invoiced;
-  const costRecovery = totals.totalCost > 0 ? totals.invoiced / totals.totalCost : 1;
-  const unpaid = project.invoices.filter((invoice) => !invoice.isPaid);
-  const hasOverdue = unpaid.some((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0);
-
-  // Spending past the budget — the hardest stop.
-  if (budget.isOverBudget) {
-    return { label: "Over budget", className: "status status-on-hold", rank: 1 };
-  }
-  // Invoicing has caught up to cost, but margin is still short of what was priced.
-  if (totals.invoiced > 0 && target > 0 && costRecovery >= 0.85 && totals.margin < target) {
-    return { label: "Below target margin", className: "status status-risk", rank: 2 };
-  }
-  // Cash raised but overdue from the client.
-  if (hasOverdue) {
-    return { label: "Payment overdue", className: "status status-on-hold", rank: 3 };
-  }
-  // Work recorded but not yet invoiced — revenue to claim.
-  if (unbilled > 0 && costRecovery < 0.85 && totals.totalCost > 0) {
-    return { label: "Unbilled work", className: "status status-risk", rank: 4 };
-  }
-  if (project.budgetAmount <= 0) {
-    return { label: "No budget set", className: "status status-finished", rank: 5 };
-  }
-  return { label: "On track", className: "status status-active", rank: 6 };
 }
 
 function ProjectDashboardTable({
@@ -339,6 +306,16 @@ export default async function DashboardPage({
   const overdueTotal = overdueInvoices.reduce((sum, invoice) => sum + invoice.amount, 0);
   const profit = totalInvoiced - totalCost;
   const margin = totalInvoiced > 0 ? (profit / totalInvoiced) * 100 : 0;
+  // Split cost between projects that have at least one invoice (a real profit/loss
+  // signal) and projects with cost but zero invoices ever raised (sync/invoicing
+  // backlog, not a trading loss) — blending the two makes the headline profit
+  // number look far worse than the business actually is.
+  const realizedRows = rows.filter((row) => row.totals.invoiced > 0);
+  const neverInvoicedRows = rows.filter((row) => row.totals.invoiced === 0 && row.totals.totalCost > 0);
+  const realizedCost = realizedRows.reduce((sum, row) => sum + row.totals.totalCost, 0);
+  const realizedProfit = totalInvoiced - realizedCost;
+  const realizedMargin = totalInvoiced > 0 ? (realizedProfit / totalInvoiced) * 100 : 0;
+  const unbilledCostExposure = neverInvoicedRows.reduce((sum, row) => sum + row.totals.totalCost, 0);
   const actionItems: ActionItem[] = [
     ...projects.flatMap((project) =>
       project.invoices
@@ -495,15 +472,46 @@ export default async function DashboardPage({
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-8">
+      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-9">
         <StatCard label="Active projects" value={activeProjects} tone="green" />
         <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
         <StatCard label="Total costs" value={money(totalCost)} />
         <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
         <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
         <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
-        <StatCard label={profit >= 0 ? "Profit" : "Loss"} value={<ProfitLossWithMargin value={profit} margin={margin} />} detail={profit >= 0 ? "Company result is positive" : "Company result is negative"} tone={profit >= 0 ? "green" : "maroon"} />
+        <StatCard
+          label={realizedProfit >= 0 ? "Realized profit" : "Realized loss"}
+          value={<ProfitLossWithMargin value={realizedProfit} margin={realizedMargin} />}
+          detail={`Only the ${realizedRows.length} project${realizedRows.length === 1 ? "" : "s"} that have an invoice`}
+          tone={realizedProfit >= 0 ? "green" : "maroon"}
+        />
+        <StatCard
+          label="Unbilled cost exposure"
+          value={money(unbilledCostExposure)}
+          detail={neverInvoicedRows.length ? `${neverInvoicedRows.length} project${neverInvoicedRows.length === 1 ? "" : "s"} with cost, no invoice yet` : "Every project with cost has an invoice"}
+          tone={unbilledCostExposure > 0 ? "amber" : "green"}
+        />
       </section>
+      {unbilledCostExposure > 0 ? (
+        <p className="mt-2 text-xs font-semibold text-[#6b7188]">
+          &quot;Total costs&quot; minus &quot;Total invoiced&quot; above blends real trading result with this unbilled backlog — use Realized profit / Unbilled cost exposure for a true read.
+        </p>
+      ) : null}
+
+      {overdueTotal > 0 ? (
+        <section className="mt-6 rounded-xl border-l-4 border-[#5b193f] bg-[#fff8fa] p-4">
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div className="text-[11px] font-black uppercase tracking-[0.14em] text-[#5b193f]">Collections alert</div>
+              <div className="mt-1 font-bold text-ink">
+                {money(overdueTotal)} overdue across {overdueInvoices.length} invoice{overdueInvoices.length === 1 ? "" : "s"} —{" "}
+                {decimal(totalOutstanding > 0 ? (overdueTotal / totalOutstanding) * 100 : 0)}% of everything outstanding is already overdue.
+              </div>
+            </div>
+            <Link href="/invoices" className="btn btn-small btn-secondary">Open invoice ledger</Link>
+          </div>
+        </section>
+      ) : null}
 
       <section className="panel mt-6 p-4">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
@@ -526,14 +534,14 @@ export default async function DashboardPage({
         )}
       </section>
 
-      <details className="panel mt-6 p-4">
+      <details className="panel mt-6 p-4" open>
         <summary className="cursor-pointer list-none">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-black">Detailed analytics</h2>
-              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Open when you want cost breakdowns, product usage, labour split, and chart views.</p>
+              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Cost breakdowns, product usage, labour split, and profit charts. Collapse if you just want the summary above.</p>
             </div>
-            <span className="btn btn-secondary btn-small">Show analytics</span>
+            <span className="btn btn-secondary btn-small">Hide analytics</span>
           </div>
         </summary>
 
@@ -595,7 +603,14 @@ export default async function DashboardPage({
             <h2 className="mb-4 text-lg font-black">Highest cost projects</h2>
             <div className="grid gap-3">
               {mostExpensiveProjects.map(({ project, totals }) => (
-                <BarRow key={project.id} label={project.name} value={totals.totalCost} total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)} detail={money(totals.totalCost)} color={totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"} />
+                <BarRow
+                  key={project.id}
+                  label={project.name}
+                  value={totals.totalCost}
+                  total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)}
+                  detail={totals.invoiced === 0 ? `${money(totals.totalCost)} · not yet invoiced` : money(totals.totalCost)}
+                  color={totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+                />
               ))}
               {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
             </div>
@@ -614,8 +629,8 @@ export default async function DashboardPage({
                     label={row.project.name}
                     value={row.totalCostPerM2}
                     total={maxProjectCostPerM2}
-                    detail={`${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
-                    color={row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+                    detail={row.totals.invoiced === 0 ? `${money(row.totalCostPerM2)} cost / m2 · not yet invoiced` : `${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
+                    color={row.totals.invoiced === 0 ? "bg-[#c5cdd6]" : row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
                   />
                 ))}
               </div>
@@ -629,7 +644,7 @@ export default async function DashboardPage({
             <div className="space-y-4">
               {rows.map(({ project, totals }) => (
                 <div key={project.id}>
-                  <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} /></div>
+                  <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} invoiced={totals.invoiced} /></div>
                   <div className="grid gap-1">
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
@@ -662,11 +677,11 @@ export default async function DashboardPage({
                   <div className="truncate font-bold">{project.name}</div>
                   <div className="h-3 rounded bg-[#e8eef0]">
                     <div
-                      className={`h-3 rounded ${totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
+                      className={`h-3 rounded ${totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
                       style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
                     />
                   </div>
-                  <div className="text-right"><ProfitLossValue value={totals.profit} /></div>
+                  <div className="text-right"><ProfitLossValue value={totals.profit} invoiced={totals.invoiced} /></div>
                 </div>
               ))}
             </div>

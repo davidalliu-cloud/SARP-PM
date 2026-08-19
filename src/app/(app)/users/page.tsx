@@ -2,6 +2,7 @@ import { UserRole } from "@prisma/client";
 import { createUser, updateUserPassword } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { requireUser } from "@/lib/auth";
+import { formatDate } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 
 export default async function UsersPage() {
@@ -45,7 +46,7 @@ export default async function UsersPage() {
                   <td className="font-bold">{user.name}</td>
                   <td>{user.email}</td>
                   <td>{user.role}</td>
-                  <td>{user.createdAt.toLocaleDateString()}</td>
+                  <td>{formatDate(user.createdAt)}</td>
                   <td>
                     <form action={updateUserPassword} className="flex min-w-[260px] gap-2">
                       <input type="hidden" name="id" value={user.id} />

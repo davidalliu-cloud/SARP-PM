@@ -245,6 +245,9 @@ model Invoice {
   monthCovered String
   invoiceNo    String?
   amount       Float
+  sourceAmount   Float?
+  sourceCurrency String?
+  vatRate        Float?
   dueDate      DateTime?
   isPaid       Boolean  @default(false)
   paidDate     DateTime?

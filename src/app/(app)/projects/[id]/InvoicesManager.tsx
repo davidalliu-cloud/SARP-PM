@@ -11,6 +11,9 @@ export type InvoiceRow = {
   monthCovered: string;
   invoiceNo: string;
   amount: number;
+  sourceAmount: number | null;
+  sourceCurrency: string;
+  vatRate: number | null;
   dueDate: string;
   isPaid: boolean;
   paidDate: string;
@@ -100,6 +103,12 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                   {invoice.isPaid && invoice.paidDate ? (
                     <span className="status status-finished">Paid {displayDate(invoice.paidDate)}</span>
                   ) : null}
+                  {invoice.sourceCurrency ? (
+                    <span className="status status-not-started" title="Converted to net EUR for profit calculations">
+                      Orig. {invoice.sourceAmount != null ? invoice.sourceAmount.toLocaleString() : ""} {invoice.sourceCurrency}
+                      {invoice.vatRate != null ? ` (${Math.round(invoice.vatRate * 100)}% VAT)` : ""}
+                    </span>
+                  ) : null}
                 </div>
                 {invoice.notes ? <div className="mt-2 text-sm text-[#373455]">{invoice.notes}</div> : null}
               </div>
@@ -150,9 +159,12 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>Invoice date<input name="invoiceDate" type="date" required defaultValue={dateInputValue(invoice.invoiceDate)} /></label>
                 <label>Month covered<input name="monthCovered" type="month" required defaultValue={invoice.monthCovered} /></label>
                 <label>Invoice number<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder="Optional" /></label>
-                <label>Amount invoiced<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
+                <label>Amount invoiced (net EUR)<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
                 <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(invoice.dueDate)} /></label>
                 <label>Client<input name="clientName" defaultValue={invoice.clientName} placeholder="Project's default client" /></label>
+                <label>Original amount (gross)<input name="sourceAmount" type="number" min="0" step="0.01" defaultValue={invoice.sourceAmount ?? ""} placeholder="Optional" /></label>
+                <label>Original currency<input name="sourceCurrency" defaultValue={invoice.sourceCurrency} placeholder="Optional, e.g. ALL" /></label>
+                <label>VAT rate applied<input name="vatRate" type="number" min="0" max="1" step="0.01" defaultValue={invoice.vatRate ?? ""} placeholder="0.20 = 20%" /></label>
                 <label className="md:col-span-2">
                   Paid status
                   <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2 text-sm font-bold text-[#373455]">

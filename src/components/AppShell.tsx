@@ -6,6 +6,14 @@ import { canApproveOffers, pendingApprovalCount } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 import { SidebarNav } from "@/components/SidebarNav";
 import { SidebarProjects } from "@/components/SidebarProjects";
+import { projectAttention, projectTotals } from "@/lib/totals";
+
+function attentionDotClass(level: ReturnType<typeof projectAttention>["level"]) {
+  if (level === "critical") return "bg-lab-burgundy";
+  if (level === "risk") return "bg-lab-gold";
+  if (level === "ok") return "bg-lab-green";
+  return "bg-lab-steel";
+}
 
 const navItems = [
   { href: "/", label: "Dashboard" },
@@ -30,7 +38,15 @@ const projectGroupDefs = [
 export async function AppShell({ children, user }: { children: ReactNode; user: User }) {
   const [projects, approvals] = await Promise.all([
     prisma.project.findMany({
-      select: { id: true, name: true, status: true },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        budgetAmount: true,
+        estimatedContractValue: true,
+        invoices: true,
+        dailyRecords: { include: { productItems: true, labourItems: true, expenseItems: true } },
+      },
       orderBy: { name: "asc" },
     }),
     canApproveOffers(user) ? pendingApprovalCount() : Promise.resolve(0),
@@ -39,14 +55,20 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
   const shellNavItems = navItems.map((item) =>
     item.href === "/offers" && approvals ? { ...item, label: `Offers (${approvals} to approve)` } : item,
   );
+  // Each project carries an attention dot in the sidebar list.
+  const projectsWithDot = projects.map((project) => {
+    const totals = projectTotals(project.dailyRecords, project.invoices);
+    const attention = projectAttention(project, totals);
+    return { id: project.id, name: project.name, status: project.status, dotClass: attentionDotClass(attention.level), dotTitle: attention.label };
+  });
   const projectGroups = projectGroupDefs
     .map((group) => ({
       key: group.key,
       label: group.label,
       alwaysShow: group.alwaysShow,
-      projects: projects
+      projects: projectsWithDot
         .filter((project) => project.status === group.key)
-        .map((project) => ({ id: project.id, name: project.name })),
+        .map((project) => ({ id: project.id, name: project.name, dotClass: project.dotClass, dotTitle: project.dotTitle })),
     }))
     .filter((group) => group.alwaysShow || group.projects.length > 0)
     .map(({ key, label, projects }) => ({ key, label, projects }));
