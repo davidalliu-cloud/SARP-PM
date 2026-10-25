@@ -88,8 +88,8 @@ function BarRow({
   return (
     <div>
       <div className="mb-1 flex items-center justify-between gap-3 text-sm">
-        <span className="truncate font-bold text-[#373455]">{label}</span>
-        <span className="shrink-0 font-black text-[#373455]">{detail}</span>
+        <span className="truncate font-bold text-ink">{label}</span>
+        <span className="shrink-0 font-bold text-ink">{detail}</span>
       </div>
       <div className="h-3 overflow-hidden rounded bg-[#e8eef0]">
         <div className={`h-full rounded ${color}`} style={{ width: `${Math.max(percent(value, total), value > 0 ? 3 : 0)}%` }} />
@@ -102,11 +102,11 @@ function ProfitLossValue({ value, invoiced }: { value: number; invoiced?: number
   // With no invoice raised yet, a negative "profit" is unbilled cost, not a real
   // loss — say so instead of alarming with a red "Loss" figure.
   if (invoiced === 0 && value < 0) {
-    return <span className="font-black text-[#6b7188]">Not yet invoiced ({money(Math.abs(value))} cost)</span>;
+    return <span className="font-bold text-muted">Not yet invoiced ({money(Math.abs(value))} cost)</span>;
   }
   const isProfit = value >= 0;
   return (
-    <span className={isProfit ? "font-black text-[#285d59]" : "font-black text-[#5b193f]"}>
+    <span className={isProfit ? "font-bold text-[#285d59]" : "font-bold text-lab-burgundy"}>
       {isProfit ? "Profit " : "Loss "}
       {money(Math.abs(value))}
     </span>
@@ -116,10 +116,10 @@ function ProfitLossValue({ value, invoiced }: { value: number; invoiced?: number
 function ProfitLossWithMargin({ value, margin }: { value: number; margin: number }) {
   const isProfit = value >= 0;
   return (
-    <span className={isProfit ? "font-black text-[#285d59]" : "font-black text-[#5b193f]"}>
+    <span className={isProfit ? "font-bold text-[#285d59]" : "font-bold text-lab-burgundy"}>
       {isProfit ? "Profit " : "Loss "}
       {money(Math.abs(value))}
-      <span className="block text-base font-black">
+      <span className="block text-base font-bold">
         {isProfit ? "+" : "-"}
         {decimal(Math.abs(margin))}%
       </span>
@@ -129,19 +129,19 @@ function ProfitLossWithMargin({ value, margin }: { value: number; margin: number
 
 function ActionRequiredCard({ item }: { item: ActionItem }) {
   const toneClasses = {
-    maroon: "border-[#5b193f] bg-[#fff8fa] text-[#5b193f]",
+    maroon: "border-lab-burgundy bg-[#fff8fa] text-lab-burgundy",
     amber: "border-[#c28a2c] bg-[#fffaf0] text-[#7a4b00]",
-    blue: "border-[#777da7] bg-[#f7f8fc] text-[#373455]",
+    blue: "border-[#777da7] bg-[#f7f8fc] text-ink",
   };
 
   return (
     <Link href={item.href} className={`block rounded-lg border-l-4 p-3 transition hover:-translate-y-0.5 hover:shadow-md ${toneClasses[item.tone]}`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <div className="truncate text-sm font-black">{item.title}</div>
-          <div className="mt-1 text-xs font-bold text-[#6b7188]">{item.detail}</div>
+          <div className="truncate text-sm font-bold">{item.title}</div>
+          <div className="mt-1 text-xs font-bold text-muted">{item.detail}</div>
         </div>
-        {item.amount ? <div className="shrink-0 text-sm font-black">{item.amount}</div> : null}
+        {item.amount ? <div className="shrink-0 text-sm font-bold">{item.amount}</div> : null}
       </div>
     </Link>
   );
@@ -181,9 +181,9 @@ function ProjectDashboardTable({
               .filter((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0)
               .reduce((sum, invoice) => sum + invoice.amount, 0);
             const marginTone = totals.invoiced <= 0
-              ? "text-[#6b7188]"
+              ? "text-muted"
               : totals.margin < 0
-                ? "text-[#5b193f]"
+                ? "text-lab-burgundy"
                 : target > 0 && totals.margin < target
                   ? "text-[#c28a2c]"
                   : "text-[#285d59]";
@@ -191,61 +191,61 @@ function ProjectDashboardTable({
             return (
               <tr key={row.project.id}>
                 <td>
-                  <Link href={`/projects/${row.project.id}`} className="font-black text-ink hover:text-[#5b193f] hover:underline">
+                  <Link href={`/projects/${row.project.id}`} className="font-bold text-ink hover:text-lab-burgundy hover:underline">
                     {row.project.name}
                   </Link>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
                     <span className={`status ${statusClass(row.project.status)}`}>{statusLabel(row.project.status)}</span>
-                    {row.project.clientName ? <span className="text-xs font-bold text-[#6b7188]">{row.project.clientName}</span> : null}
+                    {row.project.clientName ? <span className="text-xs font-bold text-muted">{row.project.clientName}</span> : null}
                   </div>
                 </td>
                 <td><span className={attention.className}>{attention.label}</span></td>
                 <td className="font-bold">
                   {row.project.budgetAmount > 0 ? (
                     <>
-                      <span className={budget.isOverBudget ? "text-[#5b193f]" : "text-[#285d59]"}>{decimal(budget.budgetUsed)}%</span>
-                      <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                      <span className={budget.isOverBudget ? "text-lab-burgundy" : "text-[#285d59]"}>{decimal(budget.budgetUsed)}%</span>
+                      <div className="mt-1 text-xs font-bold text-muted">
                         {budget.isOverBudget ? `${money(Math.abs(budget.budgetRemaining))} over` : `${money(budget.budgetRemaining)} left`}
                       </div>
                     </>
                   ) : (
-                    <span className="font-semibold text-[#6b7188]">Not set</span>
+                    <span className="font-semibold text-muted">Not set</span>
                   )}
                 </td>
                 <td className="font-bold">{money(totals.totalCost)}</td>
                 <td>
                   {money(totals.invoiced)}
                   {overdueAmount > 0 ? (
-                    <div className="mt-1 text-xs font-bold text-[#5b193f]">{money(overdueAmount)} overdue</div>
+                    <div className="mt-1 text-xs font-bold text-lab-burgundy">{money(overdueAmount)} overdue</div>
                   ) : outstanding > 0 ? (
-                    <div className="mt-1 text-xs font-bold text-[#6b7188]">{money(outstanding)} open</div>
+                    <div className="mt-1 text-xs font-bold text-muted">{money(outstanding)} open</div>
                   ) : null}
                 </td>
                 <td className="font-bold">
                   {Math.abs(unbilled) < 1 ? (
-                    <span className="text-[#6b7188]">-</span>
+                    <span className="text-muted">-</span>
                   ) : unbilled > 0 ? (
                     <>
                       <span className="text-[#c28a2c]">{money(unbilled)}</span>
-                      <div className="mt-1 text-xs font-bold text-[#6b7188]">to invoice</div>
+                      <div className="mt-1 text-xs font-bold text-muted">to invoice</div>
                     </>
                   ) : (
                     <>
                       <span className="text-[#285d59]">{money(Math.abs(unbilled))}</span>
-                      <div className="mt-1 text-xs font-bold text-[#6b7188]">billed ahead</div>
+                      <div className="mt-1 text-xs font-bold text-muted">billed ahead</div>
                     </>
                   )}
                 </td>
-                <td className={`font-black ${marginTone}`}>
+                <td className={`font-bold ${marginTone}`}>
                   {totals.invoiced > 0 ? `${decimal(totals.margin)}%` : "-"}
-                  <div className="mt-1 text-xs font-bold text-[#6b7188]">{target > 0 ? `Target ${decimal(target)}%` : "No target"}</div>
+                  <div className="mt-1 text-xs font-bold text-muted">{target > 0 ? `Target ${decimal(target)}%` : "No target"}</div>
                 </td>
               </tr>
             );
           })}
           {!rows.length ? (
             <tr>
-              <td colSpan={7} className="py-8 text-center font-bold text-[#6b7188]">{emptyText}</td>
+              <td colSpan={7} className="py-8 text-center font-bold text-muted">{emptyText}</td>
             </tr>
           ) : null}
         </tbody>
@@ -381,7 +381,7 @@ export default async function DashboardPage({
   const totalExpenseCost = rows.reduce((sum, row) => sum + row.totals.expenseCost, 0);
   const totalCompletedArea = rows.reduce((sum, row) => sum + row.dailyRecords.reduce((recordSum, record) => recordSum + record.completedAreaM2, 0), 0);
   const costBreakdown = [
-    { label: "Products", value: totalProductCost, color: "bg-[#5b193f]" },
+    { label: "Products", value: totalProductCost, color: "bg-lab-burgundy" },
     { label: "Labour", value: totalLabourCost, color: "bg-[#777da7]" },
     { label: "Expenses", value: totalExpenseCost, color: "bg-[#285d59]" },
   ];
@@ -452,9 +452,9 @@ export default async function DashboardPage({
       <section className="panel mb-6 p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="text-xs font-black uppercase text-[#5b193f]">Dashboard period</div>
-            <h2 className="mt-1 text-lg font-black text-[#373455]">{periodRange.label}</h2>
-            <p className="mt-1 text-sm font-semibold text-[#6b7188]">
+            <div className="text-xs font-bold uppercase text-lab-burgundy">Dashboard period</div>
+            <h2 className="mt-1 text-lg font-bold text-ink">{periodRange.label}</h2>
+            <p className="mt-1 text-sm font-semibold text-muted">
               Cost, invoicing, profit, and analytics are filtered by this period. Open invoice warnings stay visible at all times.
             </p>
           </div>
@@ -493,16 +493,16 @@ export default async function DashboardPage({
         />
       </section>
       {unbilledCostExposure > 0 ? (
-        <p className="mt-2 text-xs font-semibold text-[#6b7188]">
+        <p className="mt-2 text-xs font-semibold text-muted">
           &quot;Total costs&quot; minus &quot;Total invoiced&quot; above blends real trading result with this unbilled backlog — use Realized profit / Unbilled cost exposure for a true read.
         </p>
       ) : null}
 
       {overdueTotal > 0 ? (
-        <section className="mt-6 rounded-xl border-l-4 border-[#5b193f] bg-[#fff8fa] p-4">
+        <section className="mt-6 rounded-xl border-l-4 border-lab-burgundy bg-[#fff8fa] p-4">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-[11px] font-black uppercase tracking-[0.14em] text-[#5b193f]">Collections alert</div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-lab-burgundy">Collections alert</div>
               <div className="mt-1 font-bold text-ink">
                 {money(overdueTotal)} overdue across {overdueInvoices.length} invoice{overdueInvoices.length === 1 ? "" : "s"} —{" "}
                 {decimal(totalOutstanding > 0 ? (overdueTotal / totalOutstanding) * 100 : 0)}% of everything outstanding is already overdue.
@@ -516,8 +516,8 @@ export default async function DashboardPage({
       <section className="panel mt-6 p-4">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-black">Action required</h2>
-            <p className="mt-1 text-sm font-semibold text-[#6b7188]">Items that need attention first.</p>
+            <h2 className="text-lg font-bold">Action required</h2>
+            <p className="mt-1 text-sm font-semibold text-muted">Items that need attention first.</p>
           </div>
           {actionItems.length > visibleActionItems.length ? (
             <span className="status status-risk">{actionItems.length - visibleActionItems.length} more</span>
@@ -538,8 +538,8 @@ export default async function DashboardPage({
         <summary className="cursor-pointer list-none">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-black">Detailed analytics</h2>
-              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Cost breakdowns, product usage, labour split, and profit charts. Collapse if you just want the summary above.</p>
+              <h2 className="text-lg font-bold">Detailed analytics</h2>
+              <p className="mt-1 text-sm font-semibold text-muted">Cost breakdowns, product usage, labour split, and profit charts. Collapse if you just want the summary above.</p>
             </div>
             <span className="btn btn-secondary btn-small">Hide analytics</span>
           </div>
@@ -547,7 +547,7 @@ export default async function DashboardPage({
 
         <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Cost breakdown</h2>
+            <h2 className="mb-4 text-lg font-bold">Cost breakdown</h2>
             <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
               {costBreakdown.map((item) => (
                 <div key={item.label} className={item.color} style={{ width: `${percent(item.value, totalCost)}%` }} />
@@ -561,7 +561,7 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Most material used</h2>
+            <h2 className="mb-4 text-lg font-bold">Most material used</h2>
             <div className="grid gap-3">
               {topMaterials.map((item) => (
                 <BarRow
@@ -570,15 +570,15 @@ export default async function DashboardPage({
                   value={item.cost}
                   total={maxMaterialCost}
                   detail={`${decimal(item.quantity, 2)} ${item.unit} / ${money(item.cost)}`}
-                  color="bg-[#5b193f]"
+                  color="bg-lab-burgundy"
                 />
               ))}
-              {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No product usage recorded yet.</div> : null}
+              {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No product usage recorded yet.</div> : null}
             </div>
           </div>
 
           <div className="panel p-4 xl:col-span-2 2xl:col-span-1">
-            <h2 className="mb-4 text-lg font-black">Labour split</h2>
+            <h2 className="mb-4 text-lg font-bold">Labour split</h2>
             <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
               <div className="bg-[#777da7]" style={{ width: `${percent(internalLabourCost, totalLabourCost)}%` }} />
               <div className="bg-[#285d59]" style={{ width: `${percent(externalLabourCost, totalLabourCost)}%` }} />
@@ -590,17 +590,17 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Expense categories</h2>
+            <h2 className="mb-4 text-lg font-bold">Expense categories</h2>
             <div className="grid gap-3">
               {expenseRows.map((item) => (
                 <BarRow key={item.label} label={item.label} value={item.value} total={maxExpenseCost} detail={money(item.value)} color="bg-[#285d59]" />
               ))}
-              {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No extra expenses recorded yet.</div> : null}
+              {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No extra expenses recorded yet.</div> : null}
             </div>
           </div>
 
           <div className="panel p-4 xl:col-span-1 2xl:col-span-2">
-            <h2 className="mb-4 text-lg font-black">Highest cost projects</h2>
+            <h2 className="mb-4 text-lg font-bold">Highest cost projects</h2>
             <div className="grid gap-3">
               {mostExpensiveProjects.map(({ project, totals }) => (
                 <BarRow
@@ -609,16 +609,16 @@ export default async function DashboardPage({
                   value={totals.totalCost}
                   total={Math.max(...mostExpensiveProjects.map((row) => row.totals.totalCost), 1)}
                   detail={totals.invoiced === 0 ? `${money(totals.totalCost)} · not yet invoiced` : money(totals.totalCost)}
-                  color={totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+                  color={totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-lab-burgundy"}
                 />
               ))}
-              {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-[#6b7188]">No project costs recorded yet.</div> : null}
+              {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No project costs recorded yet.</div> : null}
             </div>
           </div>
 
           {projectM2Rows.length ? (
             <div className="panel p-4 xl:col-span-2 2xl:col-span-3">
-              <h2 className="mb-4 text-lg font-black">Cost per m2 by project</h2>
+              <h2 className="mb-4 text-lg font-bold">Cost per m2 by project</h2>
               <div className="mb-4">
                 <StatCard label="Average cost / m2" value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={`${decimal(totalCompletedArea, 1)} m2 completed`} tone="blue" />
               </div>
@@ -630,7 +630,7 @@ export default async function DashboardPage({
                     value={row.totalCostPerM2}
                     total={maxProjectCostPerM2}
                     detail={row.totals.invoiced === 0 ? `${money(row.totalCostPerM2)} cost / m2 · not yet invoiced` : `${money(row.totalCostPerM2)} cost / m2, ${money(row.profitPerM2)} profit / m2`}
-                    color={row.totals.invoiced === 0 ? "bg-[#c5cdd6]" : row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}
+                    color={row.totals.invoiced === 0 ? "bg-[#c5cdd6]" : row.profitPerM2 >= 0 ? "bg-[#777da7]" : "bg-lab-burgundy"}
                   />
                 ))}
               </div>
@@ -640,13 +640,13 @@ export default async function DashboardPage({
 
         <section className="mt-4 grid gap-4 xl:grid-cols-3">
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Cost vs invoiced</h2>
+            <h2 className="mb-4 text-lg font-bold">Cost vs invoiced</h2>
             <div className="space-y-4">
               {rows.map(({ project, totals }) => (
                 <div key={project.id}>
                   <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} invoiced={totals.invoiced} /></div>
                   <div className="grid gap-1">
-                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#5b193f]" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
+                    <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-lab-burgundy" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
                   </div>
                 </div>
@@ -655,29 +655,29 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Monthly costs and invoicing</h2>
+            <h2 className="mb-4 text-lg font-bold">Monthly costs and invoicing</h2>
             <div className="grid grid-cols-6 items-end gap-3">
               {monthlyRows.map(([month, row]) => (
                 <div key={month} className="grid gap-2 text-center">
                   <div className="flex h-32 items-end justify-center gap-1 border-b border-[#d7e1e5]">
-                    <div className="w-4 rounded-t bg-[#5b193f]" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
+                    <div className="w-4 rounded-t bg-lab-burgundy" style={{ height: `${Math.max((row.cost / maxMonthly) * 100, 4)}%` }} />
                     <div className="w-4 rounded-t bg-[#777da7]" style={{ height: `${Math.max((row.invoiced / maxMonthly) * 100, 4)}%` }} />
                   </div>
-                  <div className="text-xs font-black text-[#6b7188]">{month}</div>
+                  <div className="text-xs font-bold text-muted">{month}</div>
                 </div>
               ))}
             </div>
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-black">Profit/loss by project</h2>
+            <h2 className="mb-4 text-lg font-bold">Profit/loss by project</h2>
             <div className="space-y-3">
               {rows.map(({ project, totals }) => (
                 <div key={project.id} className="grid grid-cols-[110px_1fr_90px] items-center gap-3 text-sm">
                   <div className="truncate font-bold">{project.name}</div>
                   <div className="h-3 rounded bg-[#e8eef0]">
                     <div
-                      className={`h-3 rounded ${totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-[#5b193f]"}`}
+                      className={`h-3 rounded ${totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-lab-burgundy"}`}
                       style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
                     />
                   </div>
@@ -693,11 +693,11 @@ export default async function DashboardPage({
         <div className="panel p-4">
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="text-xs font-black uppercase text-[#5b193f]">Current work</div>
-              <h2 className="text-lg font-black">Active projects</h2>
-              <p className="mt-1 text-sm font-semibold text-[#6b7188]">Whole-project figures to date — budget burn, unbilled work, and margin vs the price you set. Sorted by what needs attention first.</p>
+              <div className="text-xs font-bold uppercase text-lab-burgundy">Current work</div>
+              <h2 className="text-lg font-bold">Active projects</h2>
+              <p className="mt-1 text-sm font-semibold text-muted">Whole-project figures to date — budget burn, unbilled work, and margin vs the price you set. Sorted by what needs attention first.</p>
             </div>
-            <Link href="/projects" className="text-sm font-black text-[#777da7]">View all</Link>
+            <Link href="/projects" className="text-sm font-bold text-[#777da7]">View all</Link>
           </div>
           <ProjectDashboardTable
             rows={activeProjectRows}

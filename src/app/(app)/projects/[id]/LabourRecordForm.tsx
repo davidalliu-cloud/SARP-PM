@@ -82,7 +82,7 @@ export function LabourRecordForm({
 
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-black">Employees worked</h3>
+          <h3 className="font-bold">Employees worked</h3>
           <button
             className="btn btn-small btn-secondary"
             type="button"
@@ -145,8 +145,8 @@ export function LabourRecordForm({
                   {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
                 </label>
                 <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-                  <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
-                  <div className="font-black">EUR {(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage).toFixed(2)}</div>
+                  <div className="text-xs font-bold uppercase text-muted">Line total</div>
+                  <div className="font-bold">EUR {(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage).toFixed(2)}</div>
                 </div>
                 <div className="grid content-end">
                   <button className="btn btn-small btn-delete" type="button" onClick={() => setLabourRows((rows) => rows.filter((item) => item.id !== row.id))}>
@@ -160,8 +160,8 @@ export function LabourRecordForm({
       </div>
 
       <div className="flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-sm font-bold text-[#373455]">
-          Labour total: <span className="text-[#373455]">EUR {labourTotal.toFixed(2)}</span>
+        <div className="text-sm font-bold text-ink">
+          Labour total: <span className="text-ink">EUR {labourTotal.toFixed(2)}</span>
         </div>
         <button className="btn btn-primary" type="submit" disabled={pending || !employees.length}>
           {pending ? "Saving…" : "Save labour"}

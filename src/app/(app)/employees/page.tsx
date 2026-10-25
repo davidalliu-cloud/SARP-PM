@@ -23,7 +23,7 @@ export default async function EmployeesPage({
       <PageTitle eyebrow="Master data" title="Employees" />
       <section className="grid gap-5 xl:grid-cols-[420px_1fr]">
         <form action={createEmployee} className="panel grid gap-4 p-5">
-          <h2 className="text-lg font-black">Add employee</h2>
+          <h2 className="text-lg font-bold">Add employee</h2>
           <label>Employee name<input name="name" required placeholder="Samir Haddad" /></label>
           <label>Role<input name="role" placeholder="Foreman, installer, labourer" /></label>
           <label>Default daily wage<input name="defaultDailyWage" type="number" min="0" step="0.01" required placeholder="180.00" /></label>
@@ -36,7 +36,7 @@ export default async function EmployeesPage({
               <input name="q" defaultValue={params.q || ""} placeholder="Employee, role, or wage" />
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
-              <div className="text-xs font-bold text-[#6b7188]">Showing {filteredEmployees.length} of {employees.length} employees</div>
+              <div className="text-xs font-bold text-muted">Showing {filteredEmployees.length} of {employees.length} employees</div>
               <button className="btn btn-small btn-save" type="submit">Search</button>
             </div>
           </form>
@@ -67,7 +67,7 @@ export default async function EmployeesPage({
                   </tr>
                 ))}
                 {!filteredEmployees.length ? (
-                  <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No employees match your search.</td></tr>
+                  <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">No employees match your search.</td></tr>
                 ) : null}
               </tbody>
             </table>

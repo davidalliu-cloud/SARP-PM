@@ -62,7 +62,7 @@ export function MaterialsRecordForm({
 
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-black">Products used</h3>
+          <h3 className="font-bold">Products used</h3>
           <button
             className="btn btn-small btn-secondary"
             type="button"
@@ -98,8 +98,8 @@ export function MaterialsRecordForm({
                   <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
                 </label>
                 <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-                  <div className="text-xs font-black uppercase text-[#6b7188]">Line total</div>
-                  <div className="font-black">EUR {(row.quantity * row.costPerUnit).toFixed(2)} {selected?.unit ? `/${selected.unit}` : ""}</div>
+                  <div className="text-xs font-bold uppercase text-muted">Line total</div>
+                  <div className="font-bold">EUR {(row.quantity * row.costPerUnit).toFixed(2)} {selected?.unit ? `/${selected.unit}` : ""}</div>
                 </div>
                 <div className="grid content-end">
                   <button className="btn btn-small btn-delete" type="button" onClick={() => setProductRows((rows) => rows.filter((item) => item.id !== row.id))}>
@@ -113,8 +113,8 @@ export function MaterialsRecordForm({
       </div>
 
       <div className="flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-center md:justify-between">
-        <div className="text-sm font-bold text-[#373455]">
-          Materials total: <span className="text-[#373455]">EUR {productTotal.toFixed(2)}</span>
+        <div className="text-sm font-bold text-ink">
+          Materials total: <span className="text-ink">EUR {productTotal.toFixed(2)}</span>
         </div>
         <button className="btn btn-primary" type="submit" disabled={pending || !products.length}>
           {pending ? "Saving…" : "Save materials"}

@@ -13,7 +13,7 @@ export default async function UsersPage() {
     return (
       <>
         <PageTitle eyebrow="Access" title="Users" />
-        <div className="panel p-5 font-bold text-[#5b193f]">Only admins can manage user accounts.</div>
+        <div className="panel p-5 font-bold text-lab-burgundy">Only admins can manage user accounts.</div>
       </>
     );
   }
@@ -23,7 +23,7 @@ export default async function UsersPage() {
       <PageTitle eyebrow="Access" title="Users" />
       <section className="grid gap-5 xl:grid-cols-[420px_1fr]">
         <form action={createUser} className="panel grid gap-4 p-5">
-          <h2 className="text-lg font-black">Add user</h2>
+          <h2 className="text-lg font-bold">Add user</h2>
           <label>Name<input name="name" required placeholder="Employee name" /></label>
           <label>Email<input name="email" type="email" required placeholder="employee@sarp.com" /></label>
           <label>

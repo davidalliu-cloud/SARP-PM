@@ -65,10 +65,10 @@ export default async function InvoicesPage() {
       </PageTitle>
 
       {overdueTotal > 0 ? (
-        <section className="mb-6 rounded-xl border-l-4 border-[#5b193f] bg-[#fff8fa] p-4">
+        <section className="mb-6 rounded-xl border-l-4 border-lab-burgundy bg-[#fff8fa] p-4">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-[11px] font-black uppercase tracking-[0.14em] text-[#5b193f]">Collections alert</div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-lab-burgundy">Collections alert</div>
               <div className="mt-1 font-bold text-ink">
                 {money(overdueTotal)} overdue across {overdueRows.length} invoice{overdueRows.length === 1 ? "" : "s"} —{" "}
                 {decimal(overdueShareOfOutstanding)}% of everything outstanding is already overdue.
@@ -90,10 +90,10 @@ export default async function InvoicesPage() {
       <section className="panel mt-6 overflow-hidden">
         <div className="flex flex-col gap-1 border-b border-[#e8eef0] p-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <div className="text-xs font-black uppercase text-[#5b193f]">Receivables ledger</div>
-            <h2 className="text-xl font-black">All invoices</h2>
+            <div className="text-xs font-bold uppercase text-lab-burgundy">Receivables ledger</div>
+            <h2 className="text-xl font-bold">All invoices</h2>
           </div>
-          <div className="text-sm font-bold text-[#6b7188]">Click a column to sort</div>
+          <div className="text-sm font-bold text-muted">Click a column to sort</div>
         </div>
         <InvoicesTable rows={tableRows} />
       </section>

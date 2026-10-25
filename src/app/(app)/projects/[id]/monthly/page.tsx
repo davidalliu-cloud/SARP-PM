@@ -84,7 +84,7 @@ export default async function MonthlyReportPage({
       </section>
 
       <section className="panel mt-5 p-4">
-        <h2 className="mb-3 text-xl font-black">Daily breakdown for {selected}</h2>
+        <h2 className="mb-3 text-xl font-bold">Daily breakdown for {selected}</h2>
         <div className="table-wrap">
           <table>
             <thead>
@@ -112,12 +112,12 @@ export default async function MonthlyReportPage({
                   <td>{money(recordProductCost(record))}</td>
                   <td>{money(recordLabourCost(record))}</td>
                   <td>{money(recordExpenseCost(record))}</td>
-                  <td className="font-black">{money(recordTotal(record))}</td>
+                  <td className="font-bold">{money(recordTotal(record))}</td>
                   <td>{record.notes || "-"}</td>
                 </tr>
               ))}
               {!records.length ? (
-                <tr><td colSpan={10} className="py-8 text-center font-bold text-[#6b7188]">No daily records for this month.</td></tr>
+                <tr><td colSpan={10} className="py-8 text-center font-bold text-muted">No daily records for this month.</td></tr>
               ) : null}
             </tbody>
           </table>

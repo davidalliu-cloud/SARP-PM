@@ -68,7 +68,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
 
   if (!invoices.length) {
     return (
-      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
+      <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
         No invoices saved for this project yet.
       </div>
     );
@@ -80,7 +80,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         Search invoices
         <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Invoice number, month, amount, or note" />
       </label>
-      <div className="text-xs font-bold text-[#6b7188]">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
+      <div className="text-xs font-bold text-muted">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
       {filteredInvoices.map((invoice) => {
         const isEditing = editingId === invoice.id;
 
@@ -88,8 +88,8 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
           <div key={invoice.id} className="rounded-lg border border-[#d7e1e5] bg-white p-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="font-black">{invoice.invoiceNo || "Invoice"}{invoice.clientName ? ` — ${invoice.clientName}` : ""}</div>
-                <div className="mt-1 text-sm font-semibold text-[#6b7188]">
+                <div className="font-bold">{invoice.invoiceNo || "Invoice"}{invoice.clientName ? ` — ${invoice.clientName}` : ""}</div>
+                <div className="mt-1 text-sm font-semibold text-muted">
                   {invoice.monthCovered} / Issued {displayDate(invoice.invoiceDate)} / Due {displayDate(invoice.dueDate)}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
@@ -110,10 +110,10 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                     </span>
                   ) : null}
                 </div>
-                {invoice.notes ? <div className="mt-2 text-sm text-[#373455]">{invoice.notes}</div> : null}
+                {invoice.notes ? <div className="mt-2 text-sm text-ink">{invoice.notes}</div> : null}
               </div>
               <div className="flex flex-wrap items-center gap-2 sm:justify-end">
-                <div className="mr-1 font-black text-[#777da7]">{money(invoice.amount)}</div>
+                <div className="mr-1 font-bold text-[#777da7]">{money(invoice.amount)}</div>
                 {invoice.isPaid ? (
                   <form action={markInvoiceUnpaid}>
                     <input type="hidden" name="id" value={invoice.id} />
@@ -167,7 +167,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                 <label>VAT rate applied<input name="vatRate" type="number" min="0" max="1" step="0.01" defaultValue={invoice.vatRate ?? ""} placeholder="0.20 = 20%" /></label>
                 <label className="md:col-span-2">
                   Paid status
-                  <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2 text-sm font-bold text-[#373455]">
+                  <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2 text-sm font-bold text-ink">
                     <input className="size-4 w-auto" name="isPaid" type="checkbox" defaultChecked={invoice.isPaid} />
                     Invoice has been paid
                   </span>
@@ -184,7 +184,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         );
       })}
       {!filteredInvoices.length ? (
-        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
+        <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
           No invoices match your search.
         </div>
       ) : null}

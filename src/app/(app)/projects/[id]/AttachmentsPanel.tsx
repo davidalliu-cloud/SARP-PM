@@ -59,11 +59,11 @@ export function AttachmentsPanel({
     <div className="panel p-4">
       <div className="mb-4 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <div className="text-xs font-black uppercase text-[#5b193f]">Documents</div>
-          <h2 className="text-xl font-black">Receipts and attachments</h2>
+          <div className="text-xs font-bold uppercase text-lab-burgundy">Documents</div>
+          <h2 className="text-xl font-bold">Receipts and attachments</h2>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <div className="text-sm font-bold text-[#6b7188]">{attachments.length} files</div>
+          <div className="text-sm font-bold text-muted">{attachments.length} files</div>
           <Link href={`/projects/${projectId}/attachments`} className="btn btn-small btn-edit">Open viewer</Link>
         </div>
       </div>
@@ -103,7 +103,7 @@ export function AttachmentsPanel({
           <input name="label" placeholder="Drawing revision, contract note, invoice reference, receipt details" />
         </label>
         <div className="flex items-center justify-between gap-3 lg:col-span-2">
-          <div className="text-xs font-bold text-[#6b7188]">Maximum upload size: 8 MB per file.</div>
+          <div className="text-xs font-bold text-muted">Maximum upload size: 8 MB per file.</div>
           <button className="btn btn-small btn-save" type="submit">Upload file</button>
         </div>
       </form>
@@ -115,13 +115,13 @@ export function AttachmentsPanel({
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="status status-finished">{attachment.category}</span>
-                  <span className="text-xs font-bold text-[#6b7188]">{relatedLabel(attachment)}</span>
+                  <span className="text-xs font-bold text-muted">{relatedLabel(attachment)}</span>
                 </div>
-                <div className="mt-2 truncate font-black text-[#373455]">{attachment.fileName}</div>
-                <div className="mt-1 text-sm font-semibold text-[#6b7188]">
+                <div className="mt-2 truncate font-bold text-ink">{attachment.fileName}</div>
+                <div className="mt-1 text-sm font-semibold text-muted">
                   {fileSize(attachment.size)} / {formatDate(attachment.createdAt)}
                 </div>
-                {attachment.label ? <div className="mt-2 text-sm text-[#373455]">{attachment.label}</div> : null}
+                {attachment.label ? <div className="mt-2 text-sm text-ink">{attachment.label}</div> : null}
               </div>
               <div className="flex flex-wrap gap-2 sm:justify-end">
                 <Link href={`/projects/${projectId}/attachments?category=${encodeURIComponent(attachment.category)}&file=${attachment.id}`} className="btn btn-small btn-edit">View</Link>
@@ -136,7 +136,7 @@ export function AttachmentsPanel({
           </div>
         ))}
         {!attachments.length ? (
-          <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f1f3f5] p-4 text-sm font-bold text-[#6b7188]">
+          <div className="rounded-lg border border-dashed border-[#bdc8d0] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
             No receipts or attachments uploaded for this project yet.
           </div>
         ) : null}

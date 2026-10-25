@@ -41,8 +41,8 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
   function profitClass(project: ProjectRow) {
-    if (project.profit < 0 || project.margin < 0) return "text-[#5b193f]";
-    if (!project.invoiced) return "text-[#6b7188]";
+    if (project.profit < 0 || project.margin < 0) return "text-lab-burgundy";
+    if (!project.invoiced) return "text-muted";
     if (project.estimatedProfitMargin > 0 && project.margin >= project.estimatedProfitMargin) return "text-[#285d59]";
     if (project.estimatedProfitMargin > 0) return "text-[#c28a2c]";
     return "text-[#285d59]";
@@ -73,7 +73,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                 <button
                   type="button"
                   onClick={() => toggleSort(col.key)}
-                  className="inline-flex items-center gap-1 font-black uppercase tracking-wide hover:text-[#5b193f]"
+                  className="inline-flex items-center gap-1 font-bold uppercase tracking-wide hover:text-lab-burgundy"
                   title={`Sort by ${col.label}`}
                 >
                   {col.label}
@@ -102,14 +102,14 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                     <div>
                       <Link
                         href={`/projects/${project.id}`}
-                        className="group inline-flex max-w-72 items-center gap-2 rounded-md px-2 py-1 -ml-2 font-black text-[#373455] transition hover:bg-[#f4e8eb] hover:text-[#5b193f] focus-visible:bg-[#f4e8eb] focus-visible:text-[#5b193f]"
+                        className="group inline-flex max-w-72 items-center gap-2 rounded-md px-2 py-1 -ml-2 font-bold text-ink transition hover:bg-[#f4e8eb] hover:text-lab-burgundy focus-visible:bg-[#f4e8eb] focus-visible:text-lab-burgundy"
                       >
                         <span className="truncate underline-offset-4 group-hover:underline group-focus-visible:underline">{project.name}</span>
-                        <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-black uppercase text-[#5b193f] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-bold uppercase text-lab-burgundy opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
                           Open
                         </span>
                       </Link>
-                      <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                      <div className="mt-1 text-xs font-bold text-muted">
                         {project.clientName || "No client"} / Start {formatDate(project.startDate)}
                       </div>
                     </div>
@@ -120,10 +120,10 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                   {isEditing ? (
                     <input className="h-9 py-1.5" form={formId} name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} aria-label={`Budget for ${project.name}`} />
                   ) : (
-                    <div className={project.isOverBudget ? "font-bold text-[#5b193f]" : "font-bold text-[#373455]"}>
+                    <div className={project.isOverBudget ? "font-bold text-lab-burgundy" : "font-bold text-ink"}>
                       {project.budgetAmount > 0 ? money(project.budgetAmount) : "-"}
                       {project.budgetAmount > 0 ? (
-                        <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                        <div className="mt-1 text-xs font-bold text-muted">
                           {decimal(project.budgetUsed)}% used / {money(project.budgetRemaining)} left
                         </div>
                       ) : null}
@@ -134,17 +134,17 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                   {isEditing ? (
                     <input className="h-9 py-1.5" form={formId} name="estimatedContractValue" type="number" min="0" step="0.01" defaultValue={project.estimatedContractValue} aria-label={`Contract value for ${project.name}`} />
                   ) : (
-                    <div className="font-bold text-[#373455]">
+                    <div className="font-bold text-ink">
                       {project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "-"}
-                      {project.estimatedProfitMargin ? <div className="mt-1 text-xs font-bold text-[#6b7188]">Target {decimal(project.estimatedProfitMargin)}%</div> : null}
+                      {project.estimatedProfitMargin ? <div className="mt-1 text-xs font-bold text-muted">Target {decimal(project.estimatedProfitMargin)}%</div> : null}
                     </div>
                   )}
                 </td>
                 <td className="font-bold">{money(project.totalCost)}</td>
                 <td>{money(project.invoiced)}</td>
-                <td className={`font-black ${profitClass(project)}`}>
+                <td className={`font-bold ${profitClass(project)}`}>
                   {money(project.profit)}
-                  <div className="mt-1 text-xs font-bold text-[#6b7188]">
+                  <div className="mt-1 text-xs font-bold text-muted">
                     Actual {decimal(project.margin)}%
                     {project.estimatedProfitMargin ? ` / Target ${decimal(project.estimatedProfitMargin)}%` : ""}
                   </div>
@@ -164,7 +164,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             );
           })}
           {!projects.length ? (
-            <tr><td colSpan={8} className="py-8 text-center font-bold text-[#6b7188]">No projects match this filter.</td></tr>
+            <tr><td colSpan={8} className="py-8 text-center font-bold text-muted">No projects match this filter.</td></tr>
           ) : null}
         </tbody>
       </table>

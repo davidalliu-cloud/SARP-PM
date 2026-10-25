@@ -74,7 +74,7 @@ export default async function ProjectsPage({
           </select>
         </label>
         <button className="btn btn-small btn-save" type="submit">Apply filter</button>
-        <div className="text-xs font-bold text-[#6b7188] md:col-span-3">
+        <div className="text-xs font-bold text-muted md:col-span-3">
           Showing {filteredProjects.length} of {projects.length} projects
         </div>
       </form>

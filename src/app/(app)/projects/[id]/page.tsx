@@ -54,7 +54,7 @@ function performanceSummary(tone: PerformanceTone) {
 }
 
 function guidanceToneClass(tone: GuidanceItem["tone"]) {
-  if (tone === "maroon") return "border-[#5b193f] bg-[#fff8fa]";
+  if (tone === "maroon") return "border-lab-burgundy bg-[#fff8fa]";
   if (tone === "amber") return "border-[#c28a2c] bg-[#fffaf0]";
   if (tone === "green") return "border-[#285d59] bg-[#f7fbfa]";
   return "border-[#777da7] bg-[#f7f8fc]";
@@ -439,7 +439,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <Link href={`/projects/${project.id}/monthly`} className="btn btn-secondary">Monthly report</Link>
       </section>
 
-      <section className={`mb-6 rounded-xl border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-[#5b193f]" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
+      <section className={`mb-6 rounded-xl border border-l-4 bg-white p-4 ${projectTone === "maroon" ? "border-l-lab-burgundy" : projectTone === "amber" ? "border-l-[#c28a2c]" : projectTone === "green" ? "border-l-[#285d59]" : "border-l-[#777da7]"}`}>
         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted">Project performance</div>
@@ -481,10 +481,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <div className="panel p-4">
           <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
-              <h2 className="text-xl font-black">Product quantities and costs</h2>
+              <div className="text-xs font-bold uppercase text-lab-burgundy">Project cost summary</div>
+              <h2 className="text-xl font-bold">Product quantities and costs</h2>
             </div>
-            <div className="text-sm font-bold text-[#6b7188]">{productUsageSummary.length} products / {money(totals.productCost)}</div>
+            <div className="text-sm font-bold text-muted">{productUsageSummary.length} products / {money(totals.productCost)}</div>
           </div>
           <div className="table-wrap">
             <table>
@@ -500,7 +500,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               <tbody>
                 {productUsageSummary.map((item) => (
                   <tr key={item.id}>
-                    <td className="font-black text-[#373455]">{item.name}</td>
+                    <td className="font-bold text-ink">{item.name}</td>
                     <td>{decimal(item.quantity, 2)} {item.unit}</td>
                     <td className="font-bold">{money(item.cost)}</td>
                     <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
@@ -508,7 +508,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                   </tr>
                 ))}
                 {productUsageSummary.length ? (
-                  <tr className="bg-[#f1f3f5] font-black">
+                  <tr className="bg-[#f1f3f5] font-bold">
                     <td>Total products</td>
                     <td>-</td>
                     <td>{money(totals.productCost)}</td>
@@ -516,7 +516,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     <td>-</td>
                   </tr>
                 ) : (
-                  <tr><td colSpan={5} className="py-8 text-center font-bold text-[#6b7188]">No product usage recorded yet.</td></tr>
+                  <tr><td colSpan={5} className="py-8 text-center font-bold text-muted">No product usage recorded yet.</td></tr>
                 )}
               </tbody>
             </table>
@@ -527,10 +527,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
-                <h2 className="text-xl font-black">Employee labour</h2>
+                <div className="text-xs font-bold uppercase text-lab-burgundy">Project cost summary</div>
+                <h2 className="text-xl font-bold">Employee labour</h2>
               </div>
-              <div className="text-sm font-bold text-[#6b7188]">{employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0)} man-days / {money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
+              <div className="text-sm font-bold text-muted">{employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0)} man-days / {money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
             </div>
             <div className="table-wrap">
               <table>
@@ -546,7 +546,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <tbody>
                   {employeeLabourSummary.map((item) => (
                     <tr key={item.id}>
-                      <td className="font-black text-[#373455]">{item.name}</td>
+                      <td className="font-bold text-ink">{item.name}</td>
                       <td>{decimal(item.manDays, 1)}</td>
                       <td className="font-bold">{money(item.cost)}</td>
                       <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
@@ -554,7 +554,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                     </tr>
                   ))}
                   {employeeLabourSummary.length ? (
-                    <tr className="bg-[#f1f3f5] font-black">
+                    <tr className="bg-[#f1f3f5] font-bold">
                       <td>Total employee labour</td>
                       <td>{decimal(employeeLabourSummary.reduce((sum, item) => sum + item.manDays, 0), 1)}</td>
                       <td>{money(employeeLabourSummary.reduce((sum, item) => sum + item.cost, 0))}</td>
@@ -562,7 +562,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                       <td>-</td>
                     </tr>
                   ) : (
-                    <tr><td colSpan={5} className="py-8 text-center font-bold text-[#6b7188]">No employee labour recorded yet.</td></tr>
+                    <tr><td colSpan={5} className="py-8 text-center font-bold text-muted">No employee labour recorded yet.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -572,10 +572,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
-                <h2 className="text-xl font-black">Expenses</h2>
+                <div className="text-xs font-bold uppercase text-lab-burgundy">Project cost summary</div>
+                <h2 className="text-xl font-bold">Expenses</h2>
               </div>
-              <div className="text-sm font-bold text-[#6b7188]">{expenseSummary.length} categories / {money(totals.expenseCost)}</div>
+              <div className="text-sm font-bold text-muted">{expenseSummary.length} categories / {money(totals.expenseCost)}</div>
             </div>
             <div className="table-wrap">
               <table>
@@ -590,21 +590,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <tbody>
                   {expenseSummary.map((item) => (
                     <tr key={item.category}>
-                      <td className="font-black text-[#373455]">{item.category}</td>
+                      <td className="font-bold text-ink">{item.category}</td>
                       <td>{item.entries}</td>
                       <td className="font-bold">{money(item.cost)}</td>
                       <td>{decimal(totals.totalCost > 0 ? (item.cost / totals.totalCost) * 100 : 0)}%</td>
                     </tr>
                   ))}
                   {expenseSummary.length ? (
-                    <tr className="bg-[#f1f3f5] font-black">
+                    <tr className="bg-[#f1f3f5] font-bold">
                       <td>Total expenses</td>
                       <td>{expenseSummary.reduce((sum, item) => sum + item.entries, 0)}</td>
                       <td>{money(totals.expenseCost)}</td>
                       <td>{decimal(totals.totalCost > 0 ? (totals.expenseCost / totals.totalCost) * 100 : 0)}%</td>
                     </tr>
                   ) : (
-                    <tr><td colSpan={4} className="py-8 text-center font-bold text-[#6b7188]">No expenses recorded yet.</td></tr>
+                    <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">No expenses recorded yet.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -616,10 +616,10 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           <div className="panel p-4">
             <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-end sm:justify-between">
               <div>
-                <div className="text-xs font-black uppercase text-[#5b193f]">Project cost summary</div>
-                <h2 className="text-xl font-black">External m2 teams</h2>
+                <div className="text-xs font-bold uppercase text-lab-burgundy">Project cost summary</div>
+                <h2 className="text-xl font-bold">External m2 teams</h2>
               </div>
-              <div className="text-sm font-bold text-[#6b7188]">{money(externalTeamSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
+              <div className="text-sm font-bold text-muted">{money(externalTeamSummary.reduce((sum, item) => sum + item.cost, 0))}</div>
             </div>
             <div className="table-wrap">
               <table>
@@ -636,7 +636,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 <tbody>
                   {externalTeamSummary.map((item) => (
                     <tr key={item.name}>
-                      <td className="font-black text-[#373455]">{item.name}</td>
+                      <td className="font-bold text-ink">{item.name}</td>
                       <td>{decimal(item.days, 1)}</td>
                       <td>{decimal(item.squareMeters, 2)} m2</td>
                       <td className="font-bold">{money(item.cost)}</td>

@@ -68,7 +68,7 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
                 <button
                   type="button"
                   onClick={() => toggleSort(col.key)}
-                  className="inline-flex items-center gap-1 font-black uppercase tracking-wide hover:text-[#5b193f]"
+                  className="inline-flex items-center gap-1 font-bold uppercase tracking-wide hover:text-lab-burgundy"
                   title={`Sort by ${col.label}`}
                 >
                   {col.label}
@@ -86,17 +86,17 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
             <tr key={row.id}>
               <td><span className={row.stateClassName}>{row.stateLabel}</span></td>
               <td>
-                <Link href={`/projects/${row.projectId}`} className="font-black text-[#373455]">{row.projectName}</Link>
-                {row.clientName ? <div className="mt-1 text-xs font-bold text-[#6b7188]">{row.clientName}</div> : null}
+                <Link href={`/projects/${row.projectId}`} className="font-bold text-ink">{row.projectName}</Link>
+                {row.clientName ? <div className="mt-1 text-xs font-bold text-muted">{row.clientName}</div> : null}
               </td>
               <td>
                 <div className="font-bold">{row.invoiceNo || "No number"}</div>
-                <div className="mt-1 text-xs font-bold text-[#6b7188]">{row.monthCovered}</div>
+                <div className="mt-1 text-xs font-bold text-muted">{row.monthCovered}</div>
               </td>
               <td>{formatDate(row.invoiceDate)}</td>
-              <td className={!row.isPaid && daysUntil(row.dueDate) < 0 ? "font-bold text-[#5b193f]" : "font-bold text-[#373455]"}>{formatDate(row.dueDate)}</td>
+              <td className={!row.isPaid && daysUntil(row.dueDate) < 0 ? "font-bold text-lab-burgundy" : "font-bold text-ink"}>{formatDate(row.dueDate)}</td>
               <td>{invoiceAgeLabel(row.invoiceDate, row.dueDate, row.isPaid)}</td>
-              <td className="font-black text-[#777da7]">{money(row.amount)}</td>
+              <td className="font-bold text-[#777da7]">{money(row.amount)}</td>
               <td>{row.paidDate ? formatDate(row.paidDate) : "-"}</td>
               <td>
                 {row.isPaid ? (
@@ -119,7 +119,7 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
         </tbody>
       </table>
       {!sortedRows.length ? (
-        <div className="p-5 text-sm font-bold text-[#6b7188]">No invoices have been created yet.</div>
+        <div className="p-5 text-sm font-bold text-muted">No invoices have been created yet.</div>
       ) : null}
     </div>
   );
