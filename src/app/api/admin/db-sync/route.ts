@@ -7,15 +7,10 @@ import { createOfferTables } from "@/lib/offer-setup";
 // (working) database connection. Vercel builds can't reach Prisma Postgres
 // directly, so new columns/tables are applied from here instead of db push.
 // Admin-only and safe to run repeatedly (IF NOT EXISTS / existence checks).
-// Temporary one-time repair key: lets the fix run when no admin session is
-// available (the login redirect lands on the crashing shell). Remove after use.
-const REPAIR_KEY = "k7Qm2Xp9Lr4Vt8Zs6Nd";
-
-export async function GET(request: Request) {
-  const key = new URL(request.url).searchParams.get("key");
+export async function GET() {
   const user = await getCurrentUser();
-  const authorized = key === REPAIR_KEY || user?.role === "ADMIN";
-  if (!authorized) return NextResponse.json({ error: "Not authorized" }, { status: 401 });
+  if (!user) return NextResponse.json({ error: "Not signed in" }, { status: 401 });
+  if (user.role !== "ADMIN") return NextResponse.json({ error: "Admin only" }, { status: 403 });
 
   const applied: string[] = [];
   try {
