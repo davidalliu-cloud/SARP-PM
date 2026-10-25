@@ -13,31 +13,50 @@ export default async function LoginPage({
   const { error } = await searchParams;
 
   return (
-    <main className="grid min-h-screen place-items-center bg-white px-5 py-10">
-      <form action={login} className="panel grid w-full max-w-md gap-4 p-8 shadow-[0_16px_34px_rgba(55,52,85,0.10)]">
-        <div>
-          <div className="mb-6 border-b border-line pb-6">
-            <img src="/brand/sarp-logo.png" alt="SARP Building the Future" className="h-auto w-48 max-w-full" />
+    <main className="flex min-h-screen items-center justify-center bg-[#fafafa] px-4 py-10">
+      <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-line bg-white shadow-sm md:grid-cols-[1fr_420px]">
+        {/* Brand panel */}
+        <div className="hidden bg-lab-burgundy p-10 text-white md:flex md:flex-col md:justify-between">
+          <div>
+            <img src="/brand/sarp-logo.png" alt="SARP" className="h-auto w-52 brightness-0 invert" />
+            <h1 className="mt-10 text-3xl font-semibold tracking-tight">SARP Project Management</h1>
+            <p className="mt-4 max-w-md text-sm leading-6 text-white/80">
+              Secure workspace for daily costs, materials and labour, invoices, and project profitability.
+            </p>
           </div>
-          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">SARP · LAB</div>
-          <h1 className="mt-2 text-3xl font-bold tracking-[-0.02em] text-ink">Sign in</h1>
-          <p className="mt-2 text-sm text-muted">Use your company account to access projects, costs, and reports.</p>
+          <div className="text-xs text-white/70">Costs, invoices, and project profitability</div>
         </div>
-        {error ? (
-          <div className="rounded-lg border border-[#f3cdd9] bg-[#fdeef2] px-3 py-2 text-sm font-semibold text-lab-burgundy">
-            Email or password is incorrect.
+
+        {/* Sign-in form */}
+        <div className="p-6 sm:p-8">
+          <div className="md:hidden">
+            <img src="/brand/sarp-logo.png" alt="SARP" className="h-auto w-36" />
           </div>
-        ) : null}
-        <label>
-          Email
-          <input name="email" type="email" required autoComplete="email" placeholder="admin@sarp.local" />
-        </label>
-        <label>
-          Password
-          <input name="password" type="password" required autoComplete="current-password" placeholder="Enter password" />
-        </label>
-        <button className="btn btn-primary" type="submit">Sign in</button>
-      </form>
+          <div className="mt-8 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy md:mt-0">
+            SARP &middot; LAB
+          </div>
+          <h2 className="mt-2 text-2xl font-semibold text-ink">Sign in</h2>
+          <p className="mt-2 text-sm text-muted">Use your company account to access projects, costs, and reports.</p>
+
+          {error ? (
+            <div className="mt-6 rounded-md border border-[#f3cdd9] bg-[#fdeef2] p-3 text-sm font-semibold text-lab-burgundy">
+              Email or password is incorrect.
+            </div>
+          ) : null}
+
+          <form action={login} className="mt-8 grid gap-5">
+            <label>
+              Email
+              <input name="email" type="email" required autoComplete="email" placeholder="admin@sarp.local" />
+            </label>
+            <label>
+              Password
+              <input name="password" type="password" required autoComplete="current-password" placeholder="Enter password" />
+            </label>
+            <button className="btn btn-primary w-full" type="submit">Sign in</button>
+          </form>
+        </div>
+      </section>
     </main>
   );
 }
