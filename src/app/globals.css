@@ -273,3 +273,82 @@ th {
   color: #a9761b;
   box-shadow: inset 0 0 0 1px #ffe0a6;
 }
+
+/* ------------------------------------------------------------------ *
+ * Printable offer document (/print/offers/[id])
+ * ------------------------------------------------------------------ */
+.offer-doc {
+  position: relative;
+}
+.offer-doc table {
+  white-space: normal;
+}
+.offer-doc th,
+.offer-doc td {
+  padding: 0.35rem 0.5rem;
+  font-size: 12px;
+}
+.offer-doc .meta td {
+  border: none;
+  padding: 0.15rem 0.5rem 0.15rem 0;
+}
+.offer-doc .meta td:nth-child(odd) {
+  color: var(--muted);
+  width: 7.5rem;
+}
+.offer-doc .items th {
+  background: var(--maroon);
+  color: #fff;
+  letter-spacing: 0.04em;
+  font-size: 10px;
+}
+.offer-doc .items tfoot td,
+.offer-doc .totals td {
+  font-weight: 600;
+  background: var(--tint);
+}
+.offer-doc .totals .grand td {
+  background: var(--maroon);
+  color: #fff;
+  font-weight: 700;
+}
+.offer-doc .num {
+  text-align: right;
+  white-space: nowrap;
+}
+.offer-doc .draft-mark {
+  position: absolute;
+  top: 40%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 120px;
+  font-weight: 800;
+  color: rgba(91, 25, 63, 0.08);
+  transform: rotate(-24deg);
+  pointer-events: none;
+}
+
+@media print {
+  @page {
+    size: A4;
+    margin: 12mm;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .offer-doc {
+    max-width: none;
+    padding: 0;
+  }
+  .avoid-break {
+    break-inside: avoid;
+  }
+  .offer-doc .items th,
+  .offer-doc .totals .grand td,
+  .offer-doc .items tfoot td,
+  .offer-doc .totals td {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

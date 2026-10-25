@@ -2,12 +2,14 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import type { User } from "@prisma/client";
 import { logout } from "@/app/login/actions";
+import { canApproveOffers, pendingApprovalCount } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 import { SidebarNav } from "@/components/SidebarNav";
 import { SidebarProjects } from "@/components/SidebarProjects";
 
 const navItems = [
   { href: "/", label: "Dashboard" },
+  { href: "/offers", label: "Offers" },
   { href: "/projects", label: "Projects" },
   { href: "/invoices", label: "Invoices" },
   { href: "/products", label: "Products" },
@@ -26,10 +28,17 @@ const projectGroupDefs = [
 ];
 
 export async function AppShell({ children, user }: { children: ReactNode; user: User }) {
-  const projects = await prisma.project.findMany({
-    select: { id: true, name: true, status: true },
-    orderBy: { name: "asc" },
-  });
+  const [projects, approvals] = await Promise.all([
+    prisma.project.findMany({
+      select: { id: true, name: true, status: true },
+      orderBy: { name: "asc" },
+    }),
+    canApproveOffers(user) ? pendingApprovalCount() : Promise.resolve(0),
+  ]);
+  // Admins see how many offers wait for their approval right in the nav.
+  const shellNavItems = navItems.map((item) =>
+    item.href === "/offers" && approvals ? { ...item, label: `Offers (${approvals} to approve)` } : item,
+  );
   const projectGroups = projectGroupDefs
     .map((group) => ({
       key: group.key,
@@ -63,7 +72,7 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
             Daily costs, invoices, and project profitability
           </div>
         </div>
-        <SidebarNav items={navItems} />
+        <SidebarNav items={shellNavItems} />
         <SidebarProjects groups={projectGroups} />
       </aside>
 
@@ -101,7 +110,7 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
             </form>
           </div>
           <div className="border-t border-line lg:hidden">
-            <SidebarNav items={navItems} variant="horizontal" />
+            <SidebarNav items={shellNavItems} variant="horizontal" />
           </div>
         </header>
 

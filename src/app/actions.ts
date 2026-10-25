@@ -1,9 +1,11 @@
 "use server";
 
-import { ProjectStatus, UserRole } from "@prisma/client";
+import { OfferStatus, OfferType, ProjectStatus, UserRole } from "@prisma/client";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { hashPassword, requireUser } from "@/lib/auth";
+import { ITEM_KINDS, OFFER_VALIDITY_DAYS } from "@/lib/offer-calc";
+import { canEditOffer, nextOfferCode, transitionOffer, type OfferAction } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 
 const MAX_ATTACHMENT_SIZE = 8 * 1024 * 1024;
@@ -553,6 +555,210 @@ export async function createAttachment(formData: FormData) {
 
   revalidatePath(`/projects/${projectId}`);
   revalidatePath(`/projects/${projectId}/attachments`);
+}
+
+type OfferSectionInput = {
+  title: string;
+  zone?: string;
+  description?: string;
+  areaM2?: number | null;
+  isOption?: boolean;
+  items: {
+    kind?: string;
+    description: string;
+    productName?: string;
+    unit: string;
+    quantity: number;
+    unitPrice: number;
+    unitCost?: number;
+  }[];
+};
+
+function finiteNumber(value: unknown) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+// The offer editor posts its sections/items as one JSON field.
+function offerSectionsFromForm(formData: FormData) {
+  const sections = JSON.parse(text(formData, "sections") || "[]") as OfferSectionInput[];
+  return sections
+    .map((section, sectionIndex) => ({
+      sortOrder: sectionIndex,
+      title: String(section.title ?? "").trim() || `Section ${sectionIndex + 1}`,
+      zone: String(section.zone ?? "").trim() || null,
+      description: String(section.description ?? "").trim() || null,
+      areaM2: finiteNumber(section.areaM2) > 0 ? finiteNumber(section.areaM2) : null,
+      isOption: Boolean(section.isOption),
+      items: {
+        create: (section.items ?? [])
+          .map((item, itemIndex) => ({
+            sortOrder: itemIndex,
+            kind: (ITEM_KINDS as readonly string[]).includes(String(item.kind)) ? String(item.kind) : "MATERIAL",
+            description: String(item.description ?? "").trim(),
+            productName: String(item.productName ?? "").trim() || null,
+            unit: String(item.unit ?? "").trim() || "njesi",
+            quantity: finiteNumber(item.quantity),
+            unitPrice: finiteNumber(item.unitPrice),
+            unitCost: finiteNumber(item.unitCost),
+          }))
+          .filter((item) => item.description || item.productName),
+      },
+    }));
+}
+
+function offerFieldsFromForm(formData: FormData) {
+  const issueDate = new Date(text(formData, "issueDate") || new Date());
+  const validUntil = text(formData, "validUntil");
+  return {
+    type: text(formData, "type") === OfferType.PRODUCTS ? OfferType.PRODUCTS : OfferType.WORKS,
+    clientName: text(formData, "clientName"),
+    projectName: text(formData, "projectName"),
+    siteAddress: text(formData, "siteAddress") || null,
+    issueDate,
+    validUntil: validUntil ? new Date(validUntil) : addDays(issueDate, OFFER_VALIDITY_DAYS),
+    currency: text(formData, "currency") === "ALL" ? "ALL" : "EUR",
+    exchangeRate: numberValue(formData.get("exchangeRate")) || 100,
+    vatRate: numberValue(formData.get("vatRate")),
+    discountPct: numberValue(formData.get("discountPct")),
+    paymentTerms: text(formData, "paymentTerms") || null,
+    executionTerms: text(formData, "executionTerms") || null,
+    warrantyTerms: text(formData, "warrantyTerms") || null,
+    exclusions: text(formData, "exclusions") || null,
+    internalNotes: text(formData, "internalNotes") || null,
+  };
+}
+
+function revalidateOffers(id?: string) {
+  revalidatePath("/offers");
+  if (id) revalidatePath(`/offers/${id}`);
+  revalidatePath("/", "layout");
+}
+
+export async function createOffer(formData: FormData) {
+  const user = await requireUser();
+
+  const fields = offerFieldsFromForm(formData);
+  if (!fields.clientName || !fields.projectName) throw new Error("Client and project name are required.");
+
+  const offer = await prisma.offer.create({
+    data: {
+      ...fields,
+      code: await nextOfferCode(fields.issueDate),
+      createdById: user.id,
+      sections: { create: offerSectionsFromForm(formData) },
+      events: { create: { userId: user.id, action: "Created" } },
+    },
+  });
+
+  revalidateOffers(offer.id);
+  redirect(`/offers/${offer.id}`);
+}
+
+export async function updateOffer(formData: FormData) {
+  const user = await requireUser();
+
+  const id = text(formData, "id");
+  const existing = await prisma.offer.findUnique({ where: { id } });
+  if (!existing) throw new Error("Offer not found.");
+  if (!canEditOffer(user, existing)) throw new Error("This offer can no longer be edited.");
+
+  const fields = offerFieldsFromForm(formData);
+  if (!fields.clientName || !fields.projectName) throw new Error("Client and project name are required.");
+
+  await prisma.offer.update({
+    where: { id },
+    data: {
+      ...fields,
+      sections: { deleteMany: {}, create: offerSectionsFromForm(formData) },
+      events: { create: { userId: user.id, action: "Edited" } },
+    },
+  });
+
+  revalidateOffers(id);
+  redirect(`/offers/${id}`);
+}
+
+export async function changeOfferStatus(formData: FormData) {
+  const user = await requireUser();
+
+  const id = text(formData, "id");
+  const offer = await transitionOffer(user, id, text(formData, "action") as OfferAction, text(formData, "comment") || null);
+
+  revalidateOffers(id);
+  if (offer.projectId) {
+    revalidatePath("/projects");
+    revalidatePath(`/projects/${offer.projectId}`);
+  }
+}
+
+// Copies an offer into a new draft: used for revisions (V2) and as a template.
+export async function duplicateOffer(formData: FormData) {
+  const user = await requireUser();
+
+  const source = await prisma.offer.findUnique({
+    where: { id: text(formData, "id") },
+    include: { sections: { include: { items: true } } },
+  });
+  if (!source) throw new Error("Offer not found.");
+
+  const issueDate = new Date();
+  const copy = await prisma.offer.create({
+    data: {
+      code: await nextOfferCode(issueDate),
+      type: source.type,
+      status: OfferStatus.DRAFT,
+      clientName: source.clientName,
+      projectName: source.projectName,
+      siteAddress: source.siteAddress,
+      issueDate,
+      validUntil: addDays(issueDate, OFFER_VALIDITY_DAYS),
+      currency: source.currency,
+      exchangeRate: source.exchangeRate,
+      vatRate: source.vatRate,
+      discountPct: source.discountPct,
+      paymentTerms: source.paymentTerms,
+      executionTerms: source.executionTerms,
+      warrantyTerms: source.warrantyTerms,
+      exclusions: source.exclusions,
+      internalNotes: source.internalNotes,
+      createdById: user.id,
+      sections: {
+        create: source.sections.map(({ sortOrder, title, zone, description, areaM2, isOption, items }) => ({
+          sortOrder,
+          title,
+          zone,
+          description,
+          areaM2,
+          isOption,
+          items: {
+            create: items.map(({ sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost }) => ({
+              sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost,
+            })),
+          },
+        })),
+      },
+      events: { create: { userId: user.id, action: `Copied from ${source.code}` } },
+    },
+  });
+
+  revalidateOffers(copy.id);
+  redirect(`/offers/${copy.id}/edit`);
+}
+
+export async function deleteOffer(formData: FormData) {
+  const user = await requireUser();
+
+  const id = text(formData, "id");
+  const offer = await prisma.offer.findUnique({ where: { id } });
+  if (!offer) throw new Error("Offer not found.");
+  const ownDraft = offer.status === OfferStatus.DRAFT && offer.createdById === user.id;
+  if (!ownDraft && user.role !== UserRole.ADMIN) throw new Error("Only admins can delete this offer.");
+
+  await prisma.offer.delete({ where: { id } });
+
+  revalidateOffers();
+  redirect("/offers");
 }
 
 export async function deleteAttachment(formData: FormData) {

@@ -21,15 +21,35 @@ enum UserRole {
   EMPLOYEE
 }
 
+enum OfferType {
+  WORKS
+  PRODUCTS
+}
+
+// DRAFT -> (non-admin) PENDING_APPROVAL -> READY -> SENT -> WON | LOST.
+// Admin-created offers skip PENDING_APPROVAL. WON creates the project.
+enum OfferStatus {
+  DRAFT
+  PENDING_APPROVAL
+  READY
+  SENT
+  WON
+  LOST
+  CANCELLED
+}
+
 model User {
-  id           String    @id @default(cuid())
-  name         String
-  email        String    @unique
-  passwordHash String
-  role         UserRole  @default(EMPLOYEE)
-  sessions     Session[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id             String       @id @default(cuid())
+  name           String
+  email          String       @unique
+  passwordHash   String
+  role           UserRole     @default(EMPLOYEE)
+  sessions       Session[]
+  offersCreated  Offer[]      @relation("OfferCreatedBy")
+  offersApproved Offer[]      @relation("OfferApprovedBy")
+  offerEvents    OfferEvent[]
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 }
 
 model Session {
@@ -54,8 +74,87 @@ model Project {
   dailyRecords DailyRecord[]
   invoices     Invoice[]
   attachments  Attachment[]
+  offer        Offer?
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
+}
+
+model Offer {
+  id             String         @id @default(cuid())
+  code           String         @unique
+  type           OfferType      @default(WORKS)
+  status         OfferStatus    @default(DRAFT)
+  clientName     String
+  projectName    String
+  siteAddress    String?
+  issueDate      DateTime
+  validUntil     DateTime
+  currency       String         @default("EUR")
+  // ALL per 1 EUR; used to convert ALL offers into the EUR project values.
+  exchangeRate   Float          @default(100)
+  vatRate        Float          @default(20)
+  discountPct    Float          @default(0)
+  paymentTerms   String?
+  executionTerms String?
+  warrantyTerms  String?
+  exclusions     String?
+  internalNotes  String?
+  reviewComment  String?
+  lostReason     String?
+  createdById    String
+  createdBy      User           @relation("OfferCreatedBy", fields: [createdById], references: [id])
+  approvedById   String?
+  approvedBy     User?          @relation("OfferApprovedBy", fields: [approvedById], references: [id])
+  approvedAt     DateTime?
+  sentAt         DateTime?
+  decidedAt      DateTime?
+  projectId      String?        @unique
+  project        Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  sections       OfferSection[]
+  events         OfferEvent[]
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+// A section is one system/zone. With areaM2 set, item quantities are
+// consumption per m2 and the section total is (value per m2) x areaM2.
+// Without areaM2, item quantities are absolute (product offers).
+model OfferSection {
+  id          String      @id @default(cuid())
+  offerId     String
+  offer       Offer       @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  sortOrder   Int         @default(0)
+  title       String
+  zone        String?
+  description String?
+  areaM2      Float?
+  isOption    Boolean     @default(false)
+  items       OfferItem[]
+}
+
+model OfferItem {
+  id          String       @id @default(cuid())
+  sectionId   String
+  section     OfferSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+  sortOrder   Int          @default(0)
+  kind        String       @default("MATERIAL")
+  description String
+  productName String?
+  unit        String
+  quantity    Float
+  unitPrice   Float
+  unitCost    Float        @default(0)
+}
+
+model OfferEvent {
+  id        String   @id @default(cuid())
+  offerId   String
+  offer     Offer    @relation(fields: [offerId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  comment   String?
+  createdAt DateTime @default(now())
 }
 
 model Product {

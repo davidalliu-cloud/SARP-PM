@@ -89,6 +89,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           },
           orderBy: { createdAt: "desc" },
         },
+        offer: { select: { id: true, code: true } },
       },
     }),
     prisma.product.findMany({ orderBy: { name: "asc" } }),
@@ -365,6 +366,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <button className="btn btn-small btn-save mb-0.5" type="submit">Save status</button>
           </form>
           <Link href={`/projects/${project.id}/monthly`} className="btn btn-secondary">Monthly report</Link>
+          {project.offer ? <Link href={`/offers/${project.offer.id}`} className="btn btn-secondary">Offer {project.offer.code}</Link> : null}
         </div>
       </PageTitle>
 
