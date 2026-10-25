@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { hashPassword, requireUser } from "@/lib/auth";
 import { ITEM_KINDS, OFFER_VALIDITY_DAYS } from "@/lib/offer-calc";
 import { canEditOffer, nextOfferCode, transitionOffer, type OfferAction } from "@/lib/offers";
+import { createOfferTables } from "@/lib/offer-setup";
 import { prisma } from "@/lib/prisma";
 
 const MAX_ATTACHMENT_SIZE = 8 * 1024 * 1024;
@@ -627,6 +628,15 @@ function offerFieldsFromForm(formData: FormData) {
     exclusions: text(formData, "exclusions") || null,
     internalNotes: text(formData, "internalNotes") || null,
   };
+}
+
+export async function setupOfferTables() {
+  const user = await requireUser();
+  if (user.role !== UserRole.ADMIN) throw new Error("Only admins can set up offers.");
+
+  await createOfferTables();
+
+  revalidateOffers();
 }
 
 function revalidateOffers(id?: string) {

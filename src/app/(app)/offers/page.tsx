@@ -6,6 +6,8 @@ import { requireUser } from "@/lib/auth";
 import { formatDate, money } from "@/lib/format";
 import { offerMoney, offerTotals, toEur } from "@/lib/offer-calc";
 import { canApproveOffers, isOfferExpired, offerStatusMeta } from "@/lib/offers";
+import { setupOfferTables } from "@/app/actions";
+import { offerTablesExist } from "@/lib/offer-setup";
 import { prisma } from "@/lib/prisma";
 
 const tabs: { key: string; label: string; statuses: OfferStatus[] }[] = [
@@ -20,6 +22,28 @@ const tabs: { key: string; label: string; statuses: OfferStatus[] }[] = [
 export default async function OffersPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab = "open" } = await searchParams;
   const user = await requireUser();
+
+  if (!(await offerTablesExist())) {
+    return (
+      <>
+        <PageTitle eyebrow="Sales" title="Offers" />
+        <section className="panel max-w-2xl p-5">
+          <h2 className="text-lg font-bold">One-time setup needed</h2>
+          {canApproveOffers(user) ? (
+            <form action={setupOfferTables} className="mt-3 grid gap-3">
+              <p className="text-sm text-muted">
+                This creates the new offer tables in the database. Existing projects, invoices and records are not touched.
+              </p>
+              <button className="btn btn-primary w-fit" type="submit">Set up offers</button>
+            </form>
+          ) : (
+            <p className="mt-3 text-sm text-muted">Offers are not set up yet. Ask an admin to open this page once.</p>
+          )}
+        </section>
+      </>
+    );
+  }
+
   const offers = await prisma.offer.findMany({
     include: { sections: { include: { items: true } }, createdBy: { select: { name: true } } },
     orderBy: [{ issueDate: "desc" }, { code: "desc" }],
