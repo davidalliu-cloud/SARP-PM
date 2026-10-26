@@ -6,17 +6,18 @@ import { requireUser } from "@/lib/auth";
 import { canEditOffer } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 import { OfferEditor } from "../../OfferEditor";
-import { offerProductOptions, offerToEditorValues } from "../../editor-values";
+import { offerClientOptions, offerProductOptions, offerToEditorValues } from "../../editor-values";
 
 export default async function EditOfferPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [user, offer, products] = await Promise.all([
+  const [user, offer, products, clients] = await Promise.all([
     requireUser(),
     prisma.offer.findUnique({
       where: { id },
       include: { sections: { orderBy: { sortOrder: "asc" }, include: { items: { orderBy: { sortOrder: "asc" } } } } },
     }),
     offerProductOptions(),
+    offerClientOptions(),
   ]);
   if (!offer) notFound();
 
@@ -34,7 +35,7 @@ export default async function EditOfferPage({ params }: { params: Promise<{ id: 
   return (
     <>
       <PageTitle eyebrow={offer.code} title={`Edit · ${offer.projectName}`} />
-      <OfferEditor action={updateOffer} initial={offerToEditorValues(offer)} products={products} submitLabel="Save changes" />
+      <OfferEditor action={updateOffer} initial={offerToEditorValues(offer)} products={products} clients={clients} submitLabel="Save changes" />
     </>
   );
 }

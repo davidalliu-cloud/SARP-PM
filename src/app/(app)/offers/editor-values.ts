@@ -68,3 +68,18 @@ export function offerProductOptions() {
     orderBy: { name: "asc" },
   });
 }
+
+/** Distinct client names already in the system (projects, invoices, offers), for the offer client picker. */
+export async function offerClientOptions(): Promise<string[]> {
+  const [projects, invoices, offers] = await Promise.all([
+    prisma.project.findMany({ select: { clientName: true }, distinct: ["clientName"] }),
+    prisma.invoice.findMany({ select: { clientName: true }, distinct: ["clientName"] }),
+    prisma.offer.findMany({ select: { clientName: true }, distinct: ["clientName"] }),
+  ]);
+  const names = new Set<string>();
+  for (const row of [...projects, ...invoices, ...offers]) {
+    const name = row.clientName?.trim();
+    if (name) names.add(name);
+  }
+  return Array.from(names).sort((a, b) => a.localeCompare(b));
+}

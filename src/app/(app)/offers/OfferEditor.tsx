@@ -71,11 +71,13 @@ export function OfferEditor({
   action,
   initial,
   products,
+  clients = [],
   submitLabel,
 }: {
   action: (formData: FormData) => void | Promise<void>;
   initial: OfferEditorValues;
   products: ProductOption[];
+  clients?: string[];
   submitLabel: string;
 }) {
   const [type, setType] = useState(initial.type);
@@ -139,7 +141,7 @@ export function OfferEditor({
         </label>
         <label>
           Client
-          <input name="clientName" required defaultValue={initial.clientName} placeholder="Klar shpk" />
+          <input name="clientName" required list="offer-clients" defaultValue={initial.clientName} placeholder="Select or type a client" autoComplete="off" />
         </label>
         <label>
           Project / site
@@ -180,6 +182,9 @@ export function OfferEditor({
         </div>
       </section>
 
+      <datalist id="offer-clients">
+        {clients.map((name) => <option key={name} value={name} />)}
+      </datalist>
       <datalist id="offer-products">
         {products.map((product) => <option key={product.name} value={product.name} />)}
       </datalist>
