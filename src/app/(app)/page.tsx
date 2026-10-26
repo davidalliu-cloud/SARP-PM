@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
-import { daysSince, daysUntil, invoiceDueDate, money, decimal, statusClass, statusLabel } from "@/lib/format";
+import { daysSince, daysUntil, invoiceDueDate, money, decimal, statusClass } from "@/lib/format";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, monthKey, projectAttention, projectTotals, targetMargin } from "@/lib/totals";
+import { getT } from "@/lib/i18n-server";
+import type { TFunction } from "@/lib/i18n";
 
 type ActionItem = {
   id: string;
@@ -29,10 +31,10 @@ type ProjectDashboardRow = {
 };
 
 const periodOptions = [
-  { value: "this-month", label: "This month" },
-  { value: "last-month", label: "Last month" },
-  { value: "this-year", label: "This year" },
-  { value: "all", label: "All time" },
+  { value: "this-month", labelKey: "dashboard.periodThisMonth" },
+  { value: "last-month", labelKey: "dashboard.periodLastMonth" },
+  { value: "this-year", labelKey: "dashboard.periodThisYear" },
+  { value: "all", labelKey: "dashboard.periodAllTime" },
 ];
 
 function percent(value: number, total: number) {
@@ -46,7 +48,7 @@ function getPeriodRange(period: string) {
 
   if (period === "last-month") {
     return {
-      label: "Last month",
+      labelKey: "dashboard.periodLastMonth",
       start: new Date(now.getFullYear(), now.getMonth() - 1, 1),
       end: thisMonthStart,
     };
@@ -54,17 +56,17 @@ function getPeriodRange(period: string) {
 
   if (period === "this-year") {
     return {
-      label: "This year",
+      labelKey: "dashboard.periodThisYear",
       start: new Date(now.getFullYear(), 0, 1),
       end: new Date(now.getFullYear() + 1, 0, 1),
     };
   }
 
   if (period === "all") {
-    return { label: "All time", start: null, end: null };
+    return { labelKey: "dashboard.periodAllTime", start: null, end: null };
   }
 
-  return { label: "This month", start: thisMonthStart, end: nextMonthStart };
+  return { labelKey: "dashboard.periodThisMonth", start: thisMonthStart, end: nextMonthStart };
 }
 
 function isInPeriod(date: Date, start: Date | null, end: Date | null) {
@@ -98,26 +100,26 @@ function BarRow({
   );
 }
 
-function ProfitLossValue({ value, invoiced }: { value: number; invoiced?: number }) {
+function ProfitLossValue({ value, invoiced, t }: { value: number; invoiced?: number; t: TFunction }) {
   // With no invoice raised yet, a negative "profit" is unbilled cost, not a real
   // loss — say so instead of alarming with a red "Loss" figure.
   if (invoiced === 0 && value < 0) {
-    return <span className="font-bold text-muted">Not yet invoiced ({money(Math.abs(value))} cost)</span>;
+    return <span className="font-bold text-muted">{t("dashboard.notYetInvoiced", { cost: money(Math.abs(value)) })}</span>;
   }
   const isProfit = value >= 0;
   return (
     <span className={isProfit ? "font-bold text-[#285d59]" : "font-bold text-lab-burgundy"}>
-      {isProfit ? "Profit " : "Loss "}
+      {isProfit ? `${t("dashboard.profit")} ` : `${t("dashboard.loss")} `}
       {money(Math.abs(value))}
     </span>
   );
 }
 
-function ProfitLossWithMargin({ value, margin }: { value: number; margin: number }) {
+function ProfitLossWithMargin({ value, margin, t }: { value: number; margin: number; t: TFunction }) {
   const isProfit = value >= 0;
   return (
     <span className={isProfit ? "font-bold text-[#285d59]" : "font-bold text-lab-burgundy"}>
-      {isProfit ? "Profit " : "Loss "}
+      {isProfit ? `${t("dashboard.profit")} ` : `${t("dashboard.loss")} `}
       {money(Math.abs(value))}
       <span className="block text-base font-bold">
         {isProfit ? "+" : "-"}
@@ -150,22 +152,24 @@ function ActionRequiredCard({ item }: { item: ActionItem }) {
 function ProjectDashboardTable({
   rows,
   emptyText,
+  t,
 }: {
   rows: ProjectDashboardRow[];
   emptyText: string;
+  t: TFunction;
 }) {
   return (
     <div className="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>Project</th>
-            <th>Attention</th>
-            <th>Budget used</th>
-            <th>Cost to date</th>
-            <th>Invoiced</th>
-            <th>Unbilled</th>
-            <th>Margin vs target</th>
+            <th>{t("dashboard.colProject")}</th>
+            <th>{t("dashboard.colAttention")}</th>
+            <th>{t("dashboard.colBudgetUsed")}</th>
+            <th>{t("dashboard.colCostToDate")}</th>
+            <th>{t("dashboard.colInvoiced")}</th>
+            <th>{t("dashboard.colUnbilled")}</th>
+            <th>{t("dashboard.colMarginVsTarget")}</th>
           </tr>
         </thead>
         <tbody>
@@ -195,7 +199,7 @@ function ProjectDashboardTable({
                     {row.project.name}
                   </Link>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <span className={`status ${statusClass(row.project.status)}`}>{statusLabel(row.project.status)}</span>
+                    <span className={`status ${statusClass(row.project.status)}`}>{t(`status.${row.project.status}`)}</span>
                     {row.project.clientName ? <span className="text-xs font-bold text-muted">{row.project.clientName}</span> : null}
                   </div>
                 </td>
@@ -205,20 +209,22 @@ function ProjectDashboardTable({
                     <>
                       <span className={budget.isOverBudget ? "text-lab-burgundy" : "text-[#285d59]"}>{decimal(budget.budgetUsed)}%</span>
                       <div className="mt-1 text-xs font-bold text-muted">
-                        {budget.isOverBudget ? `${money(Math.abs(budget.budgetRemaining))} over` : `${money(budget.budgetRemaining)} left`}
+                        {budget.isOverBudget
+                          ? t("dashboard.overBy", { amount: money(Math.abs(budget.budgetRemaining)) })
+                          : t("dashboard.left", { amount: money(budget.budgetRemaining) })}
                       </div>
                     </>
                   ) : (
-                    <span className="font-semibold text-muted">Not set</span>
+                    <span className="font-semibold text-muted">{t("dashboard.notSet")}</span>
                   )}
                 </td>
                 <td className="font-bold">{money(totals.totalCost)}</td>
                 <td>
                   {money(totals.invoiced)}
                   {overdueAmount > 0 ? (
-                    <div className="mt-1 text-xs font-bold text-lab-burgundy">{money(overdueAmount)} overdue</div>
+                    <div className="mt-1 text-xs font-bold text-lab-burgundy">{t("dashboard.overdueAmount", { amount: money(overdueAmount) })}</div>
                   ) : outstanding > 0 ? (
-                    <div className="mt-1 text-xs font-bold text-muted">{money(outstanding)} open</div>
+                    <div className="mt-1 text-xs font-bold text-muted">{t("dashboard.openAmount", { amount: money(outstanding) })}</div>
                   ) : null}
                 </td>
                 <td className="font-bold">
@@ -227,18 +233,18 @@ function ProjectDashboardTable({
                   ) : unbilled > 0 ? (
                     <>
                       <span className="text-[#c28a2c]">{money(unbilled)}</span>
-                      <div className="mt-1 text-xs font-bold text-muted">to invoice</div>
+                      <div className="mt-1 text-xs font-bold text-muted">{t("dashboard.toInvoice")}</div>
                     </>
                   ) : (
                     <>
                       <span className="text-[#285d59]">{money(Math.abs(unbilled))}</span>
-                      <div className="mt-1 text-xs font-bold text-muted">billed ahead</div>
+                      <div className="mt-1 text-xs font-bold text-muted">{t("dashboard.billedAhead")}</div>
                     </>
                   )}
                 </td>
                 <td className={`font-bold ${marginTone}`}>
                   {totals.invoiced > 0 ? `${decimal(totals.margin)}%` : "-"}
-                  <div className="mt-1 text-xs font-bold text-muted">{target > 0 ? `Target ${decimal(target)}%` : "No target"}</div>
+                  <div className="mt-1 text-xs font-bold text-muted">{target > 0 ? t("dashboard.target", { pct: decimal(target) }) : t("dashboard.noTarget")}</div>
                 </td>
               </tr>
             );
@@ -259,6 +265,7 @@ export default async function DashboardPage({
 }: {
   searchParams: Promise<{ period?: string }>;
 }) {
+  const t = await getT();
   const params = await searchParams;
   const selectedPeriod = periodOptions.some((option) => option.value === params.period) ? params.period || "this-month" : "this-month";
   const periodRange = getPeriodRange(selectedPeriod);
@@ -322,8 +329,10 @@ export default async function DashboardPage({
         .filter((invoice) => !invoice.isPaid && daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0)
         .map((invoice) => ({
           id: `invoice-${invoice.id}`,
-          title: `${project.name}: invoice overdue`,
-          detail: `${invoice.invoiceNo ? `Invoice ${invoice.invoiceNo}` : "Invoice"} is ${Math.abs(daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)))} days overdue`,
+          title: t("dashboard.action.invoiceOverdueTitle", { project: project.name }),
+          detail: invoice.invoiceNo
+            ? t("dashboard.action.invoiceOverdueDetailNo", { no: invoice.invoiceNo, days: Math.abs(daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate))) })
+            : t("dashboard.action.invoiceOverdueDetail", { days: Math.abs(daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate))) }),
           amount: money(invoice.amount),
           href: `/projects/${project.id}`,
           tone: "maroon" as const,
@@ -334,9 +343,9 @@ export default async function DashboardPage({
       .filter((row) => budgetTotals(row.project.budgetAmount, row.totals.totalCost).isOverBudget)
       .map((row) => ({
         id: `budget-${row.project.id}`,
-        title: `${row.project.name}: over budget`,
-        detail: `Budget exceeded by ${money(Math.abs(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetRemaining))}`,
-        amount: `${decimal(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetUsed)}% used`,
+        title: t("dashboard.action.overBudgetTitle", { project: row.project.name }),
+        detail: t("dashboard.action.overBudgetDetail", { amount: money(Math.abs(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetRemaining)) }),
+        amount: t("dashboard.action.overBudgetAmount", { pct: decimal(budgetTotals(row.project.budgetAmount, row.totals.totalCost).budgetUsed) }),
         href: `/projects/${row.project.id}`,
         tone: "maroon" as const,
         rank: 2,
@@ -345,8 +354,10 @@ export default async function DashboardPage({
       .filter((row) => row.totals.invoiced > 0 && row.totals.margin < 10 && row.project.status !== "FINISHED")
       .map((row) => ({
         id: `margin-${row.project.id}`,
-        title: `${row.project.name}: low margin`,
-        detail: row.totals.profit >= 0 ? `Current margin is ${decimal(row.totals.margin)}%` : `Current loss is ${money(Math.abs(row.totals.profit))}`,
+        title: t("dashboard.action.lowMarginTitle", { project: row.project.name }),
+        detail: row.totals.profit >= 0
+          ? t("dashboard.action.lowMarginDetail", { pct: decimal(row.totals.margin) })
+          : t("dashboard.action.lowMarginLossDetail", { amount: money(Math.abs(row.totals.profit)) }),
         amount: `${decimal(row.totals.margin)}%`,
         href: `/projects/${row.project.id}`,
         tone: row.totals.profit >= 0 ? ("amber" as const) : ("maroon" as const),
@@ -356,8 +367,8 @@ export default async function DashboardPage({
       .filter((row) => row.project.status === "ACTIVE" && row.totals.totalCost > 0 && row.totals.invoiced === 0)
       .map((row) => ({
         id: `uninvoiced-${row.project.id}`,
-        title: `${row.project.name}: costs not invoiced`,
-        detail: "Project has recorded costs but no invoice yet",
+        title: t("dashboard.action.costsNotInvoicedTitle", { project: row.project.name }),
+        detail: t("dashboard.action.costsNotInvoicedDetail"),
         amount: money(row.totals.totalCost),
         href: `/projects/${row.project.id}`,
         tone: "amber" as const,
@@ -367,8 +378,8 @@ export default async function DashboardPage({
       .filter((row) => ["ACTIVE", "ON_HOLD"].includes(row.project.status) && row.project.budgetAmount <= 0)
       .map((row) => ({
         id: `missing-budget-${row.project.id}`,
-        title: `${row.project.name}: budget missing`,
-        detail: "Add a project budget to track overruns properly",
+        title: t("dashboard.action.budgetMissingTitle", { project: row.project.name }),
+        detail: t("dashboard.action.budgetMissingDetail"),
         href: `/projects/${row.project.id}`,
         tone: "blue" as const,
         rank: 5,
@@ -381,9 +392,9 @@ export default async function DashboardPage({
   const totalExpenseCost = rows.reduce((sum, row) => sum + row.totals.expenseCost, 0);
   const totalCompletedArea = rows.reduce((sum, row) => sum + row.dailyRecords.reduce((recordSum, record) => recordSum + record.completedAreaM2, 0), 0);
   const costBreakdown = [
-    { label: "Products", value: totalProductCost, color: "bg-lab-burgundy" },
-    { label: "Labour", value: totalLabourCost, color: "bg-[#777da7]" },
-    { label: "Expenses", value: totalExpenseCost, color: "bg-[#285d59]" },
+    { label: t("nav.products"), value: totalProductCost, color: "bg-lab-burgundy" },
+    { label: t("dashboard.labourSplit"), value: totalLabourCost, color: "bg-[#777da7]" },
+    { label: t("nav.expenses"), value: totalExpenseCost, color: "bg-[#285d59]" },
   ];
   const materialUsage = new Map<string, { name: string; unit: string; quantity: number; cost: number }>();
   const expenseBreakdown = new Map<string, number>();
@@ -445,17 +456,17 @@ export default async function DashboardPage({
 
   return (
     <>
-      <PageTitle eyebrow="Control room" title="Profitability dashboard">
-        <Link href="/projects/new" className="btn btn-primary">New project</Link>
+      <PageTitle eyebrow={t("dashboard.eyebrow")} title={t("dashboard.title")}>
+        <Link href="/projects/new" className="btn btn-primary">{t("dashboard.newProject")}</Link>
       </PageTitle>
 
       <section className="panel mb-6 p-4">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <div className="text-xs font-bold uppercase text-lab-burgundy">Dashboard period</div>
-            <h2 className="mt-1 text-lg font-bold text-ink">{periodRange.label}</h2>
+            <div className="text-xs font-bold uppercase text-lab-burgundy">{t("dashboard.periodLabel")}</div>
+            <h2 className="mt-1 text-lg font-bold text-ink">{t(periodRange.labelKey)}</h2>
             <p className="mt-1 text-sm font-semibold text-muted">
-              Cost, invoicing, profit, and analytics are filtered by this period. Open invoice warnings stay visible at all times.
+              {t("dashboard.periodHint")}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -465,7 +476,7 @@ export default async function DashboardPage({
                 href={`/?period=${option.value}`}
                 className={`btn btn-small ${selectedPeriod === option.value ? "btn-primary" : "btn-secondary"}`}
               >
-                {option.label}
+                {t(option.labelKey)}
               </Link>
             ))}
           </div>
@@ -473,28 +484,28 @@ export default async function DashboardPage({
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4 2xl:grid-cols-9">
-        <StatCard label="Active projects" value={activeProjects} tone="green" />
-        <StatCard label="Total budget" value={money(totalBudget)} detail={overBudgetProjects ? `${overBudgetProjects} over budget` : "No overruns"} tone={overBudgetProjects ? "maroon" : "blue"} />
-        <StatCard label="Total costs" value={money(totalCost)} />
-        <StatCard label="Total invoiced" value={money(totalInvoiced)} tone="blue" />
-        <StatCard label="Outstanding" value={money(totalOutstanding)} detail={oldestUnpaidDays ? `Oldest issued ${oldestUnpaidDays} days ago` : "No unpaid invoices"} tone={totalOutstanding > 0 ? "maroon" : "green"} />
-        <StatCard label="Overdue invoices" value={money(overdueTotal)} detail={`${overdueInvoices.length} overdue`} tone={overdueTotal > 0 ? "maroon" : "green"} />
+        <StatCard label={t("dashboard.activeProjects")} value={activeProjects} tone="green" />
+        <StatCard label={t("dashboard.totalBudget")} value={money(totalBudget)} detail={overBudgetProjects ? t("dashboard.overBudgetCount", { count: overBudgetProjects }) : t("dashboard.noOverruns")} tone={overBudgetProjects ? "maroon" : "blue"} />
+        <StatCard label={t("dashboard.totalCosts")} value={money(totalCost)} />
+        <StatCard label={t("dashboard.totalInvoiced")} value={money(totalInvoiced)} tone="blue" />
+        <StatCard label={t("dashboard.outstanding")} value={money(totalOutstanding)} detail={oldestUnpaidDays ? t("dashboard.oldestIssued", { days: oldestUnpaidDays }) : t("dashboard.noUnpaid")} tone={totalOutstanding > 0 ? "maroon" : "green"} />
+        <StatCard label={t("dashboard.overdueInvoices")} value={money(overdueTotal)} detail={t("dashboard.overdueCount", { count: overdueInvoices.length })} tone={overdueTotal > 0 ? "maroon" : "green"} />
         <StatCard
-          label={realizedProfit >= 0 ? "Realized profit" : "Realized loss"}
-          value={<ProfitLossWithMargin value={realizedProfit} margin={realizedMargin} />}
-          detail={`Only the ${realizedRows.length} project${realizedRows.length === 1 ? "" : "s"} that have an invoice`}
+          label={realizedProfit >= 0 ? t("dashboard.realizedProfit") : t("dashboard.realizedLoss")}
+          value={<ProfitLossWithMargin value={realizedProfit} margin={realizedMargin} t={t} />}
+          detail={realizedRows.length === 1 ? t("dashboard.onlyProjectWithInvoice", { count: realizedRows.length }) : t("dashboard.onlyProjectsWithInvoice", { count: realizedRows.length })}
           tone={realizedProfit >= 0 ? "green" : "maroon"}
         />
         <StatCard
-          label="Unbilled cost exposure"
+          label={t("dashboard.unbilledExposure")}
           value={money(unbilledCostExposure)}
-          detail={neverInvoicedRows.length ? `${neverInvoicedRows.length} project${neverInvoicedRows.length === 1 ? "" : "s"} with cost, no invoice yet` : "Every project with cost has an invoice"}
+          detail={neverInvoicedRows.length ? (neverInvoicedRows.length === 1 ? t("dashboard.projectWithCostNoInvoice", { count: neverInvoicedRows.length }) : t("dashboard.projectsWithCostNoInvoice", { count: neverInvoicedRows.length })) : t("dashboard.everyProjectInvoiced")}
           tone={unbilledCostExposure > 0 ? "amber" : "green"}
         />
       </section>
       {unbilledCostExposure > 0 ? (
         <p className="mt-2 text-xs font-semibold text-muted">
-          &quot;Total costs&quot; minus &quot;Total invoiced&quot; above blends real trading result with this unbilled backlog — use Realized profit / Unbilled cost exposure for a true read.
+          {t("dashboard.unbilledNote")}
         </p>
       ) : null}
 
@@ -502,13 +513,16 @@ export default async function DashboardPage({
         <section className="mt-6 rounded-xl border-l-4 border-lab-burgundy bg-[#fff8fa] p-4">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-lab-burgundy">Collections alert</div>
+              <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-lab-burgundy">{t("dashboard.collectionsAlert")}</div>
               <div className="mt-1 font-bold text-ink">
-                {money(overdueTotal)} overdue across {overdueInvoices.length} invoice{overdueInvoices.length === 1 ? "" : "s"} —{" "}
-                {decimal(totalOutstanding > 0 ? (overdueTotal / totalOutstanding) * 100 : 0)}% of everything outstanding is already overdue.
+                {t("dashboard.overdueSummary", {
+                  amount: money(overdueTotal),
+                  count: overdueInvoices.length,
+                  pct: decimal(totalOutstanding > 0 ? (overdueTotal / totalOutstanding) * 100 : 0),
+                })}
               </div>
             </div>
-            <Link href="/invoices" className="btn btn-small btn-secondary">Open invoice ledger</Link>
+            <Link href="/invoices" className="btn btn-small btn-secondary">{t("dashboard.openInvoiceLedger")}</Link>
           </div>
         </section>
       ) : null}
@@ -516,11 +530,11 @@ export default async function DashboardPage({
       <section className="panel mt-6 p-4">
         <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold">Action required</h2>
-            <p className="mt-1 text-sm font-semibold text-muted">Items that need attention first.</p>
+            <h2 className="text-lg font-bold">{t("dashboard.actionRequired")}</h2>
+            <p className="mt-1 text-sm font-semibold text-muted">{t("dashboard.actionRequiredHint")}</p>
           </div>
           {actionItems.length > visibleActionItems.length ? (
-            <span className="status status-risk">{actionItems.length - visibleActionItems.length} more</span>
+            <span className="status status-risk">{t("dashboard.moreItems", { count: actionItems.length - visibleActionItems.length })}</span>
           ) : null}
         </div>
         {visibleActionItems.length ? (
@@ -529,7 +543,7 @@ export default async function DashboardPage({
           </div>
         ) : (
           <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f7fbfa] p-4 text-sm font-bold text-[#285d59]">
-            No urgent issues right now. Projects, invoices, and budgets are not showing immediate pressure.
+            {t("dashboard.noUrgent")}
           </div>
         )}
       </section>
@@ -538,16 +552,16 @@ export default async function DashboardPage({
         <summary className="cursor-pointer list-none">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h2 className="text-lg font-bold">Detailed analytics</h2>
-              <p className="mt-1 text-sm font-semibold text-muted">Cost breakdowns, product usage, labour split, and profit charts. Collapse if you just want the summary above.</p>
+              <h2 className="text-lg font-bold">{t("dashboard.detailedAnalytics")}</h2>
+              <p className="mt-1 text-sm font-semibold text-muted">{t("dashboard.detailedAnalyticsHint")}</p>
             </div>
-            <span className="btn btn-secondary btn-small">Hide analytics</span>
+            <span className="btn btn-secondary btn-small">{t("dashboard.hideAnalytics")}</span>
           </div>
         </summary>
 
         <section className="mt-4 grid gap-4 xl:grid-cols-[1fr_1fr] 2xl:grid-cols-[0.9fr_1.1fr_1fr]">
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Cost breakdown</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.costBreakdown")}</h2>
             <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
               {costBreakdown.map((item) => (
                 <div key={item.label} className={item.color} style={{ width: `${percent(item.value, totalCost)}%` }} />
@@ -561,7 +575,7 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Most material used</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.mostMaterialUsed")}</h2>
             <div className="grid gap-3">
               {topMaterials.map((item) => (
                 <BarRow
@@ -573,34 +587,34 @@ export default async function DashboardPage({
                   color="bg-lab-burgundy"
                 />
               ))}
-              {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No product usage recorded yet.</div> : null}
+              {!topMaterials.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">{t("dashboard.noProductUsage")}</div> : null}
             </div>
           </div>
 
           <div className="panel p-4 xl:col-span-2 2xl:col-span-1">
-            <h2 className="mb-4 text-lg font-bold">Labour split</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.labourSplit")}</h2>
             <div className="mb-4 flex h-6 overflow-hidden rounded bg-[#e8eef0]">
               <div className="bg-[#777da7]" style={{ width: `${percent(internalLabourCost, totalLabourCost)}%` }} />
               <div className="bg-[#285d59]" style={{ width: `${percent(externalLabourCost, totalLabourCost)}%` }} />
             </div>
             <div className="grid gap-3">
-              <BarRow label="Employees" value={internalLabourCost} total={totalLabourCost} detail={`${money(internalLabourCost)} / ${decimal(percent(internalLabourCost, totalLabourCost))}%`} color="bg-[#777da7]" />
-              <BarRow label="External m2 teams" value={externalLabourCost} total={totalLabourCost} detail={`${money(externalLabourCost)} / ${decimal(percent(externalLabourCost, totalLabourCost))}%`} color="bg-[#285d59]" />
+              <BarRow label={t("dashboard.employeesLabour")} value={internalLabourCost} total={totalLabourCost} detail={`${money(internalLabourCost)} / ${decimal(percent(internalLabourCost, totalLabourCost))}%`} color="bg-[#777da7]" />
+              <BarRow label={t("dashboard.externalTeams")} value={externalLabourCost} total={totalLabourCost} detail={`${money(externalLabourCost)} / ${decimal(percent(externalLabourCost, totalLabourCost))}%`} color="bg-[#285d59]" />
             </div>
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Expense categories</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.expenseCategories")}</h2>
             <div className="grid gap-3">
               {expenseRows.map((item) => (
                 <BarRow key={item.label} label={item.label} value={item.value} total={maxExpenseCost} detail={money(item.value)} color="bg-[#285d59]" />
               ))}
-              {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No extra expenses recorded yet.</div> : null}
+              {!expenseRows.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">{t("dashboard.noExtraExpenses")}</div> : null}
             </div>
           </div>
 
           <div className="panel p-4 xl:col-span-1 2xl:col-span-2">
-            <h2 className="mb-4 text-lg font-bold">Highest cost projects</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.highestCostProjects")}</h2>
             <div className="grid gap-3">
               {mostExpensiveProjects.map(({ project, totals }) => (
                 <BarRow
@@ -612,15 +626,15 @@ export default async function DashboardPage({
                   color={totals.invoiced === 0 ? "bg-[#c5cdd6]" : totals.profit >= 0 ? "bg-[#777da7]" : "bg-lab-burgundy"}
                 />
               ))}
-              {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">No project costs recorded yet.</div> : null}
+              {!mostExpensiveProjects.length ? <div className="rounded-lg border border-dashed border-[#c5cdd6] p-4 text-sm font-bold text-muted">{t("dashboard.noProjectCosts")}</div> : null}
             </div>
           </div>
 
           {projectM2Rows.length ? (
             <div className="panel p-4 xl:col-span-2 2xl:col-span-3">
-              <h2 className="mb-4 text-lg font-bold">Cost per m2 by project</h2>
+              <h2 className="mb-4 text-lg font-bold">{t("dashboard.costPerM2")}</h2>
               <div className="mb-4">
-                <StatCard label="Average cost / m2" value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={`${decimal(totalCompletedArea, 1)} m2 completed`} tone="blue" />
+                <StatCard label={t("dashboard.averageCostPerM2")} value={totalCompletedArea > 0 ? money(totalCost / totalCompletedArea) : "-"} detail={t("dashboard.m2Completed", { area: decimal(totalCompletedArea, 1) })} tone="blue" />
               </div>
               <div className="grid gap-3">
                 {projectM2Rows.map((row) => (
@@ -640,11 +654,11 @@ export default async function DashboardPage({
 
         <section className="mt-4 grid gap-4 xl:grid-cols-3">
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Cost vs invoiced</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.costVsInvoiced")}</h2>
             <div className="space-y-4">
               {rows.map(({ project, totals }) => (
                 <div key={project.id}>
-                  <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} invoiced={totals.invoiced} /></div>
+                  <div className="mb-1 flex justify-between gap-3 text-sm font-bold"><span className="truncate">{project.name}</span><ProfitLossValue value={totals.invoiced - totals.totalCost} invoiced={totals.invoiced} t={t} /></div>
                   <div className="grid gap-1">
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-lab-burgundy" style={{ width: `${(totals.totalCost / maxProjectValue) * 100}%` }} /></div>
                     <div className="h-3 rounded bg-[#e8eef0]"><div className="h-3 rounded bg-[#777da7]" style={{ width: `${(totals.invoiced / maxProjectValue) * 100}%` }} /></div>
@@ -655,7 +669,7 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Monthly costs and invoicing</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.monthlyCosts")}</h2>
             <div className="grid grid-cols-6 items-end gap-3">
               {monthlyRows.map(([month, row]) => (
                 <div key={month} className="grid gap-2 text-center">
@@ -670,7 +684,7 @@ export default async function DashboardPage({
           </div>
 
           <div className="panel p-4">
-            <h2 className="mb-4 text-lg font-bold">Profit/loss by project</h2>
+            <h2 className="mb-4 text-lg font-bold">{t("dashboard.profitLossByProject")}</h2>
             <div className="space-y-3">
               {rows.map(({ project, totals }) => (
                 <div key={project.id} className="grid grid-cols-[110px_1fr_90px] items-center gap-3 text-sm">
@@ -681,7 +695,7 @@ export default async function DashboardPage({
                       style={{ width: `${Math.min(Math.abs(totals.margin), 100)}%` }}
                     />
                   </div>
-                  <div className="text-right"><ProfitLossValue value={totals.profit} invoiced={totals.invoiced} /></div>
+                  <div className="text-right"><ProfitLossValue value={totals.profit} invoiced={totals.invoiced} t={t} /></div>
                 </div>
               ))}
             </div>
@@ -693,15 +707,16 @@ export default async function DashboardPage({
         <div className="panel p-4">
           <div className="mb-3 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <div className="text-xs font-bold uppercase text-lab-burgundy">Current work</div>
-              <h2 className="text-lg font-bold">Active projects</h2>
-              <p className="mt-1 text-sm font-semibold text-muted">Whole-project figures to date — budget burn, unbilled work, and margin vs the price you set. Sorted by what needs attention first.</p>
+              <div className="text-xs font-bold uppercase text-lab-burgundy">{t("dashboard.currentWork")}</div>
+              <h2 className="text-lg font-bold">{t("dashboard.activeProjects")}</h2>
+              <p className="mt-1 text-sm font-semibold text-muted">{t("dashboard.activeProjectsHint")}</p>
             </div>
-            <Link href="/projects" className="text-sm font-bold text-[#777da7]">View all</Link>
+            <Link href="/projects" className="text-sm font-bold text-[#777da7]">{t("dashboard.viewAll")}</Link>
           </div>
           <ProjectDashboardTable
             rows={activeProjectRows}
-            emptyText="No active projects found. Change a project status to Active when work starts."
+            emptyText={t("dashboard.emptyActive")}
+            t={t}
           />
         </div>
       </section>
