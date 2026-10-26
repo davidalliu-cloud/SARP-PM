@@ -4,7 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { updateProjectBasics } from "@/app/actions";
 import { DeleteProjectButton } from "@/components/DeleteProjectButton";
-import { decimal, formatDate, money, statusClass, statusLabel } from "@/lib/format";
+import { decimal, formatDate, money, statusClass } from "@/lib/format";
+import { useT } from "@/components/LanguageProvider";
 
 type ProjectRow = {
   id: string;
@@ -26,16 +27,17 @@ type ProjectRow = {
 
 type SortKey = "name" | "budgetAmount" | "estimatedContractValue" | "totalCost" | "invoiced" | "profit";
 
-const sortColumns: { key: SortKey; label: string }[] = [
-  { key: "name", label: "Project" },
-  { key: "budgetAmount", label: "Budget" },
-  { key: "estimatedContractValue", label: "Contract" },
-  { key: "totalCost", label: "Cost" },
-  { key: "invoiced", label: "Invoiced" },
-  { key: "profit", label: "Profit / margin" },
+const sortColumns: { key: SortKey; labelKey: string }[] = [
+  { key: "name", labelKey: "projects.colProject" },
+  { key: "budgetAmount", labelKey: "projects.colBudget" },
+  { key: "estimatedContractValue", labelKey: "projects.colContract" },
+  { key: "totalCost", labelKey: "projects.colCost" },
+  { key: "invoiced", labelKey: "projects.colInvoiced" },
+  { key: "profit", labelKey: "projects.colProfitMargin" },
 ];
 
 export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
+  const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [sortKey, setSortKey] = useState<SortKey>("profit");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
@@ -74,14 +76,14 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                   type="button"
                   onClick={() => toggleSort(col.key)}
                   className="inline-flex items-center gap-1 font-bold uppercase tracking-wide hover:text-lab-burgundy"
-                  title={`Sort by ${col.label}`}
+                  title={t("projects.sortBy", { label: t(col.labelKey) })}
                 >
-                  {col.label}
+                  {t(col.labelKey)}
                   {sortKey === col.key ? <span aria-hidden>{sortDir === "asc" ? "▲" : "▼"}</span> : null}
                 </button>
               </th>
             ))}
-            <th>Action</th>
+            <th>{t("common.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -96,7 +98,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                     <form id={formId} action={updateProjectBasics}>
                       <input type="hidden" name="id" value={project.id} />
                       <input name="name" defaultValue={project.name} required aria-label={`Project name for ${project.name}`} />
-                      <input form={formId} name="clientName" defaultValue={project.clientName || ""} placeholder="Client name" aria-label={`Client name for ${project.name}`} />
+                      <input form={formId} name="clientName" defaultValue={project.clientName || ""} placeholder={t("projects.clientNamePlaceholder")} aria-label={`Client name for ${project.name}`} />
                     </form>
                   ) : (
                     <div>
@@ -106,16 +108,16 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                       >
                         <span className="truncate underline-offset-4 group-hover:underline group-focus-visible:underline">{project.name}</span>
                         <span className="rounded border border-[#d7e1e5] bg-white px-1.5 py-0.5 text-[0.65rem] font-bold uppercase text-lab-burgundy opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-                          Open
+                          {t("projects.open")}
                         </span>
                       </Link>
                       <div className="mt-1 text-xs font-bold text-muted">
-                        {project.clientName || "No client"} / Start {formatDate(project.startDate)}
+                        {project.clientName || t("projects.noClient")} / {t("projects.start", { date: formatDate(project.startDate) })}
                       </div>
                     </div>
                   )}
                 </td>
-                <td><span className={`status ${statusClass(project.status)}`}>{statusLabel(project.status)}</span></td>
+                <td><span className={`status ${statusClass(project.status)}`}>{t(`status.${project.status}`)}</span></td>
                 <td>
                   {isEditing ? (
                     <input className="h-9 py-1.5" form={formId} name="budgetAmount" type="number" min="0" step="0.01" defaultValue={project.budgetAmount} aria-label={`Budget for ${project.name}`} />
@@ -124,7 +126,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                       {project.budgetAmount > 0 ? money(project.budgetAmount) : "-"}
                       {project.budgetAmount > 0 ? (
                         <div className="mt-1 text-xs font-bold text-muted">
-                          {decimal(project.budgetUsed)}% used / {money(project.budgetRemaining)} left
+                          {t("projects.budgetUsedLeft", { pct: decimal(project.budgetUsed), amount: money(project.budgetRemaining) })}
                         </div>
                       ) : null}
                     </div>
@@ -136,7 +138,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                   ) : (
                     <div className="font-bold text-ink">
                       {project.estimatedContractValue > 0 ? money(project.estimatedContractValue) : "-"}
-                      {project.estimatedProfitMargin ? <div className="mt-1 text-xs font-bold text-muted">Target {decimal(project.estimatedProfitMargin)}%</div> : null}
+                      {project.estimatedProfitMargin ? <div className="mt-1 text-xs font-bold text-muted">{t("projects.target", { pct: decimal(project.estimatedProfitMargin) })}</div> : null}
                     </div>
                   )}
                 </td>
@@ -145,17 +147,18 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
                 <td className={`font-bold ${profitClass(project)}`}>
                   {money(project.profit)}
                   <div className="mt-1 text-xs font-bold text-muted">
-                    Actual {decimal(project.margin)}%
-                    {project.estimatedProfitMargin ? ` / Target ${decimal(project.estimatedProfitMargin)}%` : ""}
+                    {project.estimatedProfitMargin
+                      ? t("projects.actualTarget", { actual: decimal(project.margin), target: decimal(project.estimatedProfitMargin) })
+                      : t("projects.actual", { pct: decimal(project.margin) })}
                   </div>
                 </td>
                 <td>
                   <div className="grid w-24 gap-2">
                     <button className="btn btn-small btn-edit w-full justify-center" type="button" onClick={() => setEditingId(isEditing ? null : project.id)}>
-                      {isEditing ? "Cancel" : "Edit"}
+                      {isEditing ? t("common.cancel") : t("common.edit")}
                     </button>
                     {isEditing ? (
-                      <button form={formId} className="btn btn-small btn-save w-full justify-center" type="submit" onClick={() => setEditingId(null)}>Save</button>
+                      <button form={formId} className="btn btn-small btn-save w-full justify-center" type="submit" onClick={() => setEditingId(null)}>{t("common.save")}</button>
                     ) : null}
                     <DeleteProjectButton id={project.id} name={project.name} />
                   </div>
@@ -164,7 +167,7 @@ export function ProjectsTable({ projects }: { projects: ProjectRow[] }) {
             );
           })}
           {!projects.length ? (
-            <tr><td colSpan={8} className="py-8 text-center font-bold text-muted">No projects match this filter.</td></tr>
+            <tr><td colSpan={8} className="py-8 text-center font-bold text-muted">{t("projects.noMatch")}</td></tr>
           ) : null}
         </tbody>
       </table>

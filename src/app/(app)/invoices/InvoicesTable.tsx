@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { markInvoicePaid, markInvoiceUnpaid } from "@/app/actions";
 import { daysUntil, formatDate, invoiceAgeLabel, money } from "@/lib/format";
+import { useT } from "@/components/LanguageProvider";
 
 export type InvoiceLedgerRow = {
   id: string;
@@ -24,12 +25,12 @@ export type InvoiceLedgerRow = {
 
 type SortKey = "state" | "project" | "invoiceDate" | "dueDate" | "amount";
 
-const sortColumns: { key: SortKey; label: string }[] = [
-  { key: "state", label: "Status" },
-  { key: "project", label: "Project" },
-  { key: "invoiceDate", label: "Issued" },
-  { key: "dueDate", label: "Due" },
-  { key: "amount", label: "Amount" },
+const sortColumns: { key: SortKey; labelKey: string }[] = [
+  { key: "state", labelKey: "invoices.colStatus" },
+  { key: "project", labelKey: "invoices.colProject" },
+  { key: "invoiceDate", labelKey: "invoices.colIssued" },
+  { key: "dueDate", labelKey: "invoices.colDue" },
+  { key: "amount", labelKey: "invoices.colAmount" },
 ];
 
 function dateInputValue(value = new Date()) {
@@ -37,6 +38,7 @@ function dateInputValue(value = new Date()) {
 }
 
 export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
+  const t = useT();
   const [sortKey, setSortKey] = useState<SortKey>("state");
   const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
 
@@ -69,16 +71,16 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
                   type="button"
                   onClick={() => toggleSort(col.key)}
                   className="inline-flex items-center gap-1 font-bold uppercase tracking-wide hover:text-lab-burgundy"
-                  title={`Sort by ${col.label}`}
+                  title={t("invoices.sortBy", { label: t(col.labelKey) })}
                 >
-                  {col.label}
+                  {t(col.labelKey)}
                   {sortKey === col.key ? <span aria-hidden>{sortDir === "asc" ? "▲" : "▼"}</span> : null}
                 </button>
               </th>
             ))}
-            <th>Age</th>
-            <th>Paid date</th>
-            <th>Action</th>
+            <th>{t("invoices.colAge")}</th>
+            <th>{t("invoices.colPaidDate")}</th>
+            <th>{t("common.actions")}</th>
           </tr>
         </thead>
         <tbody>
@@ -90,7 +92,7 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
                 {row.clientName ? <div className="mt-1 text-xs font-bold text-muted">{row.clientName}</div> : null}
               </td>
               <td>
-                <div className="font-bold">{row.invoiceNo || "No number"}</div>
+                <div className="font-bold">{row.invoiceNo || t("invoices.noNumber")}</div>
                 <div className="mt-1 text-xs font-bold text-muted">{row.monthCovered}</div>
               </td>
               <td>{formatDate(row.invoiceDate)}</td>
@@ -103,14 +105,14 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
                   <form action={markInvoiceUnpaid}>
                     <input type="hidden" name="id" value={row.id} />
                     <input type="hidden" name="projectId" value={row.projectId} />
-                    <button className="btn btn-small btn-secondary" type="submit">Mark unpaid</button>
+                    <button className="btn btn-small btn-secondary" type="submit">{t("invoices.markUnpaid")}</button>
                   </form>
                 ) : (
                   <form action={markInvoicePaid} className="flex flex-wrap items-center gap-2">
                     <input type="hidden" name="id" value={row.id} />
                     <input type="hidden" name="projectId" value={row.projectId} />
-                    <input className="w-32" name="paidDate" type="date" defaultValue={dateInputValue()} aria-label="Paid date" />
-                    <button className="btn btn-small btn-save" type="submit">Mark paid</button>
+                    <input className="w-32" name="paidDate" type="date" defaultValue={dateInputValue()} aria-label={t("invoices.colPaidDate")} />
+                    <button className="btn btn-small btn-save" type="submit">{t("invoices.markPaid")}</button>
                   </form>
                 )}
               </td>
@@ -119,7 +121,7 @@ export function InvoicesTable({ rows }: { rows: InvoiceLedgerRow[] }) {
         </tbody>
       </table>
       {!sortedRows.length ? (
-        <div className="p-5 text-sm font-bold text-muted">No invoices have been created yet.</div>
+        <div className="p-5 text-sm font-bold text-muted">{t("invoices.emptyLedger")}</div>
       ) : null}
     </div>
   );

@@ -1,6 +1,7 @@
 import { createEmployee, updateEmployee } from "@/app/actions";
 import { DeleteEmployeeButton } from "@/components/DeleteEmployeeButton";
 import { PageTitle } from "@/components/PageTitle";
+import { getT } from "@/lib/i18n-server";
 import { prisma } from "@/lib/prisma";
 
 export default async function EmployeesPage({
@@ -9,6 +10,7 @@ export default async function EmployeesPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const params = await searchParams;
+  const t = await getT();
   const query = (params.q || "").trim().toLowerCase();
   const employees = await prisma.employee.findMany({ orderBy: { name: "asc" } });
   const filteredEmployees = employees.filter((employee) => {
@@ -20,29 +22,29 @@ export default async function EmployeesPage({
 
   return (
     <>
-      <PageTitle eyebrow="Master data" title="Employees" />
+      <PageTitle eyebrow={t("employees.eyebrow")} title={t("employees.title")} />
       <section className="grid gap-5 xl:grid-cols-[420px_1fr]">
         <form action={createEmployee} className="panel grid gap-4 p-5">
-          <h2 className="text-lg font-bold">Add employee</h2>
-          <label>Employee name<input name="name" required placeholder="Samir Haddad" /></label>
-          <label>Role<input name="role" placeholder="Foreman, installer, labourer" /></label>
-          <label>Default daily wage<input name="defaultDailyWage" type="number" min="0" step="0.01" required placeholder="180.00" /></label>
-          <button className="btn btn-primary" type="submit">Add employee</button>
+          <h2 className="text-lg font-bold">{t("employees.addEmployee")}</h2>
+          <label>{t("employees.employeeName")}<input name="name" required placeholder="Samir Haddad" /></label>
+          <label>{t("employees.role")}<input name="role" placeholder="Foreman, installer, labourer" /></label>
+          <label>{t("employees.defaultDailyWage")}<input name="defaultDailyWage" type="number" min="0" step="0.01" required placeholder="180.00" /></label>
+          <button className="btn btn-primary" type="submit">{t("employees.addEmployee")}</button>
         </form>
         <div className="panel overflow-hidden">
           <form className="border-b border-[#d7e1e5] p-4">
             <label>
-              Search employees
-              <input name="q" defaultValue={params.q || ""} placeholder="Employee, role, or wage" />
+              {t("employees.searchEmployees")}
+              <input name="q" defaultValue={params.q || ""} placeholder={t("employees.searchPlaceholder")} />
             </label>
             <div className="mt-2 flex items-center justify-between gap-3">
-              <div className="text-xs font-bold text-muted">Showing {filteredEmployees.length} of {employees.length} employees</div>
-              <button className="btn btn-small btn-save" type="submit">Search</button>
+              <div className="text-xs font-bold text-muted">{t("employees.showing", { shown: filteredEmployees.length, total: employees.length })}</div>
+              <button className="btn btn-small btn-save" type="submit">{t("common.search")}</button>
             </div>
           </form>
           <div className="table-wrap">
             <table>
-              <thead><tr><th>Employee</th><th>Role</th><th>Default wage</th><th>Action</th></tr></thead>
+              <thead><tr><th>{t("employees.colEmployee")}</th><th>{t("employees.role")}</th><th>{t("employees.colDefaultWage")}</th><th>{t("common.actions")}</th></tr></thead>
               <tbody>
                 {filteredEmployees.map((employee) => (
                   <tr key={employee.id}>
@@ -60,14 +62,14 @@ export default async function EmployeesPage({
                     </td>
                     <td>
                       <div className="flex flex-nowrap gap-2">
-                        <button form={`employee-${employee.id}`} className="btn btn-small btn-save" type="submit">Save</button>
+                        <button form={`employee-${employee.id}`} className="btn btn-small btn-save" type="submit">{t("common.save")}</button>
                         <DeleteEmployeeButton id={employee.id} name={employee.name} />
                       </div>
                     </td>
                   </tr>
                 ))}
                 {!filteredEmployees.length ? (
-                  <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">No employees match your search.</td></tr>
+                  <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">{t("employees.noMatch")}</td></tr>
                 ) : null}
               </tbody>
             </table>

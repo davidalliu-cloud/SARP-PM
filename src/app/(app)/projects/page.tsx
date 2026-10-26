@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { PageTitle } from "@/components/PageTitle";
+import { getT } from "@/lib/i18n-server";
 import { prisma } from "@/lib/prisma";
 import { budgetTotals, projectTotals } from "@/lib/totals";
 import { ProjectsTable } from "./ProjectsTable";
@@ -10,6 +11,7 @@ export default async function ProjectsPage({
   searchParams: Promise<{ deleted?: string; q?: string; status?: string }>;
 }) {
   const params = await searchParams;
+  const t = await getT();
   const query = (params.q || "").trim().toLowerCase();
   const status = params.status || "ALL";
   const projects = await prisma.project.findMany({
@@ -50,32 +52,32 @@ export default async function ProjectsPage({
 
   return (
     <>
-      <PageTitle eyebrow="Portfolio" title="Projects">
-        <Link href="/projects/new" className="btn btn-primary">New project</Link>
+      <PageTitle eyebrow={t("projects.eyebrow")} title={t("projects.title")}>
+        <Link href="/projects/new" className="btn btn-primary">{t("projects.newProject")}</Link>
       </PageTitle>
       {params.deleted ? (
         <div className="panel mb-5 border-[#c8decf] bg-[#eef7f1] p-4 font-bold text-[#285d59]">
-          Project deleted.
+          {t("projects.deleted")}
         </div>
       ) : null}
       <form className="panel mb-5 grid gap-3 p-4 md:grid-cols-[1fr_220px_auto] md:items-end">
         <label>
-          Search projects
-          <input name="q" defaultValue={params.q || ""} placeholder="Project or client name" />
+          {t("projects.searchProjects")}
+          <input name="q" defaultValue={params.q || ""} placeholder={t("projects.searchPlaceholder")} />
         </label>
         <label>
-          Status
+          {t("projects.status")}
           <select name="status" defaultValue={status}>
-            <option value="ALL">All statuses</option>
-            <option value="NOT_STARTED">Not Started</option>
-            <option value="ACTIVE">Active</option>
-            <option value="ON_HOLD">On Hold</option>
-            <option value="FINISHED">Finished</option>
+            <option value="ALL">{t("projects.allStatuses")}</option>
+            <option value="NOT_STARTED">{t("status.NOT_STARTED")}</option>
+            <option value="ACTIVE">{t("status.ACTIVE")}</option>
+            <option value="ON_HOLD">{t("status.ON_HOLD")}</option>
+            <option value="FINISHED">{t("status.FINISHED")}</option>
           </select>
         </label>
-        <button className="btn btn-small btn-save" type="submit">Apply filter</button>
+        <button className="btn btn-small btn-save" type="submit">{t("projects.applyFilter")}</button>
         <div className="text-xs font-bold text-muted md:col-span-3">
-          Showing {filteredProjects.length} of {projects.length} projects
+          {t("projects.showing", { shown: filteredProjects.length, total: projects.length })}
         </div>
       </form>
       <ProjectsTable projects={projectRows} />

@@ -5,8 +5,10 @@ import type { Product } from "@prisma/client";
 import { updateProduct } from "@/app/actions";
 import { DeleteProductButton } from "@/components/DeleteProductButton";
 import { money } from "@/lib/format";
+import { useT } from "@/components/LanguageProvider";
 
 export function ProductsTable({ products }: { products: Product[] }) {
+  const t = useT();
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
   const filteredProducts = useMemo(() => {
@@ -24,21 +26,21 @@ export function ProductsTable({ products }: { products: Product[] }) {
     <div className="panel flex min-h-0 flex-col overflow-hidden">
       <div className="border-b border-[#d7e1e5] bg-white p-4">
         <label>
-          Search products
+          {t("products.searchProducts")}
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Search by product name, unit, or cost"
+            placeholder={t("products.searchPlaceholder")}
           />
         </label>
         <div className="mt-2 text-xs font-bold text-muted">
-          Showing {filteredProducts.length} of {products.length} products
+          {t("products.showing", { shown: filteredProducts.length, total: products.length })}
         </div>
       </div>
       <div className="table-wrap min-h-0 flex-1 overflow-auto">
         <table>
           <thead className="sticky top-0 z-10 bg-white">
-            <tr><th>Product</th><th>Unit</th><th>Default cost</th><th>Actions</th></tr>
+            <tr><th>{t("products.colProduct")}</th><th>{t("products.unit")}</th><th>{t("products.colDefaultCost")}</th><th>{t("common.actions")}</th></tr>
           </thead>
           <tbody>
             {filteredProducts.map((product) => (
@@ -58,14 +60,14 @@ export function ProductsTable({ products }: { products: Product[] }) {
                 </td>
                 <td>
                   <div className="flex flex-nowrap gap-2">
-                    <button form={`product-${product.id}`} className="btn btn-small btn-save" type="submit">Save</button>
+                    <button form={`product-${product.id}`} className="btn btn-small btn-save" type="submit">{t("common.save")}</button>
                     <DeleteProductButton id={product.id} name={product.name} />
                   </div>
                 </td>
               </tr>
             ))}
             {!filteredProducts.length ? (
-              <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">No products match your search.</td></tr>
+              <tr><td colSpan={4} className="py-8 text-center font-bold text-muted">{t("products.noMatch")}</td></tr>
             ) : null}
           </tbody>
         </table>
