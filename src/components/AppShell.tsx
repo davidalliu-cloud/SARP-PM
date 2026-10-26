@@ -6,7 +6,9 @@ import { canApproveOffers, pendingApprovalCount } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 import { SidebarNav } from "@/components/SidebarNav";
 import { SidebarProjects } from "@/components/SidebarProjects";
+import { LanguageToggle } from "@/components/LanguageToggle";
 import { projectAttention, projectTotals } from "@/lib/totals";
+import { getT } from "@/lib/i18n-server";
 
 function attentionDotClass(level: ReturnType<typeof projectAttention>["level"]) {
   if (level === "critical") return "bg-lab-burgundy";
@@ -16,26 +18,27 @@ function attentionDotClass(level: ReturnType<typeof projectAttention>["level"]) 
 }
 
 const navItems = [
-  { href: "/", label: "Dashboard" },
-  { href: "/offers", label: "Offers" },
-  { href: "/projects", label: "Projects" },
-  { href: "/invoices", label: "Invoices" },
-  { href: "/products", label: "Products" },
-  { href: "/employees", label: "Employees" },
-  { href: "/expenses", label: "Expenses" },
-  { href: "/exports", label: "Exports" },
-  { href: "/users", label: "Users" },
+  { href: "/", key: "dashboard" },
+  { href: "/offers", key: "offers" },
+  { href: "/projects", key: "projects" },
+  { href: "/invoices", key: "invoices" },
+  { href: "/products", key: "products" },
+  { href: "/employees", key: "employees" },
+  { href: "/expenses", key: "expenses" },
+  { href: "/exports", key: "exports" },
+  { href: "/users", key: "users" },
 ];
 
 // Groups always shown; "On hold" only appears when such projects exist so none are hidden.
 const projectGroupDefs = [
-  { key: "ACTIVE", label: "Active", alwaysShow: true },
-  { key: "NOT_STARTED", label: "Will start", alwaysShow: true },
-  { key: "ON_HOLD", label: "On hold", alwaysShow: false },
-  { key: "FINISHED", label: "Finished", alwaysShow: true },
+  { key: "ACTIVE", alwaysShow: true },
+  { key: "NOT_STARTED", alwaysShow: true },
+  { key: "ON_HOLD", alwaysShow: false },
+  { key: "FINISHED", alwaysShow: true },
 ];
 
 export async function AppShell({ children, user }: { children: ReactNode; user: User }) {
+  const t = await getT();
   const [projects, approvals] = await Promise.all([
     prisma.project.findMany({
       select: {
@@ -52,9 +55,13 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
     canApproveOffers(user) ? pendingApprovalCount() : Promise.resolve(0),
   ]);
   // Admins see how many offers wait for their approval right in the nav.
-  const shellNavItems = navItems.map((item) =>
-    item.href === "/offers" && approvals ? { ...item, label: `Offers (${approvals} to approve)` } : item,
-  );
+  const shellNavItems = navItems.map((item) => ({
+    href: item.href,
+    label:
+      item.href === "/offers" && approvals
+        ? t("nav.offersToApprove", { count: approvals })
+        : t(`nav.${item.key}`),
+  }));
   // Each project carries an attention dot in the sidebar list.
   const projectsWithDot = projects.map((project) => {
     const totals = projectTotals(project.dailyRecords, project.invoices);
@@ -64,12 +71,12 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
   const projectGroups = projectGroupDefs
     .map((group) => ({
       key: group.key,
-      label: group.label,
       alwaysShow: group.alwaysShow,
       projects: projectsWithDot
         .filter((project) => project.status === group.key)
         .map((project) => ({ id: project.id, name: project.name, dotClass: project.dotClass, dotTitle: project.dotTitle })),
     }))
+    .map((group) => ({ ...group, label: t(`projectGroups.${group.key}`) }))
     .filter((group) => group.alwaysShow || group.projects.length > 0)
     .map(({ key, label, projects }) => ({ key, label, projects }));
 
@@ -85,13 +92,13 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
             />
           </Link>
           <div className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
-            SARP · LAB
+            {t("brand.eyebrow")}
           </div>
           <div className="mt-2 text-xl font-bold leading-tight tracking-[-0.01em] text-ink">
-            Project Management
+            {t("brand.appName")}
           </div>
           <div className="mt-2 max-w-[13rem] text-xs leading-5 text-muted">
-            Daily costs, invoices, and project profitability
+            {t("brand.tagline")}
           </div>
         </div>
         <SidebarNav items={shellNavItems} />
@@ -109,27 +116,30 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
               />
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
-                  SARP &amp; LAB Operations
+                  {t("brand.operations")}
                 </div>
                 <div className="text-sm font-semibold tracking-[-0.01em] text-ink">
-                  Project Management
+                  {t("brand.appName")}
                 </div>
                 <div className="hidden text-xs text-muted sm:block">
-                  Daily costs, invoices, and project profitability
+                  {t("brand.tagline")}
                 </div>
               </div>
             </div>
-            <form action={logout} className="flex items-center gap-3">
-              <div className="hidden rounded-md border border-line bg-white px-3 py-2 text-xs font-semibold text-ink sm:block">
-                {user.name} · {user.role.toLowerCase()}
-              </div>
-              <button
-                className="rounded-md border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:border-lab-burgundy hover:bg-lab-burgundy hover:text-white"
-                type="submit"
-              >
-                Sign out
-              </button>
-            </form>
+            <div className="flex items-center gap-3">
+              <LanguageToggle />
+              <form action={logout} className="flex items-center gap-3">
+                <div className="hidden rounded-md border border-line bg-white px-3 py-2 text-xs font-semibold text-ink sm:block">
+                  {user.name} · {t(`roles.${user.role}`)}
+                </div>
+                <button
+                  className="rounded-md border border-line bg-white px-3 py-2 text-xs font-semibold text-ink transition hover:border-lab-burgundy hover:bg-lab-burgundy hover:text-white"
+                  type="submit"
+                >
+                  {t("common.signOut")}
+                </button>
+              </form>
+            </div>
           </div>
           <div className="border-t border-line lg:hidden">
             <SidebarNav items={shellNavItems} variant="horizontal" />
