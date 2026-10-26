@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { deleteInvoice, markInvoicePaid, markInvoiceUnpaid, updateInvoice } from "@/app/actions";
+import { useT } from "@/components/LanguageProvider";
+import type { TFunction } from "@/lib/i18n";
 import { daysSince, daysUntil, formatDate, invoiceAgeLabel, invoiceDueDate, money } from "@/lib/format";
 
 export type InvoiceRow = {
@@ -37,15 +39,16 @@ function invoiceStatusClass(invoice: InvoiceRow) {
   return "status status-finished";
 }
 
-function invoiceStatusLabel(invoice: InvoiceRow) {
-  if (invoice.isPaid) return "Paid";
+function invoiceStatusLabel(invoice: InvoiceRow, t: TFunction) {
+  if (invoice.isPaid) return t("pd.invoice.statePaid");
   const dueIn = daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate));
-  if (dueIn < 0) return "Overdue";
-  if (dueIn <= 7) return "Due soon";
-  return "Open";
+  if (dueIn < 0) return t("pd.invoice.stateOverdue");
+  if (dueIn <= 7) return t("pd.invoice.stateDueSoon");
+  return t("pd.invoice.stateOpen");
 }
 
 export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
+  const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
@@ -58,7 +61,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
         displayDate(invoice.invoiceDate),
         displayDate(invoice.dueDate),
         invoice.amount,
-        invoiceStatusLabel(invoice),
+        invoiceStatusLabel(invoice, t),
         invoice.paidDate ? displayDate(invoice.paidDate) : "",
         invoice.clientName,
         invoice.notes,
@@ -69,7 +72,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
   if (!invoices.length) {
     return (
       <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
-        No invoices saved for this project yet.
+        {t("pd.invoice.emptyNone")}
       </div>
     );
   }
@@ -77,10 +80,10 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
   return (
     <div className="space-y-3">
       <label>
-        Search invoices
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Invoice number, month, amount, or note" />
+        {t("pd.invoice.searchLabel")}
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("pd.invoice.searchPlaceholder")} />
       </label>
-      <div className="text-xs font-bold text-muted">Showing {filteredInvoices.length} of {invoices.length} invoices</div>
+      <div className="text-xs font-bold text-muted">{t("pd.invoice.showing", { shown: filteredInvoices.length, total: invoices.length })}</div>
       {filteredInvoices.map((invoice) => {
         const isEditing = editingId === invoice.id;
 
@@ -88,25 +91,25 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
           <div key={invoice.id} className="rounded-lg border border-[#d7e1e5] bg-white p-3">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div>
-                <div className="font-bold">{invoice.invoiceNo || "Invoice"}{invoice.clientName ? ` — ${invoice.clientName}` : ""}</div>
+                <div className="font-bold">{invoice.invoiceNo || t("pd.invoice.fallback")}{invoice.clientName ? ` — ${invoice.clientName}` : ""}</div>
                 <div className="mt-1 text-sm font-semibold text-muted">
-                  {invoice.monthCovered} / Issued {displayDate(invoice.invoiceDate)} / Due {displayDate(invoice.dueDate)}
+                  {t("pd.invoice.issuedDueLine", { month: invoice.monthCovered, issued: displayDate(invoice.invoiceDate), due: displayDate(invoice.dueDate) })}
                 </div>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  <span className={invoiceStatusClass(invoice)}>{invoiceStatusLabel(invoice)}</span>
+                  <span className={invoiceStatusClass(invoice)}>{invoiceStatusLabel(invoice, t)}</span>
                   <span className="status status-not-started">
                     {invoiceAgeLabel(invoice.invoiceDate, invoice.dueDate, invoice.isPaid)}
                   </span>
                   <span className="status status-finished">
-                    Issued {daysSince(invoice.invoiceDate)} days ago
+                    {t("pd.invoice.issuedDaysAgo", { days: daysSince(invoice.invoiceDate) })}
                   </span>
                   {invoice.isPaid && invoice.paidDate ? (
-                    <span className="status status-finished">Paid {displayDate(invoice.paidDate)}</span>
+                    <span className="status status-finished">{t("pd.invoice.paidOn", { date: displayDate(invoice.paidDate) })}</span>
                   ) : null}
                   {invoice.sourceCurrency ? (
-                    <span className="status status-not-started" title="Converted to net EUR for profit calculations">
-                      Orig. {invoice.sourceAmount != null ? invoice.sourceAmount.toLocaleString() : ""} {invoice.sourceCurrency}
-                      {invoice.vatRate != null ? ` (${Math.round(invoice.vatRate * 100)}% VAT)` : ""}
+                    <span className="status status-not-started" title={t("pd.invoice.origTitle")}>
+                      {t("pd.invoice.original", { amount: invoice.sourceAmount != null ? invoice.sourceAmount.toLocaleString() : "", currency: invoice.sourceCurrency })}
+                      {invoice.vatRate != null ? t("pd.invoice.vatSuffix", { pct: Math.round(invoice.vatRate * 100) }) : ""}
                     </span>
                   ) : null}
                 </div>
@@ -118,30 +121,30 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
                   <form action={markInvoiceUnpaid}>
                     <input type="hidden" name="id" value={invoice.id} />
                     <input type="hidden" name="projectId" value={invoice.projectId} />
-                    <button className="btn btn-small btn-secondary" type="submit">Mark unpaid</button>
+                    <button className="btn btn-small btn-secondary" type="submit">{t("pd.invoice.markUnpaid")}</button>
                   </form>
                 ) : (
                   <form action={markInvoicePaid} className="flex items-center gap-2">
                     <input type="hidden" name="id" value={invoice.id} />
                     <input type="hidden" name="projectId" value={invoice.projectId} />
-                    <input className="w-32" name="paidDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} aria-label="Paid date" />
-                    <button className="btn btn-small btn-save" type="submit">Mark paid</button>
+                    <input className="w-32" name="paidDate" type="date" defaultValue={new Date().toISOString().slice(0, 10)} aria-label={t("pd.invoice.paidDateAria")} />
+                    <button className="btn btn-small btn-save" type="submit">{t("pd.invoice.markPaid")}</button>
                   </form>
                 )}
                 <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : invoice.id)}>
-                  {isEditing ? "Cancel" : "Edit"}
+                  {isEditing ? t("common.cancel") : t("common.edit")}
                 </button>
                 <form
                   action={deleteInvoice}
                   onSubmit={(event) => {
-                    if (!window.confirm(`Delete invoice "${invoice.invoiceNo || displayDate(invoice.invoiceDate)}"? This cannot be undone.`)) {
+                    if (!window.confirm(t("pd.invoice.confirmDelete", { label: invoice.invoiceNo || displayDate(invoice.invoiceDate) }))) {
                       event.preventDefault();
                     }
                   }}
                 >
                   <input type="hidden" name="id" value={invoice.id} />
                   <input type="hidden" name="projectId" value={invoice.projectId} />
-                  <button className="btn btn-small btn-delete" type="submit">Delete</button>
+                  <button className="btn btn-small btn-delete" type="submit">{t("common.delete")}</button>
                 </form>
               </div>
             </div>
@@ -156,27 +159,27 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
               >
                 <input type="hidden" name="id" value={invoice.id} />
                 <input type="hidden" name="projectId" value={invoice.projectId} />
-                <label>Invoice date<input name="invoiceDate" type="date" required defaultValue={dateInputValue(invoice.invoiceDate)} /></label>
-                <label>Month covered<input name="monthCovered" type="month" required defaultValue={invoice.monthCovered} /></label>
-                <label>Invoice number<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder="Optional" /></label>
-                <label>Amount invoiced (net EUR)<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
-                <label>Due date<input name="dueDate" type="date" required defaultValue={dateInputValue(invoice.dueDate)} /></label>
-                <label>Client<input name="clientName" defaultValue={invoice.clientName} placeholder="Project's default client" /></label>
-                <label>Original amount (gross)<input name="sourceAmount" type="number" min="0" step="0.01" defaultValue={invoice.sourceAmount ?? ""} placeholder="Optional" /></label>
-                <label>Original currency<input name="sourceCurrency" defaultValue={invoice.sourceCurrency} placeholder="Optional, e.g. ALL" /></label>
-                <label>VAT rate applied<input name="vatRate" type="number" min="0" max="1" step="0.01" defaultValue={invoice.vatRate ?? ""} placeholder="0.20 = 20%" /></label>
+                <label>{t("pd.invoice.invoiceDate")}<input name="invoiceDate" type="date" required defaultValue={dateInputValue(invoice.invoiceDate)} /></label>
+                <label>{t("pd.invoice.monthCovered")}<input name="monthCovered" type="month" required defaultValue={invoice.monthCovered} /></label>
+                <label>{t("pd.invoice.invoiceNumber")}<input name="invoiceNo" defaultValue={invoice.invoiceNo} placeholder={t("common.optional")} /></label>
+                <label>{t("pd.invoice.amountNet")}<input name="amount" type="number" min="0" step="0.01" required defaultValue={invoice.amount} /></label>
+                <label>{t("pd.invoice.dueDate")}<input name="dueDate" type="date" required defaultValue={dateInputValue(invoice.dueDate)} /></label>
+                <label>{t("pd.invoice.client")}<input name="clientName" defaultValue={invoice.clientName} placeholder={t("pd.invoice.clientPlaceholder")} /></label>
+                <label>{t("pd.invoice.originalAmount")}<input name="sourceAmount" type="number" min="0" step="0.01" defaultValue={invoice.sourceAmount ?? ""} placeholder={t("common.optional")} /></label>
+                <label>{t("pd.invoice.originalCurrency")}<input name="sourceCurrency" defaultValue={invoice.sourceCurrency} placeholder={t("pd.invoice.originalCurrencyPlaceholder")} /></label>
+                <label>{t("pd.invoice.vatRate")}<input name="vatRate" type="number" min="0" max="1" step="0.01" defaultValue={invoice.vatRate ?? ""} placeholder={t("pd.invoice.vatPlaceholder")} /></label>
                 <label className="md:col-span-2">
-                  Paid status
+                  {t("pd.invoice.paidStatus")}
                   <span className="flex items-center gap-2 rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2 text-sm font-bold text-ink">
                     <input className="size-4 w-auto" name="isPaid" type="checkbox" defaultChecked={invoice.isPaid} />
-                    Invoice has been paid
+                    {t("pd.invoice.paidCheckbox")}
                   </span>
                 </label>
-                <label>Paid date<input name="paidDate" type="date" defaultValue={invoice.paidDate ? dateInputValue(invoice.paidDate) : ""} /></label>
-                <label className="md:col-span-2">Notes<textarea name="notes" rows={3} defaultValue={invoice.notes} placeholder="Optional invoice notes" /></label>
+                <label>{t("pd.invoice.paidDate")}<input name="paidDate" type="date" defaultValue={invoice.paidDate ? dateInputValue(invoice.paidDate) : ""} /></label>
+                <label className="md:col-span-2">{t("common.notes")}<textarea name="notes" rows={3} defaultValue={invoice.notes} placeholder={t("pd.invoice.notesPlaceholder")} /></label>
                 <div className="flex gap-2 md:col-span-2">
-                  <button className="btn btn-small btn-secondary" type="button" onClick={() => setEditingId(null)}>Cancel</button>
-                  <button className="btn btn-small btn-save" type="submit">Save invoice</button>
+                  <button className="btn btn-small btn-secondary" type="button" onClick={() => setEditingId(null)}>{t("common.cancel")}</button>
+                  <button className="btn btn-small btn-save" type="submit">{t("pd.invoice.saveInvoice")}</button>
                 </div>
               </form>
             ) : null}
@@ -185,7 +188,7 @@ export function InvoicesManager({ invoices }: { invoices: InvoiceRow[] }) {
       })}
       {!filteredInvoices.length ? (
         <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
-          No invoices match your search.
+          {t("pd.invoice.noMatch")}
         </div>
       ) : null}
     </div>

@@ -8,36 +8,38 @@ import { offerMoney, offerTotals, toEur } from "@/lib/offer-calc";
 import { canApproveOffers, isOfferExpired, offerStatusMeta } from "@/lib/offers";
 import { setupOfferTables } from "@/app/actions";
 import { offerTablesExist } from "@/lib/offer-setup";
+import { getT } from "@/lib/i18n-server";
 import { prisma } from "@/lib/prisma";
 
-const tabs: { key: string; label: string; statuses: OfferStatus[] }[] = [
-  { key: "open", label: "Open", statuses: [OfferStatus.DRAFT, OfferStatus.PENDING_APPROVAL, OfferStatus.READY, OfferStatus.SENT] },
-  { key: "approval", label: "Awaiting approval", statuses: [OfferStatus.PENDING_APPROVAL] },
-  { key: "sent", label: "Sent (Pending)", statuses: [OfferStatus.SENT] },
-  { key: "won", label: "Approved (Te Aprovuara)", statuses: [OfferStatus.WON] },
-  { key: "lost", label: "Lost (Pa Sukses)", statuses: [OfferStatus.LOST, OfferStatus.CANCELLED] },
-  { key: "all", label: "All", statuses: Object.values(OfferStatus) },
+const tabs: { key: string; labelKey: string; statuses: OfferStatus[] }[] = [
+  { key: "open", labelKey: "off.tabOpen", statuses: [OfferStatus.DRAFT, OfferStatus.PENDING_APPROVAL, OfferStatus.READY, OfferStatus.SENT] },
+  { key: "approval", labelKey: "off.tabApproval", statuses: [OfferStatus.PENDING_APPROVAL] },
+  { key: "sent", labelKey: "off.tabSent", statuses: [OfferStatus.SENT] },
+  { key: "won", labelKey: "off.tabWon", statuses: [OfferStatus.WON] },
+  { key: "lost", labelKey: "off.tabLost", statuses: [OfferStatus.LOST, OfferStatus.CANCELLED] },
+  { key: "all", labelKey: "off.tabAll", statuses: Object.values(OfferStatus) },
 ];
 
 export default async function OffersPage({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
   const { tab = "open" } = await searchParams;
   const user = await requireUser();
+  const t = await getT();
 
   if (!(await offerTablesExist())) {
     return (
       <>
-        <PageTitle eyebrow="Sales" title="Offers" />
+        <PageTitle eyebrow={t("off.eyebrowSales")} title={t("off.title")} />
         <section className="panel max-w-2xl p-5">
-          <h2 className="text-lg font-bold">One-time setup needed</h2>
+          <h2 className="text-lg font-bold">{t("off.setupTitle")}</h2>
           {canApproveOffers(user) ? (
             <form action={setupOfferTables} className="mt-3 grid gap-3">
               <p className="text-sm text-muted">
-                This creates the new offer tables in the database. Existing projects, invoices and records are not touched.
+                {t("off.setupText")}
               </p>
-              <button className="btn btn-primary w-fit" type="submit">Set up offers</button>
+              <button className="btn btn-primary w-fit" type="submit">{t("off.setupButton")}</button>
             </form>
           ) : (
-            <p className="mt-3 text-sm text-muted">Offers are not set up yet. Ask an admin to open this page once.</p>
+            <p className="mt-3 text-sm text-muted">{t("off.setupAskAdmin")}</p>
           )}
         </section>
       </>
@@ -64,21 +66,21 @@ export default async function OffersPage({ searchParams }: { searchParams: Promi
 
   return (
     <>
-      <PageTitle eyebrow="Sales" title="Offers">
-        <Link href="/offers/new" className="btn btn-primary">New offer</Link>
+      <PageTitle eyebrow={t("off.eyebrowSales")} title={t("off.title")}>
+        <Link href="/offers/new" className="btn btn-primary">{t("off.newOffer")}</Link>
       </PageTitle>
 
       {approvalCount && canApproveOffers(user) ? (
         <Link href="/offers?tab=approval" className="mb-6 block rounded-xl border border-[#ffe0a6] bg-[#fff3de] p-4 text-sm font-semibold text-[#a9761b]">
-          {approvalCount} {approvalCount === 1 ? "offer is" : "offers are"} waiting for your approval →
+          {t(approvalCount === 1 ? "off.approvalBannerOne" : "off.approvalBannerMany", { count: approvalCount })}
         </Link>
       ) : null}
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Awaiting approval" value={approvalCount} detail="Internal review" tone={approvalCount ? "amber" : "default"} />
-        <StatCard label="Sent pipeline" value={money(sum(OfferStatus.SENT))} detail={`${count(OfferStatus.SENT)} offers with clients`} tone="blue" />
-        <StatCard label="Approved by clients" value={money(sum(OfferStatus.WON))} detail={`${count(OfferStatus.WON)} offers won`} tone="green" />
-        <StatCard label="Win rate" value={`${winRate.toFixed(0)}%`} detail={`${decided} decided offers`} tone={winRate >= 30 ? "green" : "maroon"} />
+        <StatCard label={t("off.statAwaiting")} value={approvalCount} detail={t("off.statAwaitingDetail")} tone={approvalCount ? "amber" : "default"} />
+        <StatCard label={t("off.statSentPipeline")} value={money(sum(OfferStatus.SENT))} detail={t(count(OfferStatus.SENT) === 1 ? "off.statSentPipelineDetailOne" : "off.statSentPipelineDetailMany", { count: count(OfferStatus.SENT) })} tone="blue" />
+        <StatCard label={t("off.statApprovedClients")} value={money(sum(OfferStatus.WON))} detail={t(count(OfferStatus.WON) === 1 ? "off.statApprovedClientsDetailOne" : "off.statApprovedClientsDetailMany", { count: count(OfferStatus.WON) })} tone="green" />
+        <StatCard label={t("off.statWinRate")} value={`${winRate.toFixed(0)}%`} detail={t(decided === 1 ? "off.statWinRateDetailOne" : "off.statWinRateDetailMany", { count: decided })} tone={winRate >= 30 ? "green" : "maroon"} />
       </section>
 
       <nav className="mt-6 flex gap-1 overflow-x-auto">
@@ -90,7 +92,7 @@ export default async function OffersPage({ searchParams }: { searchParams: Promi
               item.key === activeTab.key ? "bg-lab-burgundy text-white" : "text-ink hover:bg-lab-burgundy/5 hover:text-lab-burgundy"
             }`}
           >
-            {item.label}
+            {t(item.labelKey)}
           </Link>
         ))}
       </nav>
@@ -100,30 +102,30 @@ export default async function OffersPage({ searchParams }: { searchParams: Promi
           <table>
             <thead>
               <tr>
-                <th>Status</th>
-                <th>Code</th>
-                <th>Client / project</th>
-                <th>Type</th>
-                <th>Issued</th>
-                <th>Valid until</th>
-                <th>Net value</th>
-                <th>Margin</th>
-                <th>Prepared by</th>
+                <th>{t("common.status")}</th>
+                <th>{t("off.colCode")}</th>
+                <th>{t("off.colClientProject")}</th>
+                <th>{t("off.colType")}</th>
+                <th>{t("off.colIssued")}</th>
+                <th>{t("off.colValidUntil")}</th>
+                <th>{t("off.colNetValue")}</th>
+                <th>{t("off.colMargin")}</th>
+                <th>{t("off.colPreparedBy")}</th>
               </tr>
             </thead>
             <tbody>
               {visible.map(({ offer, totals, expired }) => (
                 <tr key={offer.id}>
                   <td>
-                    <span className={offerStatusMeta[offer.status].className}>{offerStatusMeta[offer.status].label}</span>
-                    {expired ? <span className="status status-on-hold ml-1">Expired</span> : null}
+                    <span className={offerStatusMeta[offer.status].className}>{t(`off.status.${offer.status}`)}</span>
+                    {expired ? <span className="status status-on-hold ml-1">{t("off.expired")}</span> : null}
                   </td>
                   <td><Link href={`/offers/${offer.id}`} className="font-bold text-ink underline-offset-2 hover:underline">{offer.code}</Link></td>
                   <td>
                     <Link href={`/offers/${offer.id}`} className="font-bold text-ink">{offer.projectName}</Link>
                     <div className="mt-1 text-xs font-semibold text-muted">{offer.clientName}</div>
                   </td>
-                  <td>{offer.type === "WORKS" ? "Works" : "Products"}</td>
+                  <td>{offer.type === "WORKS" ? t("off.typeWorksShort") : t("off.typeProductsShort")}</td>
                   <td>{formatDate(offer.issueDate)}</td>
                   <td className={expired ? "font-bold text-lab-burgundy" : ""}>{formatDate(offer.validUntil)}</td>
                   <td className="font-bold">{offerMoney(totals.net, offer.currency)}</td>
@@ -134,7 +136,7 @@ export default async function OffersPage({ searchParams }: { searchParams: Promi
             </tbody>
           </table>
         </div>
-        {!visible.length ? <div className="p-5 text-sm font-bold text-muted">No offers in this view.</div> : null}
+        {!visible.length ? <div className="p-5 text-sm font-bold text-muted">{t("off.noneInView")}</div> : null}
       </section>
     </>
   );

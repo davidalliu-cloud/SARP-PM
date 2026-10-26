@@ -203,7 +203,7 @@ function ProjectDashboardTable({
                     {row.project.clientName ? <span className="text-xs font-bold text-muted">{row.project.clientName}</span> : null}
                   </div>
                 </td>
-                <td><span className={attention.className}>{attention.label}</span></td>
+                <td><span className={attention.className}>{t(attention.labelKey)}</span></td>
                 <td className="font-bold">
                   {row.project.budgetAmount > 0 ? (
                     <>

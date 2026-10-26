@@ -9,6 +9,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { useT } from "@/components/LanguageProvider";
 
 const ModalCloseContext = createContext<() => void>(() => {});
 
@@ -21,7 +22,7 @@ export function Modal({
   triggerLabel,
   triggerClassName = "btn btn-primary",
   title,
-  eyebrow = "SARP workflow",
+  eyebrow,
   description,
   size = "lg",
   children,
@@ -34,6 +35,8 @@ export function Modal({
   size?: "md" | "lg" | "xl";
   children: ReactNode;
 }) {
+  const t = useT();
+  const eyebrowText = eyebrow ?? t("common.workflow");
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const close = useCallback(() => setOpen(false), []);
@@ -78,14 +81,14 @@ export function Modal({
                 <div className="flex items-start justify-between gap-4 border-b border-line px-6 py-4">
                   <div>
                     <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
-                      {eyebrow}
+                      {eyebrowText}
                     </div>
                     <h2 className="mt-1 text-xl font-bold tracking-[-0.01em] text-ink">{title}</h2>
                     {description ? <p className="mt-1 text-sm text-muted">{description}</p> : null}
                   </div>
                   <button
                     type="button"
-                    aria-label="Close"
+                    aria-label={t("common.close")}
                     onClick={close}
                     className="shrink-0 rounded-md border border-line px-2.5 py-1.5 text-sm font-semibold text-ink transition hover:border-lab-burgundy hover:bg-lab-burgundy hover:text-white"
                   >

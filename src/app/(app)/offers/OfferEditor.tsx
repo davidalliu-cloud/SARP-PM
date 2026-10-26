@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useT } from "@/components/LanguageProvider";
 import { ITEM_UNITS, offerMoney, offerTotals, sectionTotals } from "@/lib/offer-calc";
 
 type ItemRow = {
@@ -80,6 +81,7 @@ export function OfferEditor({
   clients?: string[];
   submitLabel: string;
 }) {
+  const t = useT();
   const [type, setType] = useState(initial.type);
   const [currency, setCurrency] = useState(initial.currency);
   const [exchangeRate, setExchangeRate] = useState(initial.exchangeRate);
@@ -133,50 +135,50 @@ export function OfferEditor({
 
       <section className="panel grid gap-4 p-5 md:grid-cols-3">
         <label>
-          Offer type
+          {t("off.offerType")}
           <select name="type" value={type} onChange={(event) => setType(event.target.value as OfferEditorValues["type"])}>
-            <option value="WORKS">Oferta Punimeve (works, priced per m²)</option>
-            <option value="PRODUCTS">Oferta Produkteve (product supply)</option>
+            <option value="WORKS">{t("off.typeWorksOption")}</option>
+            <option value="PRODUCTS">{t("off.typeProductsOption")}</option>
           </select>
         </label>
         <label>
-          Client
-          <input name="clientName" required list="offer-clients" defaultValue={initial.clientName} placeholder="Select or type a client" autoComplete="off" />
+          {t("off.client")}
+          <input name="clientName" required list="offer-clients" defaultValue={initial.clientName} placeholder={t("off.clientPlaceholder")} autoComplete="off" />
         </label>
         <label>
-          Project / site
+          {t("off.projectSite")}
           <input name="projectName" required defaultValue={initial.projectName} placeholder="Farka Lake Front Residence" />
         </label>
         <label>
-          Site address
-          <input name="siteAddress" defaultValue={initial.siteAddress} placeholder="Optional" />
+          {t("off.siteAddress")}
+          <input name="siteAddress" defaultValue={initial.siteAddress} placeholder={t("common.optional")} />
         </label>
         <label>
-          Issue date
+          {t("off.issueDate")}
           <input name="issueDate" type="date" required defaultValue={initial.issueDate} />
         </label>
         <label>
-          Valid until
+          {t("off.validUntil")}
           <input name="validUntil" type="date" defaultValue={initial.validUntil} />
         </label>
         <label>
-          Currency
+          {t("off.currency")}
           <select name="currency" value={currency} onChange={(event) => setCurrency(event.target.value as OfferEditorValues["currency"])}>
             <option value="EUR">EUR</option>
             <option value="ALL">ALL (Lek)</option>
           </select>
         </label>
         <label>
-          ALL per 1 EUR
+          {t("off.allPerEur")}
           <input name="exchangeRate" type="number" min="1" step="0.01" value={exchangeRate} onChange={(event) => setExchangeRate(Number(event.target.value))} />
         </label>
         <div className="grid grid-cols-2 gap-3">
           <label>
-            VAT %
+            {t("off.vatPct")}
             <input name="vatRate" type="number" min="0" step="0.1" value={vatRate} onChange={(event) => setVatRate(Number(event.target.value))} />
           </label>
           <label>
-            Discount %
+            {t("off.discountPct")}
             <input name="discountPct" type="number" min="0" max="100" step="0.1" value={discountPct} onChange={(event) => setDiscountPct(Number(event.target.value))} />
           </label>
         </div>
@@ -196,51 +198,51 @@ export function OfferEditor({
           <section key={section.key} className={`panel p-5 ${section.isOption ? "border-dashed" : ""}`}>
             <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_0.7fr_auto]">
               <label>
-                {type === "WORKS" ? "System / section" : "Section"}
+                {type === "WORKS" ? t("off.systemSection") : t("off.sectionFallback")}
                 <input value={section.title} onChange={(event) => updateSection(section.key, { title: event.target.value })} placeholder="Hidroizolimi i tarracës me Mapeplan T M 15" />
               </label>
               <label>
-                Zone
+                {t("off.zone")}
                 <input value={section.zone} onChange={(event) => updateSection(section.key, { zone: event.target.value })} placeholder="Tarraca, Themele, Tualete…" />
               </label>
               <label>
-                {perM2 ? "Area (m²)" : "Pricing"}
+                {perM2 ? t("off.areaM2") : t("off.pricing")}
                 {perM2 ? (
                   <input type="number" min="0" step="0.01" value={section.areaM2 ?? 0} onChange={(event) => updateSection(section.key, { areaM2: Number(event.target.value) })} />
                 ) : (
-                  <input disabled value="Absolute quantities" />
+                  <input disabled value={t("off.absoluteQuantities")} />
                 )}
               </label>
               <div className="flex flex-wrap items-end gap-2">
                 <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { areaM2: perM2 ? null : 0 })}>
-                  {perM2 ? "Use quantities" : "Price per m²"}
+                  {perM2 ? t("off.useQuantities") : t("off.pricePerM2")}
                 </button>
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => moveSection(sectionIndex, -1)} aria-label="Move section up">↑</button>
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => moveSection(sectionIndex, 1)} aria-label="Move section down">↓</button>
-                <button className="btn btn-small btn-delete" type="button" onClick={() => setSections((rows) => rows.filter((row) => row.key !== section.key))}>Delete</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => moveSection(sectionIndex, -1)} aria-label={t("off.moveSectionUp")}>↑</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => moveSection(sectionIndex, 1)} aria-label={t("off.moveSectionDown")}>↓</button>
+                <button className="btn btn-small btn-delete" type="button" onClick={() => setSections((rows) => rows.filter((row) => row.key !== section.key))}>{t("common.delete")}</button>
               </div>
             </div>
             <label className="mt-3">
-              Description shown to client
+              {t("off.descriptionShown")}
               <textarea rows={2} value={section.description} onChange={(event) => updateSection(section.key, { description: event.target.value })} placeholder="Përshkrimi teknik i sistemit" />
             </label>
             <label className="mt-3 flex items-center gap-2 text-sm">
               <input className="w-auto" type="checkbox" checked={section.isOption} onChange={(event) => updateSection(section.key, { isOption: event.target.checked })} />
-              Alternative option (shown to client, not added to total)
+              {t("off.altOptionLabel")}
             </label>
 
             <div className="table-wrap mt-4">
               <table>
                 <thead>
                   <tr>
-                    <th>Type</th>
-                    <th>Zëri i punës</th>
-                    <th>Produkti</th>
-                    <th>Unit</th>
-                    <th>{perM2 ? "Consumption / m²" : "Quantity"}</th>
-                    <th>Price / unit</th>
-                    <th>Cost / unit (internal)</th>
-                    <th>{perM2 ? "Value / m²" : "Line total"}</th>
+                    <th>{t("off.colType")}</th>
+                    <th>{t("off.colWorkItem")}</th>
+                    <th>{t("off.colProduct")}</th>
+                    <th>{t("common.unit")}</th>
+                    <th>{perM2 ? t("off.colConsumptionPerM2") : t("common.quantity")}</th>
+                    <th>{t("off.colPricePerUnit")}</th>
+                    <th>{t("off.colCostPerUnitInternal")}</th>
+                    <th>{perM2 ? t("off.colValuePerM2") : t("off.colLineTotal")}</th>
                     <th />
                   </tr>
                 </thead>
@@ -249,9 +251,9 @@ export function OfferEditor({
                     <tr key={item.key}>
                       <td>
                         <select className="w-28" value={item.kind} onChange={(event) => updateItem(section.key, item.key, { kind: event.target.value })}>
-                          <option value="MATERIAL">Material</option>
-                          <option value="LABOUR">Labour</option>
-                          <option value="OTHER">Other</option>
+                          <option value="MATERIAL">{t("off.kindMaterial")}</option>
+                          <option value="LABOUR">{t("off.kindLabour")}</option>
+                          <option value="OTHER">{t("off.kindOther")}</option>
                         </select>
                       </td>
                       <td><input className="min-w-56" value={item.description} onChange={(event) => updateItem(section.key, item.key, { description: event.target.value })} placeholder="Shtresa hidroizoluese" /></td>
@@ -274,13 +276,13 @@ export function OfferEditor({
 
             <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="flex gap-2">
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, blankItem("MATERIAL", perM2 ? "kg" : "thes")] })}>Add material</button>
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, { ...blankItem("LABOUR", "m2"), description: "Aplikimi" }] })}>Add labour</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, blankItem("MATERIAL", perM2 ? "kg" : "thes")] })}>{t("off.addMaterial")}</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, { ...blankItem("LABOUR", "m2"), description: "Aplikimi" }] })}>{t("off.addLabour")}</button>
               </div>
               <div className="text-sm font-semibold text-ink">
-                {perM2 ? <>Value / m²: {offerMoney(subtotal.ratePrice, currency)} · </> : null}
-                Section total: {offerMoney(subtotal.total, currency)}
-                <span className="text-muted"> · cost {offerMoney(subtotal.cost, currency)}</span>
+                {perM2 ? <>{t("off.valuePerM2")}: {offerMoney(subtotal.ratePrice, currency)} · </> : null}
+                {t("off.sectionTotal")}: {offerMoney(subtotal.total, currency)}
+                <span className="text-muted"> · {t("off.costWord")} {offerMoney(subtotal.cost, currency)}</span>
               </div>
             </div>
           </section>
@@ -293,25 +295,25 @@ export function OfferEditor({
 
       <div>
         <button className="btn btn-secondary" type="button" onClick={() => setSections((rows) => [...rows, blankSection(type)])}>
-          Add section
+          {t("off.addSection")}
         </button>
       </div>
 
       <section className="panel grid gap-4 p-5 md:grid-cols-2">
-        <label>Payment terms<textarea name="paymentTerms" rows={3} defaultValue={initial.paymentTerms} /></label>
-        <label>Execution / delivery<textarea name="executionTerms" rows={3} defaultValue={initial.executionTerms} /></label>
-        <label>Warranty<textarea name="warrantyTerms" rows={3} defaultValue={initial.warrantyTerms} /></label>
-        <label>Exclusions<textarea name="exclusions" rows={3} defaultValue={initial.exclusions} /></label>
-        <label className="md:col-span-2">Internal notes (never printed)<textarea name="internalNotes" rows={2} defaultValue={initial.internalNotes} /></label>
+        <label>{t("off.paymentTerms")}<textarea name="paymentTerms" rows={3} defaultValue={initial.paymentTerms} /></label>
+        <label>{t("off.executionDelivery")}<textarea name="executionTerms" rows={3} defaultValue={initial.executionTerms} /></label>
+        <label>{t("off.warranty")}<textarea name="warrantyTerms" rows={3} defaultValue={initial.warrantyTerms} /></label>
+        <label>{t("off.exclusions")}<textarea name="exclusions" rows={3} defaultValue={initial.exclusions} /></label>
+        <label className="md:col-span-2">{t("off.internalNotesNeverPrinted")}<textarea name="internalNotes" rows={2} defaultValue={initial.internalNotes} /></label>
       </section>
 
       <section className="panel sticky bottom-0 z-10 flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
         <div className="grid gap-1 text-sm">
           <div className="font-bold text-ink">
-            Net {offerMoney(totals.net, currency)} · VAT {offerMoney(totals.vat, currency)} · Total {offerMoney(totals.total, currency)}
+            {t("off.net")} {offerMoney(totals.net, currency)} · {t("off.vat")} {offerMoney(totals.vat, currency)} · {t("common.total")} {offerMoney(totals.total, currency)}
           </div>
           <div className="text-muted">
-            Internal: cost {offerMoney(totals.cost, currency)} · margin {totals.margin.toFixed(1)}%
+            {t("off.internalLabel")}: {t("off.costWord")} {offerMoney(totals.cost, currency)} · {t("off.margin")} {totals.margin.toFixed(1)}%
             {totals.areaM2 ? ` · ${totals.areaM2.toFixed(1)} m²` : ""}
           </div>
         </div>

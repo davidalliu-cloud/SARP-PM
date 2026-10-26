@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { createDailyRecord } from "@/app/actions";
+import { useT } from "@/components/LanguageProvider";
 import { useModalClose } from "@/components/Modal";
 import { dateInputValue } from "@/lib/format";
 
@@ -43,6 +44,7 @@ export function LabourRecordForm({
   employees: EmployeeOption[];
   defaultClientName?: string;
 }) {
+  const t = useT();
   const close = useModalClose();
   const [pending, startTransition] = useTransition();
   const [labourRows, setLabourRows] = useState([newLabourRow("l-0", employees)]);
@@ -63,32 +65,32 @@ export function LabourRecordForm({
       <input type="hidden" name="projectId" value={projectId} />
       <div className="grid gap-4 md:grid-cols-[220px_220px_1fr_1fr]">
         <label>
-          Date
+          {t("common.date")}
           <input name="date" type="date" required defaultValue={dateInputValue()} />
         </label>
         <label>
-          Completed area m2
+          {t("pd.daily.completedAreaM2")}
           <input name="completedAreaM2" type="number" min="0" step="0.01" placeholder="85" />
         </label>
         <label>
-          Client
-          <input name="clientName" placeholder={defaultClientName || "Project's default client"} defaultValue={defaultClientName || ""} />
+          {t("pd.daily.client")}
+          <input name="clientName" placeholder={defaultClientName || t("pd.daily.clientPlaceholder")} defaultValue={defaultClientName || ""} />
         </label>
         <label>
-          Notes
-          <input name="notes" placeholder="Site progress, issues, weather, scope notes" />
+          {t("common.notes")}
+          <input name="notes" placeholder={t("pd.daily.notesPlaceholder")} />
         </label>
       </div>
 
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold">Employees worked</h3>
+          <h3 className="font-bold">{t("pd.daily.employeesWorked")}</h3>
           <button
             className="btn btn-small btn-secondary"
             type="button"
             onClick={() => setLabourRows((rows) => [...rows, newLabourRow(`l-${Date.now()}`, employees)])}
           >
-            Add labour row
+            {t("pd.daily.addLabourRow")}
           </button>
         </div>
         <div className="grid gap-3">
@@ -97,7 +99,7 @@ export function LabourRecordForm({
             return (
               <div key={row.id} className="grid gap-3 md:grid-cols-[0.75fr_1.3fr_0.8fr_0.8fr_0.8fr_auto]">
                 <label>
-                  Type
+                  {t("pd.daily.type")}
                   <select
                     name="labourType"
                     value={row.labourType}
@@ -106,16 +108,16 @@ export function LabourRecordForm({
                       setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, labourType } : item));
                     }}
                   >
-                    <option value="employee">Employee</option>
-                    <option value="external">External m2 team</option>
+                    <option value="employee">{t("pd.daily.employee")}</option>
+                    <option value="external">{t("pd.daily.externalTeamOption")}</option>
                   </select>
                 </label>
                 <label>
-                  {row.labourType === "external" ? "External team" : "Employee"}
+                  {row.labourType === "external" ? t("pd.daily.externalTeam") : t("pd.daily.employee")}
                   {row.labourType === "external" ? (
                     <>
                       <input type="hidden" name="employeeId" value="" />
-                      <input name="externalTeamName" value={row.externalTeamName} placeholder="External waterproofing team" onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, externalTeamName: event.target.value } : item))} />
+                      <input name="externalTeamName" value={row.externalTeamName} placeholder={t("pd.daily.externalTeamPlaceholder")} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, externalTeamName: event.target.value } : item))} />
                     </>
                   ) : (
                     <>
@@ -135,22 +137,22 @@ export function LabourRecordForm({
                   <input type="hidden" name="employeeName" value={selected?.name ?? ""} />
                 </label>
                 <label>
-                  {row.labourType === "external" ? "Rate / m2" : "Daily wage"}
+                  {row.labourType === "external" ? t("pd.daily.ratePerM2") : t("pd.daily.dailyWage")}
                   <input name={row.labourType === "external" ? "ratePerSquareMeter" : "dailyWage"} type="number" min="0" step="0.01" value={row.labourType === "external" ? row.ratePerSquareMeter : row.dailyWage} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? row.labourType === "external" ? { ...item, ratePerSquareMeter: Number(event.target.value) } : { ...item, dailyWage: Number(event.target.value) } : item))} />
                   {row.labourType === "external" ? <input type="hidden" name="dailyWage" value="0" /> : <input type="hidden" name="ratePerSquareMeter" value="0" />}
                 </label>
                 <label>
-                  m2 done
+                  {t("pd.daily.m2Done")}
                   <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
                   {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
                 </label>
                 <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-                  <div className="text-xs font-bold uppercase text-muted">Line total</div>
+                  <div className="text-xs font-bold uppercase text-muted">{t("pd.daily.lineTotal")}</div>
                   <div className="font-bold">EUR {(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage).toFixed(2)}</div>
                 </div>
                 <div className="grid content-end">
                   <button className="btn btn-small btn-delete" type="button" onClick={() => setLabourRows((rows) => rows.filter((item) => item.id !== row.id))}>
-                    Delete
+                    {t("common.delete")}
                   </button>
                 </div>
               </div>
@@ -161,10 +163,10 @@ export function LabourRecordForm({
 
       <div className="flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-center md:justify-between">
         <div className="text-sm font-bold text-ink">
-          Labour total: <span className="text-ink">EUR {labourTotal.toFixed(2)}</span>
+          {t("pd.labourForm.total")} <span className="text-ink">EUR {labourTotal.toFixed(2)}</span>
         </div>
         <button className="btn btn-primary" type="submit" disabled={pending || !employees.length}>
-          {pending ? "Saving…" : "Save labour"}
+          {pending ? t("pd.labourForm.saving") : t("pd.labourForm.save")}
         </button>
       </div>
     </form>

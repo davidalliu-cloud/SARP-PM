@@ -2,6 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { createDailyRecord } from "@/app/actions";
+import { useT } from "@/components/LanguageProvider";
 import { useModalClose } from "@/components/Modal";
 import { dateInputValue } from "@/lib/format";
 
@@ -20,6 +21,7 @@ export function ExpenseRecordForm({
   expenseTypes: ExpenseTypeOption[];
   defaultClientName?: string;
 }) {
+  const t = useT();
   const close = useModalClose();
   const [pending, startTransition] = useTransition();
   const [expenseRows, setExpenseRows] = useState([{ id: "e-0", expenseTypeId: expenseTypes[0]?.id ?? "", description: "", amount: expenseTypes[0]?.defaultAmount ?? 0 }]);
@@ -40,36 +42,36 @@ export function ExpenseRecordForm({
       <input type="hidden" name="projectId" value={projectId} />
       <div className="grid gap-4 md:grid-cols-[220px_1fr_1fr]">
         <label>
-          Date
+          {t("common.date")}
           <input name="date" type="date" required defaultValue={dateInputValue()} />
         </label>
         <label>
-          Client
-          <input name="clientName" placeholder={defaultClientName || "Project's default client"} defaultValue={defaultClientName || ""} />
+          {t("pd.daily.client")}
+          <input name="clientName" placeholder={defaultClientName || t("pd.daily.clientPlaceholder")} defaultValue={defaultClientName || ""} />
         </label>
         <label>
-          Notes
-          <input name="notes" placeholder="Site progress, issues, weather, scope notes" />
+          {t("common.notes")}
+          <input name="notes" placeholder={t("pd.daily.notesPlaceholder")} />
         </label>
       </div>
       <input type="hidden" name="completedAreaM2" value="0" />
 
       <div>
         <div className="mb-3 flex items-center justify-between">
-          <h3 className="font-bold">Expenses</h3>
+          <h3 className="font-bold">{t("pd.daily.expenses")}</h3>
           <button
             className="btn btn-small btn-secondary"
             type="button"
             onClick={() => setExpenseRows((rows) => [...rows, { id: `e-${Date.now()}`, expenseTypeId: expenseTypes[0]?.id ?? "", description: "", amount: expenseTypes[0]?.defaultAmount ?? 0 }])}
           >
-            Add expense row
+            {t("pd.daily.addExpenseRow")}
           </button>
         </div>
         <div className="grid gap-3">
           {expenseRows.map((row, index) => (
             <div key={row.id} className="grid gap-3 md:grid-cols-[1fr_1.4fr_0.8fr_0.8fr_auto]">
               <label>
-                Expense type
+                {t("pd.daily.expenseType")}
                 <select
                   name="expenseTypeId"
                   value={row.expenseTypeId}
@@ -83,16 +85,16 @@ export function ExpenseRecordForm({
                 <input type="hidden" name="expenseCategory" value={expenseTypeMap.get(row.expenseTypeId)?.name ?? ""} />
               </label>
               <label>
-                Description
+                {t("pd.daily.description")}
                 <input
                   name="expenseDescription"
                   value={row.description}
-                  placeholder="Lunch, overtime, drill bits, parking"
+                  placeholder={t("pd.expenseForm.descPlaceholder")}
                   onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, description: event.target.value } : item))}
                 />
               </label>
               <label>
-                Amount
+                {t("common.amount")}
                 <input
                   name="expenseAmount"
                   type="number"
@@ -103,12 +105,12 @@ export function ExpenseRecordForm({
                 />
               </label>
               <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-                <div className="text-xs font-bold uppercase text-muted">Line total</div>
+                <div className="text-xs font-bold uppercase text-muted">{t("pd.daily.lineTotal")}</div>
                 <div className="font-bold">EUR {row.amount.toFixed(2)}</div>
               </div>
               <div className="grid content-end">
                 <button className="btn btn-small btn-delete" type="button" onClick={() => setExpenseRows((rows) => rows.filter((item) => item.id !== row.id))}>
-                  Delete
+                  {t("common.delete")}
                 </button>
               </div>
             </div>
@@ -118,10 +120,10 @@ export function ExpenseRecordForm({
 
       <div className="flex flex-col gap-3 border-t border-line pt-4 md:flex-row md:items-center md:justify-between">
         <div className="text-sm font-bold text-ink">
-          Expenses total: <span className="text-ink">EUR {expenseTotal.toFixed(2)}</span>
+          {t("pd.expenseForm.total")} <span className="text-ink">EUR {expenseTotal.toFixed(2)}</span>
         </div>
         <button className="btn btn-primary" type="submit" disabled={pending || !expenseTypes.length}>
-          {pending ? "Saving…" : "Save expenses"}
+          {pending ? t("pd.expenseForm.saving") : t("pd.expenseForm.save")}
         </button>
       </div>
     </form>

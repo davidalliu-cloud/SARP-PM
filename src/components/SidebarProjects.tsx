@@ -3,11 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useT } from "@/components/LanguageProvider";
 
 type SidebarProject = { id: string; name: string; dotClass?: string; dotTitle?: string };
 type ProjectGroup = { key: string; label: string; projects: SidebarProject[] };
 
 export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
+  const t = useT();
   const pathname = usePathname();
   const isActive = (id: string) => {
     const base = `/projects/${id}`;
@@ -27,7 +29,7 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
   return (
     <div className="border-t border-line px-3 py-5">
       <div className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
-        Projects
+        {t("nav.projects")}
       </div>
       {groups.map((group) => {
         const isOpen = openKeys[group.key];
@@ -83,7 +85,7 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
                   })}
                 </div>
               ) : (
-                <div className="px-3 py-1 text-xs text-muted/60">None</div>
+                <div className="px-3 py-1 text-xs text-muted/60">{t("common.none")}</div>
               )
             ) : null}
           </div>

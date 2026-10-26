@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { updateOffer } from "@/app/actions";
 import { PageTitle } from "@/components/PageTitle";
 import { requireUser } from "@/lib/auth";
+import { getT } from "@/lib/i18n-server";
 import { canEditOffer } from "@/lib/offers";
 import { prisma } from "@/lib/prisma";
 import { OfferEditor } from "../../OfferEditor";
@@ -10,7 +11,7 @@ import { offerClientOptions, offerProductOptions, offerToEditorValues } from "..
 
 export default async function EditOfferPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const [user, offer, products, clients] = await Promise.all([
+  const [user, offer, products, clients, t] = await Promise.all([
     requireUser(),
     prisma.offer.findUnique({
       where: { id },
@@ -18,15 +19,16 @@ export default async function EditOfferPage({ params }: { params: Promise<{ id: 
     }),
     offerProductOptions(),
     offerClientOptions(),
+    getT(),
   ]);
   if (!offer) notFound();
 
   if (!canEditOffer(user, offer)) {
     return (
       <>
-        <PageTitle eyebrow={offer.code} title="Edit offer" />
+        <PageTitle eyebrow={offer.code} title={t("off.editOffer")} />
         <div className="panel p-5 font-bold text-lab-burgundy">
-          This offer can no longer be edited. <Link className="underline" href={`/offers/${offer.id}`}>Back to offer</Link>
+          {t("off.cannotEdit")} <Link className="underline" href={`/offers/${offer.id}`}>{t("off.backToOffer")}</Link>
         </div>
       </>
     );
@@ -34,8 +36,8 @@ export default async function EditOfferPage({ params }: { params: Promise<{ id: 
 
   return (
     <>
-      <PageTitle eyebrow={offer.code} title={`Edit · ${offer.projectName}`} />
-      <OfferEditor action={updateOffer} initial={offerToEditorValues(offer)} products={products} clients={clients} submitLabel="Save changes" />
+      <PageTitle eyebrow={offer.code} title={`${t("off.editPrefix")} · ${offer.projectName}`} />
+      <OfferEditor action={updateOffer} initial={offerToEditorValues(offer)} products={products} clients={clients} submitLabel={t("common.saveChanges")} />
     </>
   );
 }

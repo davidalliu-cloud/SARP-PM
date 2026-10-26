@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type { Dispatch, SetStateAction } from "react";
 import { deleteDailyRecord, updateDailyRecord } from "@/app/actions";
+import { useT } from "@/components/LanguageProvider";
 import { formatDate, formatNumber, money } from "@/lib/format";
 
 // Temporary review aid: FutureERP-synced records flagged as duplicates
@@ -119,6 +120,7 @@ export function DailyRecordsManager({
   employees: EmployeeOption[];
   expenseTypes: ExpenseTypeOption[];
 }) {
+  const t = useT();
   const [editingId, setEditingId] = useState<string | null>(null);
   const [query, setQuery] = useState("");
   const normalizedQuery = query.trim().toLowerCase();
@@ -140,7 +142,7 @@ export function DailyRecordsManager({
   if (!records.length) {
     return (
       <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-sm font-bold text-muted">
-        No daily records saved for this project yet.
+        {t("pd.daily.emptyNone")}
       </div>
     );
   }
@@ -148,10 +150,10 @@ export function DailyRecordsManager({
   return (
     <div className="grid gap-3">
       <label>
-        Search daily records
-        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Date, product, employee, expense, or note" />
+        {t("pd.daily.searchLabel")}
+        <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("pd.daily.searchPlaceholder")} />
       </label>
-      <div className="text-xs font-bold text-muted">Showing {filteredRecords.length} of {records.length} records</div>
+      <div className="text-xs font-bold text-muted">{t("pd.daily.showing", { shown: filteredRecords.length, total: records.length })}</div>
       <div className="grid gap-3">
         {filteredRecords.map((record) => {
           const productCost = productTotal(record.productItems);
@@ -176,31 +178,31 @@ export function DailyRecordsManager({
                   <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold text-muted">
                     {record.clientName ? <span>{record.clientName}</span> : null}
                     {record.completedAreaM2 > 0 ? <span>{formatNumber(record.completedAreaM2)} m²</span> : null}
-                    {isDuplicate ? <span className="rounded-full bg-[#f6d9d5] px-2 py-0.5 font-bold text-[#c0362c]">Possible duplicate</span> : null}
+                    {isDuplicate ? <span className="rounded-full bg-[#f6d9d5] px-2 py-0.5 font-bold text-[#c0362c]">{t("pd.daily.possibleDuplicate")}</span> : null}
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <div className="text-lg font-bold text-ink">{money(total)}</div>
                     <div className="text-[11px] font-semibold text-muted">
-                      Products {money(productCost)} · Labour {money(labourCost)} · Expenses {money(expenses)}
+                      {t("pd.daily.costBreakdown", { products: money(productCost), labour: money(labourCost), expenses: money(expenses) })}
                     </div>
                   </div>
                   <div className="flex shrink-0 gap-2">
                     <button className="btn btn-small btn-edit" type="button" onClick={() => setEditingId(isEditing ? null : record.id)}>
-                      {isEditing ? "Cancel" : "Edit"}
+                      {isEditing ? t("common.cancel") : t("common.edit")}
                     </button>
                     <form
                       action={deleteDailyRecord}
                       onSubmit={(event) => {
-                        if (!window.confirm(`Delete daily record from ${displayDate(record.date)}? This cannot be undone.`)) {
+                        if (!window.confirm(t("pd.daily.confirmDelete", { date: displayDate(record.date) }))) {
                           event.preventDefault();
                         }
                       }}
                     >
                       <input type="hidden" name="recordId" value={record.id} />
                       <input type="hidden" name="projectId" value={projectId} />
-                      <button className="btn btn-small btn-delete" type="submit">Delete</button>
+                      <button className="btn btn-small btn-delete" type="submit">{t("common.delete")}</button>
                     </form>
                   </div>
                 </div>
@@ -208,22 +210,22 @@ export function DailyRecordsManager({
 
               <div className="mt-3 grid gap-3 border-t border-line pt-3 sm:grid-cols-3">
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Products</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{t("pd.daily.products")}</div>
                   <div className="mt-1 break-words text-sm text-ink">{productsText || "—"}</div>
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Labour</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{t("pd.daily.labour")}</div>
                   <div className="mt-1 break-words text-sm text-ink">{labourText || "—"}</div>
                 </div>
                 <div className="min-w-0">
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">Expenses</div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted">{t("pd.daily.expenses")}</div>
                   <div className="mt-1 break-words text-sm text-ink">{expensesText || "—"}</div>
                 </div>
               </div>
 
               {record.notes ? (
                 <div className="mt-3 break-words text-sm text-muted">
-                  <span className="font-semibold text-ink">Note: </span>
+                  <span className="font-semibold text-ink">{t("pd.daily.notePrefix")}</span>
                   {record.notes}
                 </div>
               ) : null}
@@ -245,7 +247,7 @@ export function DailyRecordsManager({
         })}
         {!filteredRecords.length ? (
           <div className="rounded-lg border border-dashed border-[#c5cdd6] bg-[#f1f3f5] p-4 text-center text-sm font-bold text-muted">
-            No daily records match your search.
+            {t("pd.daily.noMatch")}
           </div>
         ) : null}
       </div>
@@ -268,6 +270,7 @@ function DailyRecordEditForm({
   onCancel: () => void;
   onSaved: () => void;
 }) {
+  const t = useT();
   const [productRows, setProductRows] = useState<ProductRow[]>(
     record.productItems.length ? record.productItems : [{ id: `p-${record.id}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: productCost(products[0]) }]
   );
@@ -295,20 +298,20 @@ function DailyRecordEditForm({
       <input type="hidden" name="projectId" value={record.projectId} />
       <div className="grid gap-3 md:grid-cols-[220px_220px_1fr_1fr]">
         <label>
-          Date
+          {t("common.date")}
           <input name="date" type="date" required defaultValue={dateInputValue(record.date)} />
         </label>
         <label>
-          Completed area m2
+          {t("pd.daily.completedAreaM2")}
           <input name="completedAreaM2" type="number" min="0" step="0.01" defaultValue={record.completedAreaM2} />
         </label>
         <label>
-          Client
-          <input name="clientName" defaultValue={record.clientName} placeholder="Project's default client" />
+          {t("pd.daily.client")}
+          <input name="clientName" defaultValue={record.clientName} placeholder={t("pd.daily.clientPlaceholder")} />
         </label>
         <label>
-          Notes
-          <input name="notes" defaultValue={record.notes} placeholder="Site progress, issues, weather, scope notes" />
+          {t("common.notes")}
+          <input name="notes" defaultValue={record.notes} placeholder={t("pd.daily.notesPlaceholder")} />
         </label>
       </div>
 
@@ -318,11 +321,11 @@ function DailyRecordEditForm({
 
       <div className="flex flex-col gap-3 border-t border-[#d7e1e5] pt-4 md:flex-row md:items-center md:justify-between">
         <div className="text-sm font-bold text-ink">
-          Updated daily total: <span className="text-ink">{money(total)}</span>
+          {t("pd.daily.updatedDailyTotal")} <span className="text-ink">{money(total)}</span>
         </div>
         <div className="flex gap-2">
-          <button className="btn btn-small btn-secondary" type="button" onClick={onCancel}>Cancel</button>
-          <button className="btn btn-small btn-save" type="submit">Save changes</button>
+          <button className="btn btn-small btn-secondary" type="button" onClick={onCancel}>{t("common.cancel")}</button>
+          <button className="btn btn-small btn-save" type="submit">{t("common.saveChanges")}</button>
         </div>
       </div>
     </form>
@@ -340,19 +343,20 @@ function EditableProductRows({
   products: ProductOption[];
   setProductRows: Dispatch<SetStateAction<ProductRow[]>>;
 }) {
+  const t = useT();
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-bold">Products used</h3>
+        <h3 className="font-bold">{t("pd.daily.productsUsed")}</h3>
         <button className="btn btn-small btn-secondary" type="button" onClick={() => setProductRows((rows) => [...rows, { id: `p-${Date.now()}`, productId: products[0]?.id ?? "", productName: products[0]?.name ?? "", unit: products[0]?.unit ?? "", quantity: 1, costPerUnit: productCost(products[0]) }])}>
-          Add product row
+          {t("pd.daily.addProductRow")}
         </button>
       </div>
       <div className="grid gap-3">
         {productRows.map((row, index) => (
           <div key={row.id} className="grid gap-3 md:grid-cols-[1.5fr_0.7fr_0.8fr_0.8fr_auto]">
             <label>
-              Product
+              {t("pd.daily.product")}
               <select
                 name="productId"
                 value={row.productId}
@@ -365,19 +369,19 @@ function EditableProductRows({
               </select>
             </label>
             <label>
-              Quantity
+              {t("common.quantity")}
               <input name="productQuantity" type="number" min="0" step="0.01" value={row.quantity} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, quantity: Number(event.target.value) } : item))} />
             </label>
             <label>
-              Cost per unit
+              {t("pd.daily.costPerUnit")}
               <input name="productCostPerUnit" type="number" min="0" step="0.01" value={row.costPerUnit} onChange={(event) => setProductRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, costPerUnit: Number(event.target.value) } : item))} />
             </label>
             <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-              <div className="text-xs font-bold uppercase text-muted">Line total</div>
+              <div className="text-xs font-bold uppercase text-muted">{t("pd.daily.lineTotal")}</div>
               <div className="font-bold">{money(row.quantity * row.costPerUnit)}</div>
             </div>
             <div className="grid content-end">
-              <button className="btn btn-small btn-delete" type="button" onClick={() => setProductRows((rows) => rows.filter((item) => item.id !== row.id))}>Delete</button>
+              <button className="btn btn-small btn-delete" type="button" onClick={() => setProductRows((rows) => rows.filter((item) => item.id !== row.id))}>{t("common.delete")}</button>
             </div>
           </div>
         ))}
@@ -397,19 +401,20 @@ function EditableLabourRows({
   employees: EmployeeOption[];
   setLabourRows: Dispatch<SetStateAction<LabourRow[]>>;
 }) {
+  const t = useT();
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-bold">Employees worked</h3>
+        <h3 className="font-bold">{t("pd.daily.employeesWorked")}</h3>
         <button className="btn btn-small btn-secondary" type="button" onClick={() => setLabourRows((rows) => [...rows, { id: `l-${Date.now()}`, labourType: "employee", employeeId: employees[0]?.id ?? "", employeeName: employees[0]?.name ?? "", externalTeamName: "", ratePerSquareMeter: 0, squareMeters: 0, dailyWage: employees[0]?.defaultDailyWage ?? 0 }])}>
-          Add labour row
+          {t("pd.daily.addLabourRow")}
         </button>
       </div>
       <div className="grid gap-3">
         {labourRows.map((row, index) => (
           <div key={row.id} className="grid gap-3 md:grid-cols-[0.75fr_1.3fr_0.8fr_0.8fr_0.8fr_auto]">
             <label>
-              Type
+              {t("pd.daily.type")}
               <select
                 name="labourType"
                 value={row.labourType}
@@ -418,16 +423,16 @@ function EditableLabourRows({
                   setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, labourType } : item));
                 }}
               >
-                <option value="employee">Employee</option>
-                <option value="external">External m2 team</option>
+                <option value="employee">{t("pd.daily.employee")}</option>
+                <option value="external">{t("pd.daily.externalTeamOption")}</option>
               </select>
             </label>
             <label>
-              {row.labourType === "external" ? "External team" : "Employee"}
+              {row.labourType === "external" ? t("pd.daily.externalTeam") : t("pd.daily.employee")}
               {row.labourType === "external" ? (
                 <>
                   <input type="hidden" name="employeeId" value="" />
-                  <input name="externalTeamName" value={row.externalTeamName} placeholder="External waterproofing team" onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, externalTeamName: event.target.value } : item))} />
+                  <input name="externalTeamName" value={row.externalTeamName} placeholder={t("pd.daily.externalTeamPlaceholder")} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, externalTeamName: event.target.value } : item))} />
                 </>
               ) : (
                 <>
@@ -447,21 +452,21 @@ function EditableLabourRows({
               <input type="hidden" name="employeeName" value={row.labourType === "external" ? "" : row.employeeName} />
             </label>
             <label>
-              {row.labourType === "external" ? "Rate / m2" : "Daily wage"}
+              {row.labourType === "external" ? t("pd.daily.ratePerM2") : t("pd.daily.dailyWage")}
               <input name={row.labourType === "external" ? "ratePerSquareMeter" : "dailyWage"} type="number" min="0" step="0.01" value={row.labourType === "external" ? row.ratePerSquareMeter : row.dailyWage} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? row.labourType === "external" ? { ...item, ratePerSquareMeter: Number(event.target.value) } : { ...item, dailyWage: Number(event.target.value) } : item))} />
               {row.labourType === "external" ? <input type="hidden" name="dailyWage" value="0" /> : <input type="hidden" name="ratePerSquareMeter" value="0" />}
             </label>
             <label>
-              m2 done
+              {t("pd.daily.m2Done")}
               <input name="squareMeters" type="number" min="0" step="0.01" value={row.squareMeters} disabled={row.labourType !== "external"} onChange={(event) => setLabourRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, squareMeters: Number(event.target.value) } : item))} />
               {row.labourType !== "external" ? <input type="hidden" name="squareMeters" value="0" /> : null}
             </label>
             <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-              <div className="text-xs font-bold uppercase text-muted">Line total</div>
+              <div className="text-xs font-bold uppercase text-muted">{t("pd.daily.lineTotal")}</div>
               <div className="font-bold">{money(row.labourType === "external" ? row.ratePerSquareMeter * row.squareMeters : row.dailyWage)}</div>
             </div>
             <div className="grid content-end">
-              <button className="btn btn-small btn-delete" type="button" onClick={() => setLabourRows((rows) => rows.filter((item) => item.id !== row.id))}>Delete</button>
+              <button className="btn btn-small btn-delete" type="button" onClick={() => setLabourRows((rows) => rows.filter((item) => item.id !== row.id))}>{t("common.delete")}</button>
             </div>
           </div>
         ))}
@@ -481,19 +486,20 @@ function EditableExpenseRows({
   expenseTypes: ExpenseTypeOption[];
   setExpenseRows: Dispatch<SetStateAction<ExpenseRow[]>>;
 }) {
+  const t = useT();
   return (
     <div>
       <div className="mb-3 flex items-center justify-between">
-        <h3 className="font-bold">Expenses</h3>
+        <h3 className="font-bold">{t("pd.daily.expenses")}</h3>
         <button className="btn btn-small btn-secondary" type="button" onClick={() => setExpenseRows((rows) => [...rows, { id: `e-${Date.now()}`, expenseTypeId: expenseTypes[0]?.id ?? "", category: expenseTypes[0]?.name ?? "", description: "", amount: expenseTypes[0]?.defaultAmount ?? 0 }])}>
-          Add expense row
+          {t("pd.daily.addExpenseRow")}
         </button>
       </div>
       <div className="grid gap-3">
         {expenseRows.map((row, index) => (
           <div key={row.id} className="grid gap-3 md:grid-cols-[1fr_1.4fr_0.8fr_0.8fr_auto]">
             <label>
-              Expense type
+              {t("pd.daily.expenseType")}
               <select
                 name="expenseTypeId"
                 value={row.expenseTypeId}
@@ -507,19 +513,19 @@ function EditableExpenseRows({
               <input type="hidden" name="expenseCategory" value={expenseTypeMap.get(row.expenseTypeId)?.name ?? row.category} />
             </label>
             <label>
-              Description
-              <input name="expenseDescription" value={row.description} placeholder="Lunch, overtime, tools, parking" onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, description: event.target.value } : item))} />
+              {t("pd.daily.description")}
+              <input name="expenseDescription" value={row.description} placeholder={t("pd.daily.expenseDescPlaceholder")} onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, description: event.target.value } : item))} />
             </label>
             <label>
-              Amount
+              {t("common.amount")}
               <input name="expenseAmount" type="number" min="0" step="0.01" value={row.amount} onChange={(event) => setExpenseRows((rows) => rows.map((item, itemIndex) => itemIndex === index ? { ...item, amount: Number(event.target.value) } : item))} />
             </label>
             <div className="grid content-end rounded-lg border border-[#d7e1e5] bg-[#f1f3f5] px-3 py-2">
-              <div className="text-xs font-bold uppercase text-muted">Line total</div>
+              <div className="text-xs font-bold uppercase text-muted">{t("pd.daily.lineTotal")}</div>
               <div className="font-bold">{money(row.amount)}</div>
             </div>
             <div className="grid content-end">
-              <button className="btn btn-small btn-delete" type="button" onClick={() => setExpenseRows((rows) => rows.filter((item) => item.id !== row.id))}>Delete</button>
+              <button className="btn btn-small btn-delete" type="button" onClick={() => setExpenseRows((rows) => rows.filter((item) => item.id !== row.id))}>{t("common.delete")}</button>
             </div>
           </div>
         ))}

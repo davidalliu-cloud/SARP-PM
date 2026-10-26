@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { requireUser } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
+import { getT } from "@/lib/i18n-server";
 import { offerMoney, offerTotals, sectionTotals } from "@/lib/offer-calc";
 import { prisma } from "@/lib/prisma";
 import { PrintButton } from "./PrintButton";
@@ -9,6 +10,7 @@ import { PrintButton } from "./PrintButton";
 export default async function PrintOfferPage({ params }: { params: Promise<{ id: string }> }) {
   await requireUser();
   const { id } = await params;
+  const t = await getT();
   const offer = await prisma.offer.findUnique({
     where: { id },
     include: {
@@ -22,16 +24,16 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
   const money = (value: number) => offerMoney(value, offer.currency);
   const isDraft = offer.status === "DRAFT" || offer.status === "PENDING_APPROVAL";
   const terms = [
-    ["Kushtet e pagesës", offer.paymentTerms],
-    [offer.type === "WORKS" ? "Afati i ekzekutimit" : "Koha e dorëzimit", offer.executionTerms],
-    ["Garancia", offer.warrantyTerms],
-    ["Përjashtime", offer.exclusions],
+    [t("off.printPaymentTerms"), offer.paymentTerms],
+    [offer.type === "WORKS" ? t("off.printExecutionDeadline") : t("off.printDeliveryTime"), offer.executionTerms],
+    [t("off.printWarranty"), offer.warrantyTerms],
+    [t("off.printExclusions"), offer.exclusions],
   ].filter(([, value]) => value);
 
   return (
     <div className="offer-doc mx-auto max-w-[210mm] bg-white p-10 text-[13px] leading-relaxed text-ink">
       <div className="no-print mb-6 flex items-center justify-between rounded-lg border border-line bg-lab-porcelain p-3 text-sm">
-        <span>{isDraft ? "Draft — not yet approved for sending." : "Use your browser's print dialog and choose “Save as PDF”."}</span>
+        <span>{isDraft ? t("off.printDraftNotice") : t("off.printHint")}</span>
         <PrintButton />
       </div>
 
@@ -46,12 +48,12 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
         </div>
       </header>
 
-      <h1 className="mt-6 text-2xl font-bold">{offer.type === "WORKS" ? "Ofertë Punimesh" : "Ofertë Produktesh"}</h1>
+      <h1 className="mt-6 text-2xl font-bold">{offer.type === "WORKS" ? t("off.printTitleWorks") : t("off.printTitleProducts")}</h1>
       <table className="meta mt-3">
         <tbody>
-          <tr><td>Kodi i ofertës</td><td><strong>{offer.code}</strong></td><td>Data</td><td>{formatDate(offer.issueDate)}</td></tr>
-          <tr><td>Klienti</td><td><strong>{offer.clientName}</strong></td><td>Vlefshmëria</td><td>deri më {formatDate(offer.validUntil)}</td></tr>
-          <tr><td>Projekti</td><td colSpan={offer.siteAddress ? 1 : 3}>{offer.projectName}</td>{offer.siteAddress ? <><td>Adresa</td><td>{offer.siteAddress}</td></> : null}</tr>
+          <tr><td>{t("off.printCode")}</td><td><strong>{offer.code}</strong></td><td>{t("off.printDate")}</td><td>{formatDate(offer.issueDate)}</td></tr>
+          <tr><td>{t("off.printClient")}</td><td><strong>{offer.clientName}</strong></td><td>{t("off.printValidity")}</td><td>{t("off.printUntil", { date: formatDate(offer.validUntil) })}</td></tr>
+          <tr><td>{t("off.printProject")}</td><td colSpan={offer.siteAddress ? 1 : 3}>{offer.projectName}</td>{offer.siteAddress ? <><td>{t("off.printAddress")}</td><td>{offer.siteAddress}</td></> : null}</tr>
         </tbody>
       </table>
 
@@ -63,19 +65,19 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
             <h2 className="text-base font-bold">
               {index + 1}. {section.title}
               {section.zone ? <span className="font-normal text-muted"> — {section.zone}</span> : null}
-              {section.isOption ? <span className="ml-2 text-xs font-semibold uppercase text-lab-burgundy">Opsion alternativ</span> : null}
+              {section.isOption ? <span className="ml-2 text-xs font-semibold uppercase text-lab-burgundy">{t("off.printAltOption")}</span> : null}
             </h2>
             {section.description ? <p className="mt-1 whitespace-pre-line">{section.description}</p> : null}
             <table className="items mt-2">
               <thead>
                 <tr>
-                  <th>Nr.</th>
-                  <th>Zëri i punës</th>
-                  <th>Produkti</th>
-                  <th>Njësia</th>
-                  <th className="num">{perM2 ? "Konsumi / m²" : "Sasia"}</th>
-                  <th className="num">Çmimi / njësi (pa TVSH)</th>
-                  <th className="num">{perM2 ? "Vlera / m²" : "Vlera"}</th>
+                  <th>{t("off.printNr")}</th>
+                  <th>{t("off.colWorkItem")}</th>
+                  <th>{t("off.colProduct")}</th>
+                  <th>{t("common.unit")}</th>
+                  <th className="num">{perM2 ? t("off.colConsumptionPerM2") : t("common.quantity")}</th>
+                  <th className="num">{t("off.printPricePerUnit")}</th>
+                  <th className="num">{perM2 ? t("off.colValuePerM2") : t("off.printValue")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -93,12 +95,12 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
               </tbody>
               <tfoot>
                 {perM2 ? (
-                  <tr><td colSpan={6}>Vlera për 1 m² (pa TVSH)</td><td className="num">{money(subtotal.ratePrice)}</td></tr>
+                  <tr><td colSpan={6}>{t("off.printValuePerM2Excl")}</td><td className="num">{money(subtotal.ratePrice)}</td></tr>
                 ) : null}
                 {perM2 && section.areaM2 ? (
-                  <tr><td colSpan={6}>Sipërfaqja {section.areaM2} m² × {money(subtotal.ratePrice)}</td><td className="num">{money(subtotal.total)}</td></tr>
+                  <tr><td colSpan={6}>{t("off.printAreaTimes", { area: section.areaM2, rate: money(subtotal.ratePrice) })}</td><td className="num">{money(subtotal.total)}</td></tr>
                 ) : null}
-                {!perM2 ? <tr><td colSpan={6}>Totali i seksionit (pa TVSH)</td><td className="num">{money(subtotal.total)}</td></tr> : null}
+                {!perM2 ? <tr><td colSpan={6}>{t("off.printSectionTotal")}</td><td className="num">{money(subtotal.total)}</td></tr> : null}
               </tfoot>
             </table>
           </section>
@@ -107,20 +109,20 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
 
       <table className="totals avoid-break ml-auto mt-6 w-80">
         <tbody>
-          <tr><td>Totali (pa TVSH)</td><td className="num">{money(totals.subtotal)}</td></tr>
-          {totals.discount ? <tr><td>Zbritje {offer.discountPct}%</td><td className="num">−{money(totals.discount)}</td></tr> : null}
-          {totals.discount ? <tr><td>Totali pas zbritjes</td><td className="num">{money(totals.net)}</td></tr> : null}
-          <tr><td>TVSH {offer.vatRate}%</td><td className="num">{money(totals.vat)}</td></tr>
-          <tr className="grand"><td>TOTALI ME TVSH</td><td className="num">{money(totals.total)}</td></tr>
+          <tr><td>{t("off.printSubtotal")}</td><td className="num">{money(totals.subtotal)}</td></tr>
+          {totals.discount ? <tr><td>{t("off.printDiscount", { pct: offer.discountPct })}</td><td className="num">−{money(totals.discount)}</td></tr> : null}
+          {totals.discount ? <tr><td>{t("off.printAfterDiscount")}</td><td className="num">{money(totals.net)}</td></tr> : null}
+          <tr><td>{t("off.printVat", { rate: offer.vatRate })}</td><td className="num">{money(totals.vat)}</td></tr>
+          <tr className="grand"><td>{t("off.printGrandTotal")}</td><td className="num">{money(totals.total)}</td></tr>
         </tbody>
       </table>
       {offer.sections.some((section) => section.isOption) ? (
-        <p className="mt-2 text-right text-xs text-muted">Opsionet alternative nuk përfshihen në total.</p>
+        <p className="mt-2 text-right text-xs text-muted">{t("off.printAltNote")}</p>
       ) : null}
 
       {terms.length ? (
         <section className="avoid-break mt-8">
-          <h2 className="text-base font-bold">Kushtet</h2>
+          <h2 className="text-base font-bold">{t("off.printTermsHeading")}</h2>
           <dl className="mt-2 grid gap-2">
             {terms.map(([label, value]) => (
               <div key={label}>
@@ -134,12 +136,12 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
 
       <footer className="avoid-break mt-12 flex justify-between text-sm">
         <div>
-          <div className="text-muted">Për SARP &amp; LAB sh.p.k.</div>
-          <div className="mt-10 border-t border-ink pt-1">Administratori · David Alliu</div>
+          <div className="text-muted">{t("off.printForCompany")}</div>
+          <div className="mt-10 border-t border-ink pt-1">{t("off.printAdminTitle")} · David Alliu</div>
         </div>
         <div>
-          <div className="text-muted">Pranuar nga klienti</div>
-          <div className="mt-10 w-56 border-t border-ink pt-1">Emri, firma, data</div>
+          <div className="text-muted">{t("off.printAcceptedByClient")}</div>
+          <div className="mt-10 w-56 border-t border-ink pt-1">{t("off.printNameSignatureDate")}</div>
         </div>
       </footer>
     </div>

@@ -66,7 +66,7 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
   const projectsWithDot = projects.map((project) => {
     const totals = projectTotals(project.dailyRecords, project.invoices);
     const attention = projectAttention(project, totals);
-    return { id: project.id, name: project.name, status: project.status, dotClass: attentionDotClass(attention.level), dotTitle: attention.label };
+    return { id: project.id, name: project.name, status: project.status, dotClass: attentionDotClass(attention.level), dotTitle: t(attention.labelKey) };
   });
   const projectGroups = projectGroupDefs
     .map((group) => ({

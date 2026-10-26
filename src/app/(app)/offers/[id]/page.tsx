@@ -5,13 +5,13 @@ import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
 import { requireUser } from "@/lib/auth";
 import { formatDate } from "@/lib/format";
+import { getT } from "@/lib/i18n-server";
 import { offerMoney, offerTotals, sectionTotals } from "@/lib/offer-calc";
 import {
   availableOfferActions,
   canApproveOffers,
   canEditOffer,
   isOfferExpired,
-  offerActionLabel,
   offerStatusMeta,
   type OfferAction,
 } from "@/lib/offers";
@@ -29,14 +29,15 @@ const actionStyle: Record<OfferAction, string> = {
 };
 
 // Actions that take a free-text note (review feedback, lost reason).
-const commentPrompt: Partial<Record<OfferAction, string>> = {
-  approve: "Note for the author (optional)",
-  request_changes: "What needs to change?",
-  mark_lost: "Why was it lost? (price, competitor, timing…)",
+const commentPromptKey: Partial<Record<OfferAction, string>> = {
+  approve: "off.comment.approve",
+  request_changes: "off.comment.request_changes",
+  mark_lost: "off.comment.mark_lost",
 };
 
 export default async function OfferDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+  const t = await getT();
   const [user, offer] = await Promise.all([
     requireUser(),
     prisma.offer.findUnique({
@@ -60,13 +61,13 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
 
   return (
     <>
-      <PageTitle eyebrow={`${offer.code} · ${offer.type === "WORKS" ? "Oferta Punimeve" : "Oferta Produkteve"}`} title={offer.projectName}>
+      <PageTitle eyebrow={`${offer.code} · ${offer.type === "WORKS" ? t("off.typeWorksName") : t("off.typeProductsName")}`} title={offer.projectName}>
         <div className="flex flex-wrap gap-2">
-          {canEditOffer(user, offer) ? <Link href={`/offers/${offer.id}/edit`} className="btn btn-secondary">Edit</Link> : null}
-          <Link href={`/print/offers/${offer.id}`} className="btn btn-secondary" target="_blank">Print / PDF</Link>
+          {canEditOffer(user, offer) ? <Link href={`/offers/${offer.id}/edit`} className="btn btn-secondary">{t("common.edit")}</Link> : null}
+          <Link href={`/print/offers/${offer.id}`} className="btn btn-secondary" target="_blank">{t("off.printPdf")}</Link>
           <form action={duplicateOffer}>
             <input type="hidden" name="id" value={offer.id} />
-            <button className="btn btn-secondary" type="submit">Duplicate / revise</button>
+            <button className="btn btn-secondary" type="submit">{t("off.duplicate")}</button>
           </form>
         </div>
       </PageTitle>
@@ -74,26 +75,26 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
       <section className="panel mb-6 flex flex-col gap-4 p-5 lg:flex-row lg:items-start lg:justify-between">
         <div className="grid gap-1 text-sm">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={meta.className}>{meta.label}</span>
-            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{meta.albanian}</span>
-            {expired ? <span className="status status-on-hold">Validity expired</span> : null}
+            <span className={meta.className}>{t(`off.status.${offer.status}`)}</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted">{t(`off.statusSub.${offer.status}`)}</span>
+            {expired ? <span className="status status-on-hold">{t("off.validityExpired")}</span> : null}
           </div>
-          <div className="mt-2"><strong>Client:</strong> {offer.clientName}{offer.siteAddress ? ` · ${offer.siteAddress}` : ""}</div>
-          <div><strong>Issued:</strong> {formatDate(offer.issueDate)} · <strong>Valid until:</strong> {formatDate(offer.validUntil)}</div>
+          <div className="mt-2"><strong>{t("off.metaClient")}:</strong> {offer.clientName}{offer.siteAddress ? ` · ${offer.siteAddress}` : ""}</div>
+          <div><strong>{t("off.metaIssued")}:</strong> {formatDate(offer.issueDate)} · <strong>{t("off.metaValidUntil")}:</strong> {formatDate(offer.validUntil)}</div>
           <div>
-            <strong>Prepared by:</strong> {offer.createdBy.name}
-            {offer.approvedBy && offer.approvedAt ? <> · <strong>Approved by:</strong> {offer.approvedBy.name} on {formatDate(offer.approvedAt)}</> : null}
+            <strong>{t("off.metaPreparedBy")}:</strong> {offer.createdBy.name}
+            {offer.approvedBy && offer.approvedAt ? <> · <strong>{t("off.metaApprovedBy")}:</strong> {offer.approvedBy.name} {t("off.onConnector")} {formatDate(offer.approvedAt)}</> : null}
           </div>
           {offer.project ? (
             <div className="mt-2">
-              <strong>Project:</strong>{" "}
+              <strong>{t("off.metaProject")}:</strong>{" "}
               <Link href={`/projects/${offer.project.id}`} className="font-bold text-lab-burgundy underline">{offer.project.name} →</Link>
             </div>
           ) : null}
           {offer.reviewComment ? (
-            <div className="mt-3 rounded-lg border border-[#ffe0a6] bg-[#fff3de] p-3 text-[#7a5414]"><strong>Review note:</strong> {offer.reviewComment}</div>
+            <div className="mt-3 rounded-lg border border-[#ffe0a6] bg-[#fff3de] p-3 text-[#7a5414]"><strong>{t("off.reviewNote")}:</strong> {offer.reviewComment}</div>
           ) : null}
-          {offer.lostReason ? <div className="mt-3 rounded-lg bg-[#fdeef2] p-3 text-lab-burgundy"><strong>Lost reason:</strong> {offer.lostReason}</div> : null}
+          {offer.lostReason ? <div className="mt-3 rounded-lg bg-[#fdeef2] p-3 text-lab-burgundy"><strong>{t("off.lostReasonLabel")}:</strong> {offer.lostReason}</div> : null}
         </div>
 
         <div className="grid gap-3 lg:w-[380px]">
@@ -101,32 +102,32 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
             <form key={action} action={changeOfferStatus} className="grid gap-2">
               <input type="hidden" name="id" value={offer.id} />
               <input type="hidden" name="action" value={action} />
-              {commentPrompt[action] ? (
-                <textarea name="comment" rows={2} placeholder={commentPrompt[action]} required={action !== "approve"} />
+              {commentPromptKey[action] ? (
+                <textarea name="comment" rows={2} placeholder={t(commentPromptKey[action]!)} required={action !== "approve"} />
               ) : null}
-              <button className={`btn ${actionStyle[action]}`} type="submit">{offerActionLabel(action)}</button>
+              <button className={`btn ${actionStyle[action]}`} type="submit">{t(`off.action.${action}`)}</button>
             </form>
           ))}
           {offer.status === "PENDING_APPROVAL" && !canApproveOffers(user) ? (
-            <div className="text-sm font-semibold text-muted">Waiting for an admin to approve this offer.</div>
+            <div className="text-sm font-semibold text-muted">{t("off.waitingAdminApprove")}</div>
           ) : null}
           {(offer.status === "DRAFT" && offer.createdById === user.id) || canApproveOffers(user) ? (
             <form action={deleteOffer}>
               <input type="hidden" name="id" value={offer.id} />
-              <button className="btn btn-small btn-delete" type="submit">Delete offer</button>
+              <button className="btn btn-small btn-delete" type="submit">{t("off.deleteOffer")}</button>
             </form>
           ) : null}
         </div>
       </section>
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Net (pa TVSH)" value={money(totals.net)} detail={totals.discount ? `after ${offer.discountPct}% discount` : "before VAT"} tone="blue" />
-        <StatCard label={`Total with VAT ${offer.vatRate}%`} value={money(totals.total)} detail={`VAT ${money(totals.vat)}`} />
-        <StatCard label="Internal cost" value={money(totals.cost)} detail="Not shown to client" tone="amber" />
+        <StatCard label={t("off.statNet")} value={money(totals.net)} detail={totals.discount ? t("off.afterDiscount", { pct: offer.discountPct }) : t("off.beforeVat")} tone="blue" />
+        <StatCard label={t("off.statTotalWithVat", { rate: offer.vatRate })} value={money(totals.total)} detail={t("off.vatAmount", { amount: money(totals.vat) })} />
+        <StatCard label={t("off.statInternalCost")} value={money(totals.cost)} detail={t("off.notShownToClient")} tone="amber" />
         <StatCard
-          label="Margin"
+          label={t("off.statMargin")}
           value={totals.cost > 0 ? `${totals.margin.toFixed(1)}%` : "-"}
-          detail={totals.cost > 0 ? `Profit ${money(totals.profit)}` : "Add unit costs to see margin"}
+          detail={totals.cost > 0 ? t("off.profitAmount", { amount: money(totals.profit) }) : t("off.addUnitCosts")}
           tone={totals.margin >= 25 ? "green" : totals.margin >= 10 ? "blue" : "maroon"}
         />
       </section>
@@ -139,7 +140,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
             <div className="flex flex-col gap-1 border-b border-line p-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-lab-burgundy">
-                  {section.zone || "Section"}{section.isOption ? " · Alternative option (not in total)" : ""}
+                  {section.zone || t("off.sectionFallback")}{section.isOption ? ` · ${t("off.altOptionNotInTotal")}` : ""}
                 </div>
                 <h2 className="text-lg font-bold">{section.title}</h2>
                 {section.description ? <p className="mt-1 max-w-3xl text-sm text-muted">{section.description}</p> : null}
@@ -153,20 +154,20 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
               <table>
                 <thead>
                   <tr>
-                    <th>Zëri i punës</th>
-                    <th>Produkti</th>
-                    <th>Unit</th>
-                    <th>{perM2 ? "Cons. / m²" : "Qty"}</th>
-                    <th>Price / unit</th>
-                    <th>{perM2 ? "Value / m²" : "Total"}</th>
-                    <th>Cost / unit</th>
-                    <th>Margin</th>
+                    <th>{t("off.colWorkItem")}</th>
+                    <th>{t("off.colProduct")}</th>
+                    <th>{t("common.unit")}</th>
+                    <th>{perM2 ? t("off.colConsPerM2") : t("off.colQty")}</th>
+                    <th>{t("off.colPricePerUnit")}</th>
+                    <th>{perM2 ? t("off.colValuePerM2") : t("common.total")}</th>
+                    <th>{t("off.colCostPerUnit")}</th>
+                    <th>{t("off.colMargin")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {section.items.map((item) => (
                     <tr key={item.id}>
-                      <td>{item.description}{item.kind === "LABOUR" ? <span className="ml-2 text-xs text-muted">labour</span> : null}</td>
+                      <td>{item.description}{item.kind === "LABOUR" ? <span className="ml-2 text-xs text-muted">{t("off.labourTag")}</span> : null}</td>
                       <td>{item.productName || "-"}</td>
                       <td>{item.unit}</td>
                       <td>{item.quantity}</td>
@@ -184,17 +185,17 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
       })}
 
       {offer.internalNotes ? (
-        <section className="panel mt-6 p-5 text-sm"><strong>Internal notes:</strong> {offer.internalNotes}</section>
+        <section className="panel mt-6 p-5 text-sm"><strong>{t("off.internalNotesLabel")}:</strong> {offer.internalNotes}</section>
       ) : null}
 
       <section className="panel mt-6 p-5">
-        <h2 className="mb-3 text-lg font-bold">History</h2>
+        <h2 className="mb-3 text-lg font-bold">{t("off.history")}</h2>
         <ol className="grid gap-2 text-sm">
           {offer.events.map((event) => (
             <li key={event.id} className="flex flex-wrap gap-2">
               <span className="text-muted">{formatDate(event.createdAt)}</span>
               <strong>{event.action}</strong>
-              <span>by {event.user?.name ?? "deleted user"}</span>
+              <span>{t("off.byUser", { name: event.user?.name ?? t("off.deletedUser") })}</span>
               {event.comment ? <span className="text-muted">— {event.comment}</span> : null}
             </li>
           ))}

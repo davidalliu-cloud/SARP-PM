@@ -71,19 +71,19 @@ export function projectAttention(project: AttentionProject, totals: ReturnType<t
   const hasOverdue = unpaid.some((invoice) => daysUntil(invoiceDueDate(invoice.invoiceDate, invoice.dueDate)) < 0);
 
   if (budget.isOverBudget) {
-    return { label: "Over budget", className: "status status-on-hold", rank: 1, level: "critical" as AttentionLevel };
+    return { label: "Over budget", labelKey: "attention.overBudget", className: "status status-on-hold", rank: 1, level: "critical" as AttentionLevel };
   }
   if (totals.invoiced > 0 && target > 0 && costRecovery >= 0.85 && totals.margin < target) {
-    return { label: "Below target margin", className: "status status-risk", rank: 2, level: "risk" as AttentionLevel };
+    return { label: "Below target margin", labelKey: "attention.belowTargetMargin", className: "status status-risk", rank: 2, level: "risk" as AttentionLevel };
   }
   if (hasOverdue) {
-    return { label: "Payment overdue", className: "status status-on-hold", rank: 3, level: "critical" as AttentionLevel };
+    return { label: "Payment overdue", labelKey: "attention.paymentOverdue", className: "status status-on-hold", rank: 3, level: "critical" as AttentionLevel };
   }
   if (unbilled > 0 && costRecovery < 0.85 && totals.totalCost > 0) {
-    return { label: "Unbilled work", className: "status status-risk", rank: 4, level: "risk" as AttentionLevel };
+    return { label: "Unbilled work", labelKey: "attention.unbilledWork", className: "status status-risk", rank: 4, level: "risk" as AttentionLevel };
   }
   if (project.budgetAmount <= 0) {
-    return { label: "No budget set", className: "status status-finished", rank: 5, level: "neutral" as AttentionLevel };
+    return { label: "No budget set", labelKey: "attention.noBudgetSet", className: "status status-finished", rank: 5, level: "neutral" as AttentionLevel };
   }
-  return { label: "On track", className: "status status-active", rank: 6, level: "ok" as AttentionLevel };
+  return { label: "On track", labelKey: "attention.onTrack", className: "status status-active", rank: 6, level: "ok" as AttentionLevel };
 }

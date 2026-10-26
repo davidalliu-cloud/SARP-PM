@@ -1,4 +1,6 @@
 import type { Locale, Messages } from "./i18n";
+import { enOffers, sqOffers } from "./messages-offers";
+import { enPd, sqPd } from "./messages-project-detail";
 
 // English is the source of truth for keys. Albanian mirrors the same shape;
 // any key missing in `sq` falls back to `en` at runtime (see createTranslator).
@@ -58,6 +60,7 @@ const en = {
     quantity: "Quantity",
     yes: "Yes",
     no: "No",
+    workflow: "SARP workflow",
   },
   status: {
     NOT_STARTED: "Will start",
@@ -70,6 +73,14 @@ const en = {
     NOT_STARTED: "Will start",
     ON_HOLD: "On hold",
     FINISHED: "Finished",
+  },
+  attention: {
+    overBudget: "Over budget",
+    belowTargetMargin: "Below target margin",
+    paymentOverdue: "Payment overdue",
+    unbilledWork: "Unbilled work",
+    noBudgetSet: "No budget set",
+    onTrack: "On track",
   },
   login: {
     heroTitle: "SARP Project Management",
@@ -425,6 +436,7 @@ const sq = {
     quantity: "Sasia",
     yes: "Po",
     no: "Jo",
+    workflow: "Fluksi i punës SARP",
   },
   status: {
     NOT_STARTED: "Do të fillojë",
@@ -437,6 +449,14 @@ const sq = {
     NOT_STARTED: "Do të fillojnë",
     ON_HOLD: "Në pritje",
     FINISHED: "Përfunduar",
+  },
+  attention: {
+    overBudget: "Mbi buxhet",
+    belowTargetMargin: "Nën marzhin e objektivit",
+    paymentOverdue: "Pagesë e vonuar",
+    unbilledWork: "Punë e pafaturuar",
+    noBudgetSet: "Pa buxhet të caktuar",
+    onTrack: "Në rrugë të mbarë",
   },
   login: {
     heroTitle: "Menaxhimi i Projekteve SARP",
@@ -734,5 +754,8 @@ const sq = {
   },
 } as const;
 
-export const messages: Record<Locale, Messages> = { en, sq };
-export const englishMessages: Messages = en;
+export const messages: Record<Locale, Messages> = {
+  en: { ...en, off: enOffers, pd: enPd },
+  sq: { ...sq, off: sqOffers, pd: sqPd },
+};
+export const englishMessages: Messages = messages.en;
