@@ -27,8 +27,8 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
   const toggle = (key: string) => setOpenKeys((prev) => ({ ...prev, [key]: !prev[key] }));
 
   return (
-    <div className="border-t border-line px-3 py-5">
-      <div className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
+    <div className="border-t border-white/10 px-3 py-5">
+      <div className="mb-2 px-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-rose">
         {t("nav.projects")}
       </div>
       {groups.map((group) => {
@@ -39,7 +39,7 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
               type="button"
               onClick={() => toggle(group.key)}
               aria-expanded={isOpen}
-              className="flex w-full items-center justify-between rounded-md px-3 py-1.5 text-left text-muted transition hover:bg-lab-burgundy hover:text-white"
+              className="flex w-full items-center justify-between rounded-md px-3 py-1.5 text-left text-white/60 transition hover:bg-white/10 hover:text-white"
             >
               <span className="text-[10px] font-semibold uppercase tracking-[0.16em]">
                 {group.label}
@@ -72,8 +72,8 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
                         title={project.name}
                         className={`flex items-center gap-2 truncate rounded-md px-3 py-1.5 text-sm transition ${
                           active
-                            ? "bg-lab-burgundy/5 font-semibold text-lab-burgundy hover:bg-lab-burgundy hover:text-white"
-                            : "text-ink hover:bg-lab-burgundy hover:text-white"
+                            ? "bg-lab-burgundy/25 font-semibold text-white hover:bg-lab-burgundy"
+                            : "text-white/75 hover:bg-white/10 hover:text-white"
                         }`}
                       >
                         {project.dotClass ? (
@@ -85,7 +85,7 @@ export function SidebarProjects({ groups }: { groups: ProjectGroup[] }) {
                   })}
                 </div>
               ) : (
-                <div className="px-3 py-1 text-xs text-muted/60">{t("common.none")}</div>
+                <div className="px-3 py-1 text-xs text-white/40">{t("common.none")}</div>
               )
             ) : null}
           </div>

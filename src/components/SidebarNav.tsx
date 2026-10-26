@@ -47,10 +47,10 @@ export function SidebarNav({
           <Link
             key={href}
             href={href}
-            className={`mb-1 flex min-h-11 items-center border-l-2 px-4 text-sm font-medium transition ${
+            className={`mb-1 flex min-h-11 items-center rounded-md border px-4 text-sm font-medium transition ${
               active
-                ? "border-lab-burgundy bg-lab-burgundy/5 font-semibold text-lab-burgundy hover:bg-lab-burgundy hover:text-white"
-                : "border-transparent text-ink hover:bg-lab-burgundy hover:text-white"
+                ? "border-lab-burgundy bg-lab-burgundy/25 font-semibold text-white"
+                : "border-transparent text-white/70 hover:bg-white/10 hover:text-white"
             }`}
           >
             {label}

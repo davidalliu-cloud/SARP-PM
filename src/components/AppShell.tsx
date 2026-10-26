@@ -82,22 +82,22 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
 
   return (
     <div className="min-h-screen">
-      <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-72 overflow-y-auto border-r border-line bg-white lg:block">
-        <div className="border-b border-line px-6 py-8">
+      <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-72 overflow-y-auto bg-sidebar text-white lg:block">
+        <div className="border-b border-white/10 px-6 py-8">
           <Link href="/" className="block">
             <img
               src="/brand/sarp-logo.png"
               alt="SARP Building the Future"
-              className="h-auto w-40 max-w-full"
+              className="h-auto w-40 max-w-full brightness-0 invert"
             />
           </Link>
-          <div className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">
+          <div className="mt-6 text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-rose">
             {t("brand.eyebrow")}
           </div>
-          <div className="mt-2 text-xl font-bold leading-tight tracking-[-0.01em] text-ink">
+          <div className="mt-2 text-xl font-bold leading-tight tracking-[-0.01em] text-white">
             {t("brand.appName")}
           </div>
-          <div className="mt-2 max-w-[13rem] text-xs leading-5 text-muted">
+          <div className="mt-2 max-w-[13rem] text-xs leading-5 text-white/55">
             {t("brand.tagline")}
           </div>
         </div>
@@ -105,7 +105,7 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
         <SidebarProjects groups={projectGroups} />
       </aside>
 
-      <div className="lg:pl-72">
+      <div className="min-h-screen bg-canvas lg:pl-72">
         <header className="no-print sticky top-0 z-20 border-b border-line bg-white/95 backdrop-blur">
           <div className="flex min-h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
             <div className="flex items-center gap-3">

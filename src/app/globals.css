@@ -21,6 +21,11 @@
   --color-lab-red: #a23146;
   --color-lab-purple: #7b1e7a;
   --color-lab-burgundy: #5b193f;
+  --color-lab-rose: #c98aa9;
+
+  /* Dark sidebar + light canvas, matching the SARP LAB Management System shell. */
+  --color-sidebar: #1a1824;
+  --color-canvas: #f4f6f8;
   --color-lab-mist: #e6f8f6;
   --color-lab-porcelain: #f1f3f5;
   --color-lab-steel: #bdc8d0;
