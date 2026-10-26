@@ -16,8 +16,8 @@ export default async function LoginPage({
   const t = await getT();
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#e6ecef] px-4 py-10">
-      <section className="grid w-full max-w-5xl overflow-hidden rounded-xl border border-line bg-white shadow-sm md:grid-cols-[1fr_420px]">
+    <main className="flex min-h-screen items-center justify-center bg-[#fafafa] px-4 py-10">
+      <section className="grid w-full max-w-5xl overflow-hidden rounded-lg border border-line bg-white shadow-sm md:grid-cols-[1fr_420px]">
         {/* Brand panel */}
         <div className="hidden bg-lab-burgundy p-10 text-white md:flex md:flex-col md:justify-between">
           <div>

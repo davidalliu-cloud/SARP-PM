@@ -3,7 +3,7 @@
 
 export const LOCALES = ["en", "sq"] as const;
 export type Locale = (typeof LOCALES)[number];
-export const DEFAULT_LOCALE: Locale = "en";
+export const DEFAULT_LOCALE: Locale = "sq";
 export const LANG_COOKIE = "lang";
 
 export const LOCALE_LABELS: Record<Locale, string> = {
