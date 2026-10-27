@@ -162,6 +162,14 @@ model Product {
   name               String
   unit               String
   defaultCostPerUnit Float
+  // Waterproofing offer costing (from the SARP catalogue / Mapei TDS). Kept
+  // separate from unit/defaultCostPerUnit so daily-record semantics are untouched.
+  consumptionPerM2   Float? // base units of this product used per 1 m² of system
+  consumptionBasis   String? // how the consumption was derived / TDS source note
+  workItem           String? // "Zëri i Punës" — the work-item description for offers
+  baseUnit           String? // offer base unit the consumption/price refer to (m2, kg, litër…)
+  supplierPriceAll   Float? // supplier price per base unit, ALL (the "P" in the costing engine)
+  priceEur           Float? // supplier price per base unit, EUR (reference)
   usageItems         ProductUsageItem[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt

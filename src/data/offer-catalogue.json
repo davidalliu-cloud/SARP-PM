@@ -1,0 +1,5915 @@
+[
+ {
+  "name": "Idrocrete HP",
+  "workItem": "Aditiv hidroizolues për beton — ul përshkueshmërinë nga uji",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 103.0,
+  "priceEur": 1.03
+ },
+ {
+  "name": "Crystal PW 25",
+  "workItem": "Aditiv kristalizues për beton ujëpashkueshëm",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Cablejet (18kg)",
+  "workItem": "Përzierje çimentoje rrjedhëse për mbushjen e kanaleve/tubacioneve kabllore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 177.0,
+  "priceEur": 1.77
+ },
+ {
+  "name": "Expancrete (20kg)",
+  "workItem": "Aditiv ekspansiv kompensues i tkurrjes për beton dhe llaçe",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 79.0,
+  "priceEur": 0.79
+ },
+ {
+  "name": "Expanfluid",
+  "workItem": "Aditiv ekspansiv-superplastifikues për llaçe mbushjeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 255.0,
+  "priceEur": 2.55
+ },
+ {
+  "name": "Alchioil 100",
+  "workItem": "Vaj dizarmimi për kallëpe betoni",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeform ECO 31",
+  "workItem": "Vaj dizarmimi (çlirues) për kallëpe betoni",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 300.0,
+  "priceEur": 3.0
+ },
+ {
+  "name": "Mapetherm AR 1",
+  "workItem": "Llaç ngjitës dhe rrafshues për panele izoluese termike (sistem fasade)",
+  "consumptionPerM2": 8.0,
+  "consumptionBasis": "≈4 kg/m² ngjitje + ≈4 kg/m² rrafshim me rrjetë — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapetherm AR 1 GG: Grey",
+  "workItem": "Llaç ngjitës dhe rrafshues për panele izoluese termike (sistem fasade)",
+  "consumptionPerM2": 8.0,
+  "consumptionBasis": "≈4 kg/m² ngjitje + ≈4 kg/m² rrafshim me rrjetë — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond P902 2K Light (10kg)",
+  "workItem": "Ngjitës poliuretanik për parket dhe veshje dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 376.0,
+  "priceEur": 3.76
+ },
+ {
+  "name": "Ultrabond P913 2K Light (10kg)",
+  "workItem": "Ngjitës poliuretanik për parket dhe veshje dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 329.0,
+  "priceEur": 3.29
+ },
+ {
+  "name": "Ultrabond P913 2K Dark (10kg)",
+  "workItem": "Ngjitës poliuretanik për parket dhe veshje dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 329.0,
+  "priceEur": 3.29
+ },
+ {
+  "name": "Ultrabond P980 1K (15kg)",
+  "workItem": "Ngjitës poliuretanik për parket dhe veshje dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 415.0,
+  "priceEur": 4.15
+ },
+ {
+  "name": "Ultrabond Eco P16",
+  "workItem": "Ngjitës akrilik për veshje elastike/tekstile dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planiseal 88: White (25kg)",
+  "workItem": "Suva çimentoje hidroizoluese (osmotike) për beton dhe murature",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.7 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 60.6,
+  "priceEur": 0.606
+ },
+ {
+  "name": "Planiseal 88: Grey (25kg)",
+  "workItem": "Suva çimentoje hidroizoluese (osmotike) për beton dhe murature",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.7 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 54.9,
+  "priceEur": 0.549
+ },
+ {
+  "name": "Planiseal 288 Grey (Kit A+B 25kg)",
+  "workItem": "Hidroizolim osmotik çimentoje, rezistent ndaj presionit të ujit",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "1.5 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 126.8,
+  "priceEur": 1.268
+ },
+ {
+  "name": "Planiseal 288 Comp B (3kg)",
+  "workItem": "Hidroizolim osmotik çimentoje, rezistent ndaj presionit të ujit",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "1.5 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 250.0,
+  "priceEur": 2.5
+ },
+ {
+  "name": "Mapelastic Smart Grey (Kit A+B 30kg)",
+  "workItem": "Hidroizolim elastik dykomponent, aplikim me furçë/rul",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm (2 shtresa) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 153.0,
+  "priceEur": 1.53
+ },
+ {
+  "name": "Mapelastic Smart White (Kit A+B 30kg)",
+  "workItem": "Hidroizolim elastik dykomponent, aplikim me furçë/rul",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm (2 shtresa) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 158.3,
+  "priceEur": 1.583
+ },
+ {
+  "name": "Monolastic (20kg)",
+  "workItem": "Hidroizolim elastik monokomponent çimentoje",
+  "consumptionPerM2": 3.2,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 142.5,
+  "priceEur": 1.425
+ },
+ {
+  "name": "Monolastic Turbo (15kg)",
+  "workItem": "Hidroizolim elastik monokomponent me tharje të shpejtë",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "1.5 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 290.0,
+  "priceEur": 2.9
+ },
+ {
+  "name": "Mapelastic Foundation (Kit A+B 32kg)",
+  "workItem": "Hidroizolim elastik dykomponent për themele dhe struktura në kontakt me dhé",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.65 kg/m²/mm × 2 mm (2 shtresa) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 174.0,
+  "priceEur": 1.74
+ },
+ {
+  "name": "Mapelastic Zero (A+B 32kg)",
+  "workItem": "Membranë hidroizoluese elastike çimentoje (tualete, tarraca, ballkone)",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm (2 shtresa) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 142.5,
+  "priceEur": 1.425
+ },
+ {
+  "name": "Mapelastic Turbo (Kit A+B 36kg)",
+  "workItem": "Membranë hidroizoluese elastike çimentoje (tualete, tarraca, ballkone)",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "1.5 kg/m²/mm × 2 mm (2 shtresa) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 268.5,
+  "priceEur": 2.685
+ },
+ {
+  "name": "Lamposilex (5kg)",
+  "workItem": "Llaç me presë të menjëhershme për ndalimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 300.0,
+  "priceEur": 3.0
+ },
+ {
+  "name": "Trend HS S F 4mm",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 340.0,
+  "priceEur": 3.4
+ },
+ {
+  "name": "Idroprimer (20kg)",
+  "workItem": "Primer bituminoz me bazë uji për membranat hidroizoluese",
+  "consumptionPerM2": 0.3,
+  "consumptionBasis": "0.2–0.4 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 6.6,
+  "priceEur": 0.066
+ },
+ {
+  "name": "Mapeproof FBT",
+  "workItem": "Membranë bentonitike hidroizoluese për themele dhe mure në kontakt me dhé",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 1100.0,
+  "priceEur": 11.0
+ },
+ {
+  "name": "Mapeproof FBT Tape 600 (20M)",
+  "workItem": "Shirit vetëngjitës për mbylljen e mbivendosjeve të membranës",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 478.5,
+  "priceEur": 4.785
+ },
+ {
+  "name": "Mapetex 50 H100",
+  "workItem": "Tekstil jo i endur për armimin e membranave hidroizoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 121.0,
+  "priceEur": 1.21
+ },
+ {
+  "name": "Mapeproof Liquid Membrane",
+  "workItem": "Membranë hidroizoluese e lëngshme para-derdhjes së betonit",
+  "consumptionPerM2": 1.6,
+  "consumptionBasis": "1.6 kg/m² për 1 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeproof AL AP",
+  "workItem": "Membranë hidroizoluese vetëngjitëse HDPE për pllaka dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 940.5,
+  "priceEur": 9.405
+ },
+ {
+  "name": "Mapeproof AL 1200 AP",
+  "workItem": "Membranë hidroizoluese vetëngjitëse HDPE për pllaka dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 898.5,
+  "priceEur": 8.985
+ },
+ {
+  "name": "Mapetex Sel N",
+  "workItem": "Tekstil jo i endur për armimin e membranave hidroizoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 147.0,
+  "priceEur": 1.47
+ },
+ {
+  "name": "Mapeproof AL Tape D10 AP",
+  "workItem": "Shirit vetëngjitës për mbylljen e mbivendosjeve të membranës",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 153.0,
+  "priceEur": 1.53
+ },
+ {
+  "name": "Mapeproof SA Primer",
+  "workItem": "Primer për membranat hidroizoluese vetëngjitëse",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tessildrain PP-FC 70: White (Kibotex 70)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 27.0,
+  "priceEur": 0.27
+ },
+ {
+  "name": "Mapeplan B 15",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 497.0,
+  "priceEur": 4.97
+ },
+ {
+  "name": "Tessildrain 250: Green",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 44.0,
+  "priceEur": 0.44
+ },
+ {
+  "name": "Tessildrain PPTB 100: White",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 35.0,
+  "priceEur": 0.35
+ },
+ {
+  "name": "Polybond HP P 4mm S F",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 483.0,
+  "priceEur": 4.83
+ },
+ {
+  "name": "Tessildrain PES-NTB 150: White (2m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 29.0,
+  "priceEur": 0.29
+ },
+ {
+  "name": "Mapeplan M 15 Broof T1/T3",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 514.0,
+  "priceEur": 5.14
+ },
+ {
+  "name": "Mapeplan WT 15",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 553.0,
+  "priceEur": 5.53
+ },
+ {
+  "name": "Mapeplan T M BRoof T1 15",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 573.0,
+  "priceEur": 5.73
+ },
+ {
+  "name": "Tessildrain PES-NTB 200: White (6m*50m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 37.0,
+  "priceEur": 0.37
+ },
+ {
+  "name": "Mapeplan Lamiera PVC",
+  "workItem": "Llamarinë e laminuar/punuar për fiksimin e detajeve dhe skajeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 103.08,
+  "priceEur": 1.0308
+ },
+ {
+  "name": "Mapeplan T  Lamiera TPO",
+  "workItem": "Llamarinë e laminuar/punuar për fiksimin e detajeve dhe skajeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 96.0,
+  "priceEur": 0.96
+ },
+ {
+  "name": "Tessildrain PES-NTB 400: White (2m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 67.0,
+  "priceEur": 0.67
+ },
+ {
+  "name": "Mapeplan VB PE Nero",
+  "workItem": "Barrierë vaporit prej polietileni nën shtresat izoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 50.0,
+  "priceEur": 0.5
+ },
+ {
+  "name": "Mapeplan Bocchetta Parete 80mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta Parete 100mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tessildrain PES-NTB 250: White (2m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 44.0,
+  "priceEur": 0.44
+ },
+ {
+  "name": "Mapeplan Bocchetta 75mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tessildrain PES-NTB 300: White (4m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 52.0,
+  "priceEur": 0.52
+ },
+ {
+  "name": "Mapeplan Bocchetta 80mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta 80mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tessildrain PES-NTB 300: White (2m)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 52.0,
+  "priceEur": 0.52
+ },
+ {
+  "name": "Mapeplan Bocchetta 90mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T  Bocchetta 90mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta 100mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta 110mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm (ose drejtkëndore): 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T  Bocchetta 100",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Aeratore",
+  "workItem": "Ajrues (kamino ventilimi) për shtresat hidroizoluese",
+  "consumptionPerM2": 0.025,
+  "consumptionBasis": "Ajrues (kamino ventilimi): 1 copë / 40 m² sipërfaqe → 0.025 copë/m², për çlirimin e presionit të vaporit nën membranë (praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Areatore",
+  "workItem": "Ajrues (kamino ventilimi) për shtresat hidroizoluese",
+  "consumptionPerM2": 0.025,
+  "consumptionBasis": "Ajrues (kamino ventilimi): 1 copë / 40 m² sipërfaqe → 0.025 copë/m², për çlirimin e presionit të vaporit nën membranë (praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "DS8 HDPE Dimpled Sheet (Protofon)",
+  "workItem": "Fletë HDPE me gunga — mbrojtje dhe kullim i hidroizolimit",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 50.0,
+  "priceEur": 0.5
+ },
+ {
+  "name": "MP Profil",
+  "workItem": "Profil metalik fiksimi/mbylljeje për skajet e membranës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "m2",
+  "supplierPriceAll": 10.0,
+  "priceEur": 0.1
+ },
+ {
+  "name": "CPF-Rubber",
+  "workItem": "Aksesor injektimi (paker/lidhës) për rrëshirat e injektimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Resin Acrygel (Kit A+B+C+D 43kg)",
+  "workItem": "Rrëshirë akrilike injektimi për hidroizolimin e strukturave/terrenit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "SL Net: White (145gr)",
+  "workItem": "Rrjetë armimi për sistemet hidroizoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 23.1,
+  "priceEur": 0.231
+ },
+ {
+  "name": "SL Net: Blue (160gr)",
+  "workItem": "Rrjetë armimi për sistemet hidroizoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 23.6,
+  "priceEur": 0.236
+ },
+ {
+  "name": "SL Stop 25 B",
+  "workItem": "Masë/profil ndaluese e infiltrimeve të ujit në nyje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 250.0,
+  "priceEur": 2.5
+ },
+ {
+  "name": "SL Stop 25 R",
+  "workItem": "Masë/profil ndaluese e infiltrimeve të ujit në nyje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 300.0,
+  "priceEur": 3.0
+ },
+ {
+  "name": "SL Swell 10 (Hydroflex 10/20T)",
+  "workItem": "Profil hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 308.0,
+  "priceEur": 3.08
+ },
+ {
+  "name": "SL Swell 05 (Hydroflex 5/20T)",
+  "workItem": "Profil hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 178.0,
+  "priceEur": 1.78
+ },
+ {
+  "name": "SL Band 121 (Hydroflex 121)",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 23.0,
+  "priceEur": 0.23
+ },
+ {
+  "name": "SL Band 120 (Hydroflex 120)",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 23.0,
+  "priceEur": 0.23
+ },
+ {
+  "name": "SL Band SA (BBP01-150/1)",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 113.0,
+  "priceEur": 1.13
+ },
+ {
+  "name": "Mapeband TPE 170",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 828.0,
+  "priceEur": 8.28
+ },
+ {
+  "name": "Mapeband TPE 325",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 1478.0,
+  "priceEur": 14.78
+ },
+ {
+  "name": "Mapeband H12",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeband PE 120",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeband SA",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeband Easy (30m)",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Aquaflex Roof HR (20kg)",
+  "workItem": "Membranë hidroizoluese e lëngshme për tarraca (aplikim me rul)",
+  "consumptionPerM2": 1.75,
+  "consumptionBasis": "1.5–2.0 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 310.5,
+  "priceEur": 3.105
+ },
+ {
+  "name": "Aquaflex Roof Plus HR (20kg)",
+  "workItem": "Membranë hidroizoluese e lëngshme për tarraca (aplikim me rul)",
+  "consumptionPerM2": 1.75,
+  "consumptionBasis": "1.5–2.0 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 478.5,
+  "priceEur": 4.785
+ },
+ {
+  "name": "Aquaflex Primer (6kg)",
+  "workItem": "Primer për membranat hidroizoluese të lëngshme",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1045.5,
+  "priceEur": 10.455
+ },
+ {
+  "name": "Mapegum WPS (5kg)",
+  "workItem": "Membranë hidroizoluese e lëngshme e gatshme, për ambiente të brendshme",
+  "consumptionPerM2": 1.5,
+  "consumptionBasis": "1.5 kg/m² (≈1 mm i thatë) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 315.8,
+  "priceEur": 3.158
+ },
+ {
+  "name": "Mapegum WPS (10kg)",
+  "workItem": "Membranë hidroizoluese e lëngshme e gatshme, për ambiente të brendshme",
+  "consumptionPerM2": 1.5,
+  "consumptionBasis": "1.5 kg/m² (≈1 mm i thatë) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 289.5,
+  "priceEur": 2.895
+ },
+ {
+  "name": "Mapelastic Aquadefense Zero (7.5kg)",
+  "workItem": "Membranë hidroizoluese e gatshme, tharje e shpejtë, nën pllaka",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "0.5 kg/m² për shtresë × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 363.0,
+  "priceEur": 3.63
+ },
+ {
+  "name": "Mapelastic Aquadefense Zero (15kg)",
+  "workItem": "Membranë hidroizoluese e gatshme, tharje e shpejtë, nën pllaka",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "0.5 kg/m² për shtresë × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 331.5,
+  "priceEur": 3.315
+ },
+ {
+  "name": "Purtop Easy: White (15kg)",
+  "workItem": "Membranë hidroizoluese poliuretanike/poliuree me elasticitet të lartë",
+  "consumptionPerM2": 2.2,
+  "consumptionBasis": "≈2.2 kg/m² për 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 634.0,
+  "priceEur": 6.34
+ },
+ {
+  "name": "Mapethene HT AP",
+  "workItem": "Membranë bituminoze vetëngjitëse për themele dhe mure nëntokësore",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 720.0,
+  "priceEur": 7.2
+ },
+ {
+  "name": "Mapethene Primer (10kg)",
+  "workItem": "Primer për membranat bituminoze vetëngjitëse",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 305.3,
+  "priceEur": 3.053
+ },
+ {
+  "name": "Waterstop 250 (me bulb)",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 351.0,
+  "priceEur": 3.51
+ },
+ {
+  "name": "Waterstop DA24-4 me Bulb",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 581.0,
+  "priceEur": 5.81
+ },
+ {
+  "name": "Idrostop Soft",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 641.0,
+  "priceEur": 6.41
+ },
+ {
+  "name": "Mapeproof Swell",
+  "workItem": "Profil hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Primer PU 60 (10kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1044.0,
+  "priceEur": 10.44
+ },
+ {
+  "name": "Primer 3296 (10kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.1–0.2 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 534.0,
+  "priceEur": 5.34
+ },
+ {
+  "name": "Eco Prim PU 1K (10kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1202.0,
+  "priceEur": 12.02
+ },
+ {
+  "name": "Mapecoat I 620 W (Kit A+B 15kg)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.6,
+  "consumptionBasis": "0.3 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat I 62 W (Kit A+B 11kg)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.6,
+  "consumptionBasis": "0.3 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 58 W (Ral 7037)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 59 W (RAL 7040)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 630 (20.3kg)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Base Coat (10kg)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor: Milano Grey  (1.5L)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Loft W: White (20kg)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 1.5,
+  "consumptionBasis": "≈1.5 kg/m² për shtresë dekorative — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecolor Paste: RAL 1015",
+  "workItem": "Pastë ngjyruese për rrëshirat dhe veshjet",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecolor Paste: RAL 7035 (0.7kg)",
+  "workItem": "Pastë ngjyruese për rrëshirat dhe veshjet",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecolor Paste: RAL 7037 (0.7kg)",
+  "workItem": "Pastë ngjyruese për rrëshirat dhe veshjet",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecolor Paste: RAL 8002",
+  "workItem": "Pastë ngjyruese për rrëshirat dhe veshjet",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Primer SN (Kit A+B 20kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "0.4–0.6 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat I 600 W",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.6,
+  "consumptionBasis": "0.3 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Adesilex PG1 (1kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 900.0,
+  "priceEur": 9.0
+ },
+ {
+  "name": "Adesilex PG1 (2kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 720.0,
+  "priceEur": 7.2
+ },
+ {
+  "name": "Adesilex PG1 (6kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 485.833333,
+  "priceEur": 4.858333
+ },
+ {
+  "name": "Adesilex PG4 (1kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1000.0,
+  "priceEur": 10.0
+ },
+ {
+  "name": "Adesilex PG4 (2kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 825.0,
+  "priceEur": 8.25
+ },
+ {
+  "name": "Adesilex PG4 (6kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 615.0,
+  "priceEur": 6.15
+ },
+ {
+  "name": "Adesilex P22 (12kg)",
+  "workItem": "Ngjitës i gatshëm në dispersion për pllaka dhe veshje",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "1.5–2.5 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Adesilex P25 (5kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Eporip (1kg)",
+  "workItem": "Rrëshirë epoksidike për riparim çarjesh dhe lidhje beton i vjetër–i re",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1300.0,
+  "priceEur": 13.0
+ },
+ {
+  "name": "Eporip (2kg)",
+  "workItem": "Rrëshirë epoksidike për riparim çarjesh dhe lidhje beton i vjetër–i re",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1108.5,
+  "priceEur": 11.085
+ },
+ {
+  "name": "Eporip (10kg)",
+  "workItem": "Rrëshirë epoksidike për riparim çarjesh dhe lidhje beton i vjetër–i re",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1044.5,
+  "priceEur": 10.445
+ },
+ {
+  "name": "Planicrete: IBC 1000L",
+  "workItem": "Aditiv latex për ngjitje dhe elasticitet të llaçeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 478.0,
+  "priceEur": 4.78
+ },
+ {
+  "name": "Lampocem (5kg)",
+  "workItem": "Llaç me presë të shpejtë për fiksime dhe ankorime",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 68.0,
+  "priceEur": 0.68
+ },
+ {
+  "name": "Mapefill",
+  "workItem": "Llaç mbushës pa tkurrje për ankorime dhe baza makinerish",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planigrout 310 (Kit A+B+C)",
+  "workItem": "Llaç mbushës pa tkurrje për ankorime dhe baza makinerish",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Packer 10*85",
+  "workItem": "Aksesor injektimi (paker/lidhës) për rrëshirat e injektimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Packer 10*120 (Injektore)",
+  "workItem": "Aksesor injektimi (paker/lidhës) për rrëshirat e injektimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Injection Coupler CPF-UP",
+  "workItem": "Aksesor injektimi (paker/lidhës) për rrëshirat e injektimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapegrout Collabile TI 20",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapegrout SV",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop Fast 330",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": 2.8,
+  "consumptionBasis": "1.4 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop Extra Fino (20kg)",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": 2.8,
+  "consumptionBasis": "1.4 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 27.6,
+  "priceEur": 0.276
+ },
+ {
+  "name": "Mapegrout Thixotropic",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapegrout T60",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapegrout 430 Zero",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": "17 kg/m² per cm trashësi (aplikim rrafshues standard) — Mapei TDS. Për kanal V (mbushje kanali) shih llogaritjen sipas gjeometrisë në fleta Parametrat.",
+  "baseUnit": "kg",
+  "supplierPriceAll": 36.0,
+  "priceEur": 0.36
+ },
+ {
+  "name": "Mapegrout SV T: Black",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop Rasa & Riapara R4",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": 2.8,
+  "consumptionBasis": "1.4 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefer (2kg)",
+  "workItem": "Llaç antikorroziv për mbrojtjen e armaturës së hekurit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 405.0,
+  "priceEur": 4.05
+ },
+ {
+  "name": "Mapefer 1K Zero",
+  "workItem": "Llaç antikorroziv për mbrojtjen e armaturës së hekurit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Primer RM (Kit A+B 2kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1312.0,
+  "priceEur": 13.12
+ },
+ {
+  "name": "Quartz Frantumato 0.4/0.8mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Frantumato 0.4/0.8mm (15kg)",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Frantumato 0.8/0.12mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Sabbia Silicea 503 (25kg)",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Sferico Big-Bag  0.1/0.3mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Sferico Big-Bag  0.3/0.9mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Sferico Big-Bag  0.8/1.2mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz Sferico 0.1/0.35mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Quartz 0.25mm  (25kg)",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.0,
+  "priceEur": 0.2
+ },
+ {
+  "name": "Mapefloor I 302 SL (Kit A+B 20Kg)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 3.2,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Epojet LV (2.5kg)",
+  "workItem": "Rrëshirë epoksidike ultra-lëngshme për injektimin e çarjeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 2552.0,
+  "priceEur": 25.52
+ },
+ {
+  "name": "Epojet SLV (2.5kg)",
+  "workItem": "Rrëshirë epoksidike ultra-lëngshme për injektimin e çarjeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 2552.0,
+  "priceEur": 25.52
+ },
+ {
+  "name": "Planibond BA 100 (3kg)",
+  "workItem": "Promotor ngjitjeje epoksidik beton–beton",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 793.5,
+  "priceEur": 7.935
+ },
+ {
+  "name": "Mapefloor EP 90",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 3.2,
+  "consumptionBasis": "1.6 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefix VE SF (300ml)",
+  "workItem": "Rrëshirë kimike ankorimi për fiksime strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefix Polybond (300ml)",
+  "workItem": "Rrëshirë kimike ankorimi për fiksime strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefix Vinybond (300ml)",
+  "workItem": "Rrëshirë kimike ankorimi për fiksime strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Foamjet 260 LV (44kg)",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Foamjet AKS (1kg)",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Resfoam 1 KM (20kg)",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1329.0,
+  "priceEur": 13.29
+ },
+ {
+  "name": "Resfoam 1K M - AKS (1kg)",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1685.0,
+  "priceEur": 16.85
+ },
+ {
+  "name": "Resfoam 1KM HS",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Resfoam 1KM HS AKS",
+  "workItem": "Rrëshirë poliuretanike injektimi për bllokimin e infiltrimeve të ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "AquaSeal + (20kg)",
+  "workItem": "Hidroizolim çimentoje për sipërfaqe të ekspozuara ndaj ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 528.15,
+  "priceEur": 5.2815
+ },
+ {
+  "name": "AquaGuard (20kg)",
+  "workItem": "Hidroizolim çimentoje për sipërfaqe të ekspozuara ndaj ujit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 554.4,
+  "priceEur": 5.544
+ },
+ {
+  "name": "Ultracare Kerapoxy Cleaner (5L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 839.0,
+  "priceEur": 8.39
+ },
+ {
+  "name": "Ultracare Kerapoxy Cleaner Spray (0.75L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 1514.666667,
+  "priceEur": 15.146667
+ },
+ {
+  "name": "Ultracare Keranet Easy Spray (0.75L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 496.0,
+  "priceEur": 4.96
+ },
+ {
+  "name": "Ultracare Grout Cleaner (0.75L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracare Multicleaner (5L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 347.0,
+  "priceEur": 3.47
+ },
+ {
+  "name": "Ultracare Deep Cleaner (0.75L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 850.666667,
+  "priceEur": 8.506667
+ },
+ {
+  "name": "Ultracare Deep Protector (0.75L)",
+  "workItem": "Mbrojtës hidro-oleofobik për sipërfaqe poroze",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 850.666667,
+  "priceEur": 8.506667
+ },
+ {
+  "name": "Ultracare Rain Protector S",
+  "workItem": "Mbrojtës hidro-oleofobik për sipërfaqe poroze",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracare Intesifier S",
+  "workItem": "Mbrojtës hidro-oleofobik për sipërfaqe poroze",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracare HD Cleaner (5L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 611.0,
+  "priceEur": 6.11
+ },
+ {
+  "name": "Ultracare Keranet (5L)",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 255.0,
+  "priceEur": 2.55
+ },
+ {
+  "name": "Ultracare Stain Protector S (1L)",
+  "workItem": "Mbrojtës hidro-oleofobik për sipërfaqe poroze",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 2316.0,
+  "priceEur": 23.16
+ },
+ {
+  "name": "Mapewrap 31 T",
+  "workItem": "Rrëshirë epoksidike impregnuese për fibrat e karbonit",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "0.8–1.2 kg/m² për shtresë (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapewrap C UNI AX 300/10",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapewrap C UNI AX 300/20",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapewrap C UNI AX 300/40",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapewrap Primer 1 (2kg)",
+  "workItem": "Rrëshirë epoksidike impregnuese për fibrat e karbonit",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "0.8–1.2 kg/m² për shtresë (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1840.0,
+  "priceEur": 18.4
+ },
+ {
+  "name": "C-Sheet 240/600/10",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "C-Sheet 240/600/30",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop HDM Maxi (Kit A+B 31.25kg)",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": 2.8,
+  "consumptionBasis": "1.4 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 112.0,
+  "priceEur": 1.12
+ },
+ {
+  "name": "Planitop HPC",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Fibre HPC (6.5kg)",
+  "workItem": "Fibra për armimin difuz të llaçeve dhe betoneve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1115.0,
+  "priceEur": 11.15
+ },
+ {
+  "name": "Planitop HPC Floor 46",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop HPC LV",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop HPC TIXO",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracolor Plus: 100 White (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 219.0,
+  "priceEur": 2.19
+ },
+ {
+  "name": "Ultracolor Plus: 103 Moonlight (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 110 Manhattan 2000 (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 238.0,
+  "priceEur": 2.38
+ },
+ {
+  "name": "Ultracolor Plus: 111 Silver Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 112 Medium Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 113 Cement Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 164.0,
+  "priceEur": 1.64
+ },
+ {
+  "name": "Ultracolor Plus: 114 Anthracite (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 238.0,
+  "priceEur": 2.38
+ },
+ {
+  "name": "Ultracolor Plus: 115 River Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 119 London Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 120 Black (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 238.0,
+  "priceEur": 2.38
+ },
+ {
+  "name": "Ultracolor Plus: 123 Ancient White (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 125 Castle Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 127 Arctic Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 130 Jasmine (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 131 Vanilla (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 132 Beige 2000 (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 133 Sand (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 134 Silk (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 135 Golden (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 136 Mud (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 137 Caribbean (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 138 Almond (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 141 Caramel (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 142 Brown (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 143 Terracota (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 144 Chocolate (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 145 Terra di Siena (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 149 Volcano (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 150 Yellow (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 516.0,
+  "priceEur": 5.16
+ },
+ {
+  "name": "Ultracolor Plus: 152 Liquorice (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 163 Light Lilac (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 167 Avio (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 168 Cerulean (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 169 Steel Blue (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 516.0,
+  "priceEur": 5.16
+ },
+ {
+  "name": "Ultracolor Plus: 172 Space Blue (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 516.0,
+  "priceEur": 5.16
+ },
+ {
+  "name": "Ultracolor Plus: 174 Tornado (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 176 Green Grey",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracolor Plus: 177  Sage (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Kerapoxy: 100 White (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Ultracolor Plus: 187 Linen (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Ultracolor Plus: 188 Biscuit (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Kerapoxy: 100 White (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Ultracolor Plus: 189 Spelt (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 245.0,
+  "priceEur": 2.45
+ },
+ {
+  "name": "Keracolor FF: 100 White (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 110 Manhattan 2000 (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Keracolor FF: 103 Moonlight (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 110 Manhattan 2000 (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 110 Manhattan 2000 (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Keracolor FF: 111 Silver Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 112 Medium Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 113 Cement Grey (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 111 Silver Grey (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Keracolor FF: 114 Anthracite (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 111 Silver Grey (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Kerapoxy: 112 Medium Grey (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Kerapoxy: 112 Medium Grey (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Keracolor FF: 123 Ancient White (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 149.0,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Keracolor FF: 130 Jasmine (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 131 Vanilla (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Keracolor FF: 132 Beige 2000 (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (10kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 668.0,
+  "priceEur": 6.68
+ },
+ {
+  "name": "Keracolor FF: 133 Sand (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 114 Anthracite (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Keracolor FF: 134 Silk (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 135 Golden Dust (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 114 Anthracite (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Keracolor FF: 137 Caribbean (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 149.0,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 141 Caramel (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 142 Brown (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 144 Chocolate (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 145 Terra di Siena (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Keracolor FF: 188 Biscotto (5kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 64.2,
+  "priceEur": 0.642
+ },
+ {
+  "name": "Kerapoxy: 120 Black (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Keracolor GG: 113 Cement Grey (25kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 12.84,
+  "priceEur": 0.1284
+ },
+ {
+  "name": "Kerapoxy: 120 Black (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Kerapoxy: 132 Beige 2000 (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Ultracolor Plus: 113 Cement Grey (22kg)",
+  "workItem": "Stuko çimentoje për mbushjen e fugave të pllakave",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "≈0.5 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 148.0,
+  "priceEur": 1.48
+ },
+ {
+  "name": "Kerapoxy: 132 Beige 2000 (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Kerabond T: White (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 28.1,
+  "priceEur": 0.281
+ },
+ {
+  "name": "Kerabond T: Grey (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 27.0,
+  "priceEur": 0.27
+ },
+ {
+  "name": "Kerapoxy CQ: 132 Beige 2000 (10kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 726.0,
+  "priceEur": 7.26
+ },
+ {
+  "name": "Keraflex Maxi S1: White (23kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 5.5,
+  "consumptionBasis": "5–6 kg/m² (mesatarja), spatul i dhëmbëzuar — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 54.9,
+  "priceEur": 0.549
+ },
+ {
+  "name": "Kerapoxy CQ: 174 Tornado (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 890.0,
+  "priceEur": 8.9
+ },
+ {
+  "name": "Keraflex Maxi S1: Grey (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 5.5,
+  "consumptionBasis": "5–6 kg/m² (mesatarja), spatul i dhëmbëzuar — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 51.7,
+  "priceEur": 0.517
+ },
+ {
+  "name": "Kerapoxy CQ: 283 Sea Blue (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 890.0,
+  "priceEur": 8.9
+ },
+ {
+  "name": "Kerapoxy CQ: 111 Silver Grey (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 890.0,
+  "priceEur": 8.9
+ },
+ {
+  "name": "Ultralite S1 Flex (15kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "2.5–3.5 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 84.8,
+  "priceEur": 0.848
+ },
+ {
+  "name": "Kerapoxy CQ: 111 Silver Grey (10kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 726.0,
+  "priceEur": 7.26
+ },
+ {
+  "name": "Keraset: Grey (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 20.7,
+  "priceEur": 0.207
+ },
+ {
+  "name": "Kerapoxy CQ: 113 Cement Grey (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 890.0,
+  "priceEur": 8.9
+ },
+ {
+  "name": "Kerastile G2: White (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 33.9,
+  "priceEur": 0.339
+ },
+ {
+  "name": "Kerapoxy CQ: 113 Cement Grey (10kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 726.0,
+  "priceEur": 7.26
+ },
+ {
+  "name": "Kerapoxy CQ: 132 Beige 2000 (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 890.0,
+  "priceEur": 8.9
+ },
+ {
+  "name": "Kerastile G3 S1: White (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 43.8,
+  "priceEur": 0.438
+ },
+ {
+  "name": "Kerapoxy Easy Design: 110 Manhattan (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 966.0,
+  "priceEur": 9.66
+ },
+ {
+  "name": "Kerapoxy Easy Design: 103 Moonlight (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 966.0,
+  "priceEur": 9.66
+ },
+ {
+  "name": "Kerapoxy Easy Design: 123 Ancient White (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 966.0,
+  "priceEur": 9.66
+ },
+ {
+  "name": "Kerapoxy Easy Design: 165 Cherry (3kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 966.0,
+  "priceEur": 9.66
+ },
+ {
+  "name": "Primer G (10kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 459.0,
+  "priceEur": 4.59
+ },
+ {
+  "name": "Purtop Easy T (20kg)",
+  "workItem": "Membranë hidroizoluese poliuretanike/poliuree me elasticitet të lartë",
+  "consumptionPerM2": 2.2,
+  "consumptionBasis": "≈2.2 kg/m² për 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 2326.0,
+  "priceEur": 23.26
+ },
+ {
+  "name": "Purtop Easy T Primer (4kg)",
+  "workItem": "Primer për membranat poliuretanike/poliuree",
+  "consumptionPerM2": 0.3,
+  "consumptionBasis": "Primer 0.25–0.35 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1321.0,
+  "priceEur": 13.21
+ },
+ {
+  "name": "Mapepur Universal Foam G (750ml)",
+  "workItem": "Shkumë poliuretanike montimi/izolimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapepur Fire Foam M (750ml)",
+  "workItem": "Shkumë poliuretanike montimi/izolimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapepur Universal Foam M (750ml)",
+  "workItem": "Shkumë poliuretanike montimi/izolimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex AC3: White",
+  "workItem": "Mastik akrilik për fuga dhe çarje në ambiente të brendshme",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex AC4: Grey",
+  "workItem": "Mastik akrilik për fuga dhe çarje në ambiente të brendshme",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex AC4: White",
+  "workItem": "Mastik akrilik për fuga dhe çarje në ambiente të brendshme",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil U 999",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil U 100",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil Z Plus 100",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil Z Plus 999",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil 300°C: Black (300ml)",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 100 White",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 103 Moonlight",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 110 Manhattan 2000",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 111 Silver Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 112 Medium Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 113 Cement Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 114 Anthracite",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 119 London Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 120 Black",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 123 Ancient White",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 125 Castle Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 127 Arctic Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 130 Jasmine",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 131 Vanilla",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 132 Beige 2000",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 133 Sand",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 134 Silk",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 135 Golden",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 136 Mud",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 137 Caribbean",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 138 Almond",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 141 Caramel",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 142 Brown",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 143 Terracota",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 144 Chocolate",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 145 Terra di Siena",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 149 Volcano",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 150 Yellow",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 163 Light Lilac",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 167 Avio",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 168 Cerulean",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 169 Steel Blue",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 172 Space Blue",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 174 Tornado",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 176 Green Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 177 Sage",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 187 Linen",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 188 Biscuit",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 189 Spelt",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 999 Transparent",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 100 White (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 100 White (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 111 Silver Grey (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 111 Silver Grey (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 113 Cement Grey (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 113 Cement Grey (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 45: 120 Black (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS 55: 113 Grey (290ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex MS Crystal",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex Firestop 1200°C",
+  "workItem": "Hermetizues rezistent ndaj zjarrit për kalime dhe fuga",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 100 White (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 100 White (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 111 Silver Grey (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 111 Silver Grey (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 113 Cement Grey (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 113 Cement Grey (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 120 Black (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 45 FT: 120 Black (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 35 CR: 113 Cement Grey (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 50 SL (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 65 Catalyst",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 65",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex Blackfill (300ml)",
+  "workItem": "Hermetizues poliuretanik i zi për fuga në beton/asfalt",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeflex PU 70 SL (Kit A+B 10kg)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 650.0,
+  "priceEur": 6.5
+ },
+ {
+  "name": "Mapeflex PU 70 NS (Kit A+B 5kg)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 1740.0,
+  "priceEur": 17.4
+ },
+ {
+  "name": "GS Flex Sigilante Poliuretanico (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Quarzolite Pittura: White (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Elastocolor Pittura Zero: White (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Elastocolor Waterproof",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Colorite Matt: White (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Antipluviol (25kg)",
+  "workItem": "Impregnues hidrorepelent për fasada dhe sipërfaqe poroze",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 178.0,
+  "priceEur": 1.78
+ },
+ {
+  "name": "Antipluviol (5kg)",
+  "workItem": "Impregnues hidrorepelent për fasada dhe sipërfaqe poroze",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 275.0,
+  "priceEur": 2.75
+ },
+ {
+  "name": "Antipluviol W (10kg)",
+  "workItem": "Impregnues hidrorepelent për fasada dhe sipërfaqe poroze",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 570.0,
+  "priceEur": 5.7
+ },
+ {
+  "name": "Antipluviol S (10kg)",
+  "workItem": "Impregnues hidrorepelent për fasada dhe sipërfaqe poroze",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 1043.0,
+  "priceEur": 10.43
+ },
+ {
+  "name": "Dursilite Igea: White (14L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilite: Base P (4L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilite Gypsos: Base P (4L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilite Matt: Base P (4L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilite Igea: White (4L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilite Matt: White (14L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Colorite Beton: RAL 9011 (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Silancolor Pittura Zero: White (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Dursilac Matt: RAL 9011 (2.5L)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.35,
+  "consumptionBasis": "0.3–0.4 l/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Quarzolite T 1.2mm: White (25kg)",
+  "workItem": "Suva dekorative për fasada",
+  "consumptionPerM2": 2.6,
+  "consumptionBasis": "2.2–3.0 kg/m² suva dekorative (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Silancolor T 1.2mm: White (20kg)",
+  "workItem": "Suva dekorative për fasada",
+  "consumptionPerM2": 2.6,
+  "consumptionBasis": "2.2–3.0 kg/m² suva dekorative (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Quarzolite Base Coat (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Malech (10kg)",
+  "workItem": "Primer fiksues me bazë uji për sipërfaqe murale",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "0.15–0.25 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Silancolor Cleaner + (5l)",
+  "workItem": "Pastrues për sipërfaqe murale përpara lyerjes",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Silancolor Primer (10kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 l/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Silancolor Primer Plus (10kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 0.25,
+  "consumptionBasis": "0.2–0.3 l/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "ACTI (25kg)",
+  "workItem": "Acid për pastrim/trajtim kimik të sipërfaqeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Acid Klorhidrik",
+  "workItem": "Acid për pastrim/trajtim kimik të sipërfaqeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kerastile G1: White (25kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² (mesatarja), spatul 6–8 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Primer G (25kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Eco Prim Grip Plus (10kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "0.15–0.25 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Eco Prim Grip Plus (5kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "0.15–0.25 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Topcem Pronto",
+  "workItem": "Lidhës/llaç për shtresa rrafshuese (skedë) me tharje të shpejtë",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesilent",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 542.0,
+  "priceEur": 5.42
+ },
+ {
+  "name": "Mapesilent Tape",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 56.0,
+  "priceEur": 0.56
+ },
+ {
+  "name": "Mapefoam 6mm",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 19.0,
+  "priceEur": 0.19
+ },
+ {
+  "name": "Mapefoam 10mm",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 21.0,
+  "priceEur": 0.21
+ },
+ {
+  "name": "Mapefoam 15mm (250m)",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 30.0,
+  "priceEur": 0.3
+ },
+ {
+  "name": "Mapefoam 20mm (150m)",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 41.0,
+  "priceEur": 0.41
+ },
+ {
+  "name": "Mapefoam 25mm (100m)",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 91.0,
+  "priceEur": 0.91
+ },
+ {
+  "name": "Mapefoam 30mm (180m)",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 116.0,
+  "priceEur": 1.16
+ },
+ {
+  "name": "Eurofoam 30mm",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Eurofoam 40mm",
+  "workItem": "Kordon polietileni për kontrollin e thellësisë së fugës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ghiaietto  6-10mm",
+  "workItem": "Çakëll dekorativ/mbrojtës për tarraca",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Prosfas",
+  "workItem": null,
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "PI Saver (5L)",
+  "workItem": null,
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 887.6,
+  "priceEur": 8.876
+ },
+ {
+  "name": "PI Cleaner (5L)",
+  "workItem": "Pastrues industrial për pajisje dhe sipërfaqe",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 552.2,
+  "priceEur": 5.522
+ },
+ {
+  "name": "Cleaner L",
+  "workItem": "Pastrues industrial për pajisje dhe sipërfaqe",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapestop Cream (280ml)",
+  "workItem": "Krem silanik injektimi kundër lagështisë kapilare",
+  "consumptionPerM2": 0.3,
+  "consumptionBasis": "≈0.3 kg/m² mur për 1 rresht injektimi — verifiko trashësinë",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapestop Cream (600ml)",
+  "workItem": "Krem silanik injektimi kundër lagështisë kapilare",
+  "consumptionPerM2": 0.3,
+  "consumptionBasis": "≈0.3 kg/m² mur për 1 rresht injektimi — verifiko trashësinë",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Poromap Rinzaffo Plus (25kg)",
+  "workItem": "Suva makroporoze dehumidifikuese për murature me lagështi",
+  "consumptionPerM2": 12.0,
+  "consumptionBasis": "≈12 kg/m² për 1 cm trashësi — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Poromap Deumidificante (20kg)",
+  "workItem": "Suva makroporoze dehumidifikuese për murature me lagështi",
+  "consumptionPerM2": 12.0,
+  "consumptionBasis": "≈12 kg/m² për 1 cm trashësi — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Poromap Finitura Civile (25kg)",
+  "workItem": "Suva makroporoze dehumidifikuese për murature me lagështi",
+  "consumptionPerM2": 12.0,
+  "consumptionBasis": "≈12 kg/m² për 1 cm trashësi — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond MS Rapid (300ml)",
+  "workItem": "Ngjitës montimi elastik me kapje të lartë fillestare",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond PU Strong (300ml)",
+  "workItem": "Ngjitës montimi elastik me kapje të lartë fillestare",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond MS Rapid (600ml)",
+  "workItem": "Ngjitës montimi elastik me kapje të lartë fillestare",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo PP Testa 75 x 25mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo PP Testa 75 x 80mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo PP Testa 50 x 40mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo PP Testa 50 x 80mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo TT 50*80+Vite 6.1*80mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo TT 50*40+Vite 6.1*50mm",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tubo TT 75*40mm blue",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.1 x 050 - T25",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.1 x 060 - T25",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.1 x 080 - T25",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.3 x 070 - T25",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.3 x 080 - T30",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": 2.0,
+  "consumptionBasis": "Fiksim mekanik në mbivendosje: rulon 2.10 m (gjerësi efektive ~2.00 m), hap 25 cm në tegel → 4 copë/ml ÷ 2.00 m ≈ 2.0 copë/m² (zonë qendrore; shto 50–100% në perimetër/qoshe sipas ngarkesës së erës)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Cleaner (5L)",
+  "workItem": "Solucion pastrimi për membranat sintetike PVC/TPO",
+  "consumptionPerM2": 0.05,
+  "consumptionBasis": "Pastrim vetëm i mbivendosjeve/tegelave: ~0.05 litër/m² sipërfaqe membrane",
+  "baseUnit": "litër",
+  "supplierPriceAll": 330.0,
+  "priceEur": 3.3
+ },
+ {
+  "name": "Mapeplan Cleaner (5L)",
+  "workItem": "Solucion pastrimi për membranat sintetike PVC/TPO",
+  "consumptionPerM2": 0.05,
+  "consumptionBasis": "Pastrim vetëm i mbivendosjeve/tegelave: ~0.05 litër/m² sipërfaqe membrane",
+  "baseUnit": "litër",
+  "supplierPriceAll": 345.0,
+  "priceEur": 3.45
+ },
+ {
+  "name": "Rondella 70 Piana",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Rondella 82x40 Piana",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Placchete IRD 82x40",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Placchete ID 70x70",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan UG 15",
+  "workItem": "Membranë sintetike PVC për struktura nëntokësore (bodrume, tunele)",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 423.0,
+  "priceEur": 4.23
+ },
+ {
+  "name": "Polystuoia 20",
+  "workItem": "Fletë HDPE me gunga — mbrojtje dhe kullim i hidroizolimit",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "XPS Polistiren 5cm",
+  "workItem": "Panel izolues termik XPS për tarraca, themele dhe fasada",
+  "consumptionPerM2": 1.05,
+  "consumptionBasis": "Panel i ngurtë: 1.05 m²/m² (5% humbje prerjeje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 448.028674,
+  "priceEur": 4.480287
+ },
+ {
+  "name": "XPS Polistiren 3cm",
+  "workItem": "Panel izolues termik XPS për tarraca, themele dhe fasada",
+  "consumptionPerM2": 1.05,
+  "consumptionBasis": "Panel i ngurtë: 1.05 m²/m² (5% humbje prerjeje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 268.817204,
+  "priceEur": 2.688172
+ },
+ {
+  "name": "Ultraplan",
+  "workItem": "Llaç autonivelues për rrafshimin e dyshemeve",
+  "consumptionPerM2": 4.8,
+  "consumptionBasis": "1.6 kg/m²/mm × 3 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultraplan Maxi",
+  "workItem": "Llaç autonivelues për rrafshimin e dyshemeve",
+  "consumptionPerM2": 4.8,
+  "consumptionBasis": "1.6 kg/m²/mm × 3 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planitop Rasa & Ripara R2",
+  "workItem": "Llaç riparimi/rrafshimi për strukturat e betonit",
+  "consumptionPerM2": 2.8,
+  "consumptionBasis": "1.4 kg/m²/mm × 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Intomap Finish W1",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 2.6,
+  "consumptionBasis": "2.2–3.0 kg/m² suva dekorative (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Customer Clearance Cost",
+  "workItem": "Shpenzime doganore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat TNS Fast: 10 Red",
+  "workItem": "Veshje akrilike për fusha sportive (sistem TNS)",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "0.25 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Plastimul",
+  "workItem": "Emulsion bituminoz hidroizolues për mure nëntokësore",
+  "consumptionPerM2": 3.5,
+  "consumptionBasis": "3–4 kg/m² në 2 shtresa (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Novoplan Maxi (25kg)",
+  "workItem": "Llaç autonivelues për rrafshimin e dyshemeve",
+  "consumptionPerM2": 4.8,
+  "consumptionBasis": "1.6 kg/m²/mm × 3 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Membran Bitumi Cilesia 2",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Membran Bitumi Adeziv Cil.2",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Boketone PVC",
+  "workItem": "Boketë (pilete) PVC për shkarkimin e ujit",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Aeratore Euro Guaina",
+  "workItem": "Ajrues (kamino ventilimi) për shtresat hidroizoluese",
+  "consumptionPerM2": 0.025,
+  "consumptionBasis": "Ajrues (kamino ventilimi): 1 copë / 40 m² sipërfaqe → 0.025 copë/m², për çlirimin e presionit të vaporit nën membranë (praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapewrap Rullino",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "JF PL1",
+  "workItem": null,
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "JF PL2",
+  "workItem": null,
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kubetiere 150 x 150",
+  "workItem": "Kallëp kubik për provat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Cimento Colacem 32.5",
+  "workItem": "Çimento portland për llaçe dhe betone",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Encore 5126",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Uje",
+  "workItem": "Ujë për përzierje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Idrocrete HP 60",
+  "workItem": "Aditiv hidroizolues për beton — ul përshkueshmërinë nga uji",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Idrocrete HP 50",
+  "workItem": "Aditiv hidroizolues për beton — ul përshkueshmërinë nga uji",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Yakflow Longa 50",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Yakflow Impuls 50",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kendore me Rrjete",
+  "workItem": "Kënddore (profil qoshe) për suva dhe pllaka gipsi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Transport",
+  "workItem": "Transport i materialeve në kantier",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Aquaflex S 1K (15kg)",
+  "workItem": "Membranë hidroizoluese e lëngshme për tarraca (aplikim me rul)",
+  "consumptionPerM2": 1.75,
+  "consumptionBasis": "1.5–2.0 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Bentonite VSD (30kg)",
+  "workItem": "Bentonit/membranë bentonitike hidroizoluese",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kerapoxy: 130 Jasmine (2kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 976.0,
+  "priceEur": 9.76
+ },
+ {
+  "name": "Kerapoxy: 130 Jasmine (5kg)",
+  "workItem": "Stuko epoksidike për fuga — rezistente kimikisht dhe higjienike",
+  "consumptionPerM2": 1.0,
+  "consumptionBasis": "≈1 kg/m² — varet nga formati i pllakës dhe gjerësia e fugës",
+  "baseUnit": "kg",
+  "supplierPriceAll": 777.0,
+  "priceEur": 7.77
+ },
+ {
+  "name": "Mapeproof FBH",
+  "workItem": "Membranë bentonitike hidroizoluese për themele dhe mure në kontakt me dhé",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapesil AC: 152 Liquorice",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Elastocolor Pittura Zero: Base P (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Evolight S P 3mm S F",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Evolight S P 4mm S F",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Evolight S P 4mm G F Grey",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Evolight S P 4.5mm G F Grey",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Idrosilex Liquido (5kg)",
+  "workItem": "Aditiv hidroizolues për llaçe dhe betone",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Idrosilex Liquido (25kg)",
+  "workItem": "Aditiv hidroizolues për llaçe dhe betone",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Keracrete (25kg)",
+  "workItem": "Aditiv latex për ngjitje dhe elasticitet të llaçeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil X Plus: Transparent",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 00 White",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 11 Light Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 13 Dark Grey",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 14 Anthracite",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 20 Black",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibosil AC: 32 Beige",
+  "workItem": "Silikon hermetizues për fuga elastike (banjo, qeramikë, xham)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: White (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: White (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: Dark Grey (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: Dark Grey (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: Black (300ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex MS 40: Black (600ml)",
+  "workItem": "Hermetizues elastik MS-polimer për fuga strukturore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: White (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: White (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Light Grey (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Light Grey (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Dark Grey (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Dark Grey (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Black (300ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kiboflex PU 40: Black (600ml)",
+  "workItem": "Hermetizues poliuretanik elastik për fuga dilatimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeguard WP 200",
+  "workItem": "Membranë/panel shkëputjeje dhe hidroizolimi nën pllaka",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 712.0,
+  "priceEur": 7.12
+ },
+ {
+  "name": "Mapeguard WP Adhesive",
+  "workItem": "Membranë/panel shkëputjeje dhe hidroizolimi nën pllaka",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeguard ST (30m)",
+  "workItem": "Membranë/panel shkëputjeje dhe hidroizolimi nën pllaka",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 184.0,
+  "priceEur": 1.84
+ },
+ {
+  "name": "Mapescreed Foamer L (IBC 1000L)",
+  "workItem": "Lidhës/llaç për shtresa rrafshuese (skedë) me tharje të shpejtë",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultralite S2 Flex (15kg)",
+  "workItem": "Llaç ngjitës çimentoje për pllaka qeramike dhe gres",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "2.5–3.5 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Vite CLS 6.1 x 030 - T25",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracare Stain Remover",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultracare Rust Remover",
+  "workItem": "Produkt pastrimi për pllaka, fuga dhe sipërfaqe",
+  "consumptionPerM2": 0.1,
+  "consumptionBasis": "≈0.1 l/m² për aplikim (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tessildrain PES-NTC 500: White (2M)",
+  "workItem": "Geotekstil jo i endur — mbrojtje, ndarje dhe filtrim/kullim i shtresave",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 67.0,
+  "priceEur": 0.67
+ },
+ {
+  "name": "Mapecoat EPN 24",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.6,
+  "consumptionBasis": "0.3 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Intomap Mono",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": 2.6,
+  "consumptionBasis": "2.2–3.0 kg/m² suva dekorative (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Sipas situacionit bashkengjitur",
+  "workItem": "Zë sipas situacionit të bashkëngjitur (jo material)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "SL Flow X30 82",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Quartz 0.063-0.355mm",
+  "workItem": "Rërë kuarci për sisteme rrëshirë dhe dysheme industriale",
+  "consumptionPerM2": 3.0,
+  "consumptionBasis": "≈3 kg/m² spërkatje mbi rrëshirë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Bentobar",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T bocchetta tonde de parete TPO 90mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Bateri 22-8.0 Li-ion",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Elektrik&#160; SL 6-22 box",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tower light SL 10-22 100-240V box",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "C 6-22 Karikues",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Idrocrete KR 1000 (20kg)",
+  "workItem": "Aditiv hidroizolues/reduktues i kapilaritetit për beton",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 59W/B  0.5kg",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 59W /A RAL 7032",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Custome Cleasrance Cost",
+  "workItem": "Shpenzime doganore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Upa 6/37",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kedore gipisi",
+  "workItem": "Kënddore (profil qoshe) për suva dhe pllaka gipsi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kedore gipisi",
+  "workItem": "Kënddore (profil qoshe) për suva dhe pllaka gipsi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Fiber Carbon 600",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Fiber Carbon 300",
+  "workItem": "Fibër karboni për përforcim strukturor të elementeve",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Fletë: 1.10 m²/m² (10% mbivendosje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kendore gipsi",
+  "workItem": "Kënddore (profil qoshe) për suva dhe pllaka gipsi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "mp sealing button",
+  "workItem": "Profil metalik fiksimi/mbylljeje për skajet e membranës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibolastic Komp. B (5L)",
+  "workItem": "Hidroizolim elastik dykomponent çimentoje",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "Vlerë tipike 1.6 kg/m²/mm × 2 mm — verifiko TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 500.0,
+  "priceEur": 5.0
+ },
+ {
+  "name": "Kibolastic (A+B 20 Kg)",
+  "workItem": "Hidroizolim elastik dykomponent çimentoje",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "Vlerë tipike 1.6 kg/m²/mm × 2 mm — verifiko TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 90.0,
+  "priceEur": 0.9
+ },
+ {
+  "name": "Kibolastic Komp.A (15kg)",
+  "workItem": "Hidroizolim elastik dykomponent çimentoje",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "Vlerë tipike 1.6 kg/m²/mm × 2 mm — verifiko TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 30.0,
+  "priceEur": 0.3
+ },
+ {
+  "name": "Mapeband easy (30m)",
+  "workItem": "Shirit hidroizolues elastik për qoshe, nyje dhe kalime tubi",
+  "consumptionPerM2": 1.2,
+  "consumptionBasis": "Shirit hidroizolues për qoshe/nyje: 1.20 ml/m² sipërfaqe (rregull i brendshëm SARP, përfshin mbivendosjet dhe prerjet)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "SL Flow X25 64",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan B 20",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 578.0,
+  "priceEur": 5.78
+ },
+ {
+  "name": "Mapeplan B 18",
+  "workItem": "Membranë sintetike hidroizoluese PVC/TPO për tarraca dhe struktura",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 621.0,
+  "priceEur": 6.21
+ },
+ {
+  "name": "Spider P SA 3mm",
+  "workItem": "Membranë bituminoze hidroizoluese (guaina) për tarraca dhe themele",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta Tonde De Parete 100mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Waterstop 500 ( me bulb)",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "ml",
+  "supplierPriceAll": 2900.0,
+  "priceEur": 29.0
+ },
+ {
+  "name": "Mapeplan Bocchetta Rettangolare De Parete",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm (ose drejtkëndore): 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta Tonde De Parete 125mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm (ose drejtkëndore): 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Concorso spese doganali",
+  "workItem": "Shpenzime doganore",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Planigrout  300 (KIT A+B+C)",
+  "workItem": "Llaç mbushës pa tkurrje për ankorime dhe baza makinerish",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat Finish TS (KIT A+B)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Adesilex MT 32 (10kg)",
+  "workItem": "Ngjitës epoksidik strukturor për beton dhe elementë prefabrikuar",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Cerfix Proangle 10mm: Manhattan 2000 110",
+  "workItem": "Profil PVC për mbrojtjen e qosheve të pllakave",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat TNS Fast  RAL 6011 (20kg)",
+  "workItem": "Veshje akrilike për fusha sportive (sistem TNS)",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "0.25 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Venezia (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Seoul (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Zurich (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Gobi (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Tahiti (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor  Etna Re (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor Borneo Gn (1.5)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Base Coat  (10kg)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat TNS Line Tex (5kg)",
+  "workItem": "Veshje akrilike për fusha sportive (sistem TNS)",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "0.25 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Loft W White (20kg)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 1.5,
+  "consumptionBasis": "≈1.5 kg/m² për shtresë dekorative — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultratop Easycolor New York (1.5lt)",
+  "workItem": "Sistem dekorativ (mikrobeton) për dysheme",
+  "consumptionPerM2": 8.5,
+  "consumptionBasis": "1.7 kg/m²/mm × 5 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Primer LT  (5kg)",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefloor Finish 59W TRP (A+B 5.5kg)",
+  "workItem": "Veshje epoksi/poliuretanike mbrojtëse-dekorative për dysheme",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.12–0.18 kg/m² për shtresë (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapetherm EPS Neopor 80 (8cm)",
+  "workItem": "Panel izolues termik EPS për sistem fasade",
+  "consumptionPerM2": 1.05,
+  "consumptionBasis": "Panel i ngurtë: 1.05 m²/m² (5% humbje prerjeje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Voltex 2.5x20",
+  "workItem": "Bentonit/membranë bentonitike hidroizoluese",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Llamarine e punuar",
+  "workItem": "Llamarinë e laminuar/punuar për fiksimin e detajeve dhe skajeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "XPS Polisterol 10cm",
+  "workItem": "Panel izolues termik XPS për tarraca, themele dhe fasada",
+  "consumptionPerM2": 1.05,
+  "consumptionBasis": "Panel i ngurtë: 1.05 m²/m² (5% humbje prerjeje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 896.057348,
+  "priceEur": 8.960573
+ },
+ {
+  "name": "Purtop Easy: White (25kg)",
+  "workItem": "Membranë hidroizoluese poliuretanike/poliuree me elasticitet të lartë",
+  "consumptionPerM2": 2.2,
+  "consumptionBasis": "≈2.2 kg/m² për 2 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Lamiera Protofoni",
+  "workItem": "Llamarinë e laminuar/punuar për fiksimin e detajeve dhe skajeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Palet Euro",
+  "workItem": "Paletë transporti",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeproof AL Tape S15",
+  "workItem": "Shirit vetëngjitës për mbylljen e mbivendosjeve të membranës",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Elastcolor Paint Zero Base P",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vida Punto Trust Pata 4.2x19",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Upo Plastike Apolo FX8",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Vida Druri 6x140",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Upo Plastike Apolo FX6",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta Tonde de Parete 80 mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta Tonda Da Parete 80mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta 125mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm: 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta 110mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm: 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan T Bocchetta 75 mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.007,
+  "consumptionBasis": "Pilete shkarkimi Ø75–80 mm: 1 copë / 150 m² tarracë → 0.007 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta Tonda Da Parete 125mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm: 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta 125 mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.004,
+  "consumptionBasis": "Pilete shkarkimi Ø110–125 mm: 1 copë / 250 m² tarracë → 0.004 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (dimensionim sipas EN 12056-3; praktikë standarde për tarraca të sheshta)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Waterstop PVC 300mm Me Bulb",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "SL Flow X20 55",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan Bocchetta Tonda De Parete 90 mm",
+  "workItem": "Pilete shkarkimi PVC/TPO për membranat sintetike",
+  "consumptionPerM2": 0.005,
+  "consumptionBasis": "Pilete shkarkimi Ø90–100 mm: 1 copë / 200 m² tarracë → 0.005 copë/m². Minimum 2 pilete për çdo tarracë ose kompartiment kullimi (EN 12056-3; praktikë standarde)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Sfungjer i verdhe pastrimi",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Anti-Mould Protector",
+  "workItem": "Mbrojtës hidro-oleofobik për sipërfaqe poroze",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "SFUNGJER PASTRIMI (KIT 2 SFUNGJER+DOREZE)",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kove Bojaku",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Kibolastic Komp. B (10L)",
+  "workItem": "Hidroizolim elastik dykomponent çimentoje",
+  "consumptionPerM2": 3.4,
+  "consumptionBasis": "Vlerë tipike 1.6 kg/m²/mm × 2 mm — verifiko TDS",
+  "baseUnit": "litër",
+  "supplierPriceAll": 400.0,
+  "priceEur": 4.0
+ },
+ {
+  "name": "Isolastic",
+  "workItem": "Aditiv latex për ngjitje dhe elasticitet të llaçeve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeguard Board",
+  "workItem": "Membranë/panel shkëputjeje dhe hidroizolimi nën pllaka",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond Eco V4SP",
+  "workItem": "Ngjitës akrilik për veshje elastike/tekstile dyshemeje",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Elastcolor Paint Zero  (20kg)",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Kubetiere 100 x 100",
+  "workItem": "Kallëp kubik për provat e betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "PAJISJE PER LABORATORIN",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "SHPENZIME PER SHERBIME (AKOMODIM)",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Pi Pump ( 0.4 L )",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Oil pump PI-PUMP",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Hydrogum",
+  "workItem": null,
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Waterstoper",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Traansport",
+  "workItem": "Transport i materialeve në kantier",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Tank Filter",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Waterstop AA FS 240",
+  "workItem": "Profil waterstop/hidrofryhës për hermetizimin e nyjave të betonimit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ad blue",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeguard UM 35",
+  "workItem": "Membranë/panel shkëputjeje dhe hidroizolimi nën pllaka",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "m2",
+  "supplierPriceAll": 964.0,
+  "priceEur": 9.64
+ },
+ {
+  "name": "Silancolor T 1.5mm white (25kg)",
+  "workItem": "Suva dekorative për fasada",
+  "consumptionPerM2": 2.6,
+  "consumptionBasis": "2.2–3.0 kg/m² suva dekorative (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Elastcolor W Base P",
+  "workItem": "Bojë/veshje mbrojtëse-dekorative për fasada dhe mure",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Shiping cost ( 1x20GP Durres Port )",
+  "workItem": "Transport i materialeve në kantier",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Transport",
+  "workItem": "Transport i materialeve në kantier",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecure E 30 IBC",
+  "workItem": "Produkt kurimi (curing) për mbrojtjen e betonit të freskët",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Sfunxher i bardhe per pastrim bojaku",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Sfunxher i zi pastrim bojaku",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Dozator Aditivi",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Cilinder per dozatorin e aditivit",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Nordplug",
+  "workItem": "Aksesor fiksimi mekanik (vidë/rondele/upë) për membrana dhe panele",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond Turf 2 Stars Green",
+  "workItem": "Ngjitës për bashkimin e rulove të barit sintetik",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Fibran XPS 3cm",
+  "workItem": "Panel izolues termik XPS për tarraca, themele dhe fasada",
+  "consumptionPerM2": 1.05,
+  "consumptionBasis": "Panel i ngurtë: 1.05 m²/m² (5% humbje prerjeje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 403.225806,
+  "priceEur": 4.032258
+ },
+ {
+  "name": "Termination bar",
+  "workItem": "Profil metalik fiksimi/mbylljeje për skajet e membranës",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "ml",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Pigment",
+  "workItem": "Pastë ngjyruese për rrëshirat dhe veshjet",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeplan UG Black 20",
+  "workItem": "Membranë sintetike PVC për struktura nëntokësore (bodrume, tunele)",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 562.0,
+  "priceEur": 5.62
+ },
+ {
+  "name": "Aksesore (Lama, Vida, Pileta, Silikon)",
+  "workItem": "Aksesorë montimi (lama, vida, pileta, silikon) për sistemin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "m2",
+  "supplierPriceAll": 260.0,
+  "priceEur": 2.6
+ },
+ {
+  "name": "GEO 8-150 Geocomposite Drainage Sheets",
+  "workItem": "Fletë HDPE me gunga — mbrojtje dhe kullim i hidroizolimit",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "GR20-G Green Roof Drainage Sheet",
+  "workItem": "Fletë HDPE me gunga — mbrojtje dhe kullim i hidroizolimit",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultrabond Eco Contact 5kg",
+  "workItem": "Ngjitës kontakti me bazë uji për veshje elastike",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Chronos VF 202  25kg",
+  "workItem": "Aditiv superplastifikues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapetard",
+  "workItem": "Aditiv vonues i presës së betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapefibre ST 30 (6KG)",
+  "workItem": "Fibra për armimin difuz të llaçeve dhe betoneve",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat TNS Fast Base P (20kg)",
+  "workItem": "Veshje akrilike për fusha sportive (sistem TNS)",
+  "consumptionPerM2": 0.5,
+  "consumptionBasis": "0.25 kg/m² × 2 shtresa — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapeair AEI",
+  "workItem": "Aditiv aerues për betonin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapepur Multi Adhesive foam G",
+  "workItem": "Shkumë poliuretanike montimi/izolimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Ritardan",
+  "workItem": "Aditiv vonues i presës së betonit",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "WB - Lack 200 Arancione",
+  "workItem": "Pajisje/konsumabël kantieri (jo material i sistemit)",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecrete Film",
+  "workItem": "Produkt kurimi (curing) për mbrojtjen e betonit të freskët",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "litër",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecoat TNS Primer  EPW  10kg",
+  "workItem": "Primer për sistemin e veshjes së fushave sportive",
+  "consumptionPerM2": 0.15,
+  "consumptionBasis": "0.1–0.2 kg/m² (mesatarja) — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Planitex S",
+  "workItem": "Llaç autonivelues për rrafshimin e dyshemeve",
+  "consumptionPerM2": 4.8,
+  "consumptionBasis": "1.6 kg/m²/mm × 3 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapepur all in one foam",
+  "workItem": "Shkumë poliuretanike montimi/izolimi",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Sono W/Z -Premium",
+  "workItem": "Sistem izolimi akustik ndaj zhurmave të goditjes",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapei Primerseal",
+  "workItem": "Primer (astar) për përmirësimin e ngjitjes së shtresave pasuese",
+  "consumptionPerM2": 0.2,
+  "consumptionBasis": "Primer — vlerë tipike 0.15–0.25 kg/m² (mesatarja)",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Sonic Roll H",
+  "workItem": "Sistem izolimi akustik ndaj zhurmave të goditjes",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m2",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Sonic Tape H",
+  "workItem": "Sistem izolimi akustik ndaj zhurmave të goditjes",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Sonic Band H",
+  "workItem": "Sistem izolimi akustik ndaj zhurmave të goditjes",
+  "consumptionPerM2": 1.1,
+  "consumptionBasis": "Rulon/fletë: 1.10 m²/m² (10% mbivendosje/humbje)",
+  "baseUnit": "m",
+  "supplierPriceAll": 0.0,
+  "priceEur": null
+ },
+ {
+  "name": "Ultraplan Eco 20",
+  "workItem": "Llaç autonivelues për rrafshimin e dyshemeve",
+  "consumptionPerM2": 4.8,
+  "consumptionBasis": "1.6 kg/m²/mm × 3 mm — Mapei TDS",
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Mapecure SRA",
+  "workItem": "Produkt kurimi (curing) për mbrojtjen e betonit të freskët",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "kg",
+  "supplierPriceAll": null,
+  "priceEur": null
+ },
+ {
+  "name": "Aksesore (Lama, Vida, Pileta, Silikon)",
+  "workItem": "Aksesorë montimi (lama, vida, pileta, silikon) për sistemin",
+  "consumptionPerM2": null,
+  "consumptionBasis": null,
+  "baseUnit": "m2",
+  "supplierPriceAll": 260.0,
+  "priceEur": 2.6
+ }
+]
