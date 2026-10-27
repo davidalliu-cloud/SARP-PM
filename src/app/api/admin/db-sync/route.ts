@@ -25,6 +25,14 @@ export async function GET() {
       `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "sourceAmount" DOUBLE PRECISION`,
       `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "sourceCurrency" TEXT`,
       `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "vatRate" DOUBLE PRECISION`,
+      // Offer costing engine — product consumption/TDS + supplier price, and per-offer params.
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "consumptionPerM2" DOUBLE PRECISION`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "consumptionBasis" TEXT`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "workItem" TEXT`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "baseUnit" TEXT`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "supplierPriceAll" DOUBLE PRECISION`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "priceEur" DOUBLE PRECISION`,
+      `ALTER TABLE "Offer" ADD COLUMN IF NOT EXISTS "params" JSONB`,
     ];
     for (const sql of statements) {
       await prisma.$executeRawUnsafe(sql);
@@ -75,6 +83,10 @@ export async function GET() {
     prisma.offer.findMany({ include: { sections: { include: { items: true } }, createdBy: { select: { name: true } } }, take: 1 }),
   );
   await run("invoices.findMany", () => prisma.invoice.findMany({ include: { project: true }, take: 1 }));
+  await run("products.offerFields", () =>
+    prisma.product.findMany({ select: { consumptionPerM2: true, supplierPriceAll: true, baseUnit: true, workItem: true }, take: 1 }),
+  );
+  await run("offers.params", () => prisma.offer.findMany({ select: { params: true }, take: 1 }));
 
   const allOk = Object.values(checks).every((v) => v === "ok");
   return NextResponse.json({ ok: allOk, applied, checks });
