@@ -94,6 +94,7 @@ model Offer {
   exchangeRate   Float          @default(100)
   vatRate        Float          @default(20)
   discountPct    Float          @default(0)
+  params         Json?
   paymentTerms   String?
   executionTerms String?
   warrantyTerms  String?

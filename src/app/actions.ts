@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { hashPassword, requireUser } from "@/lib/auth";
 import { ITEM_KINDS, OFFER_VALIDITY_DAYS } from "@/lib/offer-calc";
+import { resolveOfferParams } from "@/lib/offer-costing";
 import { canEditOffer, nextOfferCode, transitionOffer, type OfferAction } from "@/lib/offers";
 import { createOfferTables } from "@/lib/offer-setup";
 import { prisma } from "@/lib/prisma";
@@ -614,6 +615,14 @@ function offerSectionsFromForm(formData: FormData) {
     }));
 }
 
+function offerParamsFromForm(formData: FormData) {
+  try {
+    return resolveOfferParams(JSON.parse(text(formData, "params") || "{}"));
+  } catch {
+    return resolveOfferParams({});
+  }
+}
+
 function offerFieldsFromForm(formData: FormData) {
   const issueDate = new Date(text(formData, "issueDate") || new Date());
   const validUntil = text(formData, "validUntil");
@@ -628,6 +637,7 @@ function offerFieldsFromForm(formData: FormData) {
     exchangeRate: numberValue(formData.get("exchangeRate")) || 100,
     vatRate: numberValue(formData.get("vatRate")),
     discountPct: numberValue(formData.get("discountPct")),
+    params: offerParamsFromForm(formData),
     paymentTerms: text(formData, "paymentTerms") || null,
     executionTerms: text(formData, "executionTerms") || null,
     warrantyTerms: text(formData, "warrantyTerms") || null,

@@ -1,6 +1,7 @@
 import type { Offer, OfferItem, OfferSection } from "@prisma/client";
 import { dateInputValue } from "@/lib/format";
 import { DEFAULT_TERMS, OFFER_VALIDITY_DAYS } from "@/lib/offer-calc";
+import { DEFAULT_OFFER_PARAMS, resolveOfferParams } from "@/lib/offer-costing";
 import { prisma } from "@/lib/prisma";
 import type { OfferEditorValues } from "./OfferEditor";
 
@@ -19,6 +20,7 @@ export function blankOfferValues(): OfferEditorValues {
     exchangeRate: 100,
     vatRate: 20,
     discountPct: 0,
+    params: DEFAULT_OFFER_PARAMS,
     ...DEFAULT_TERMS,
     internalNotes: "",
     sections: [],
@@ -38,6 +40,7 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
     exchangeRate: offer.exchangeRate,
     vatRate: offer.vatRate,
     discountPct: offer.discountPct,
+    params: resolveOfferParams(offer.params),
     paymentTerms: offer.paymentTerms ?? "",
     executionTerms: offer.executionTerms ?? "",
     warrantyTerms: offer.warrantyTerms ?? "",
@@ -64,7 +67,16 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
 
 export function offerProductOptions() {
   return prisma.product.findMany({
-    select: { name: true, unit: true, defaultCostPerUnit: true },
+    select: {
+      name: true,
+      unit: true,
+      defaultCostPerUnit: true,
+      baseUnit: true,
+      consumptionPerM2: true,
+      consumptionBasis: true,
+      supplierPriceAll: true,
+      workItem: true,
+    },
     orderBy: { name: "asc" },
   });
 }

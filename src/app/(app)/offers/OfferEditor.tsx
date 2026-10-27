@@ -1,8 +1,15 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useT } from "@/components/LanguageProvider";
 import { ITEM_UNITS, offerMoney, offerTotals, sectionTotals } from "@/lib/offer-calc";
+import {
+  allToOffer,
+  DEFAULT_OFFER_PARAMS,
+  priceUnit,
+  type LineKind,
+  type OfferParams,
+} from "@/lib/offer-costing";
 
 type ItemRow = {
   key: string;
@@ -37,6 +44,7 @@ export type OfferEditorValues = {
   exchangeRate: number;
   vatRate: number;
   discountPct: number;
+  params: OfferParams;
   paymentTerms: string;
   executionTerms: string;
   warrantyTerms: string;
@@ -45,10 +53,20 @@ export type OfferEditorValues = {
   sections: (Omit<SectionRow, "key" | "items"> & { items: Omit<ItemRow, "key">[] })[];
 };
 
-type ProductOption = { name: string; unit: string; defaultCostPerUnit: number };
+type ProductOption = {
+  name: string;
+  unit: string;
+  defaultCostPerUnit: number;
+  baseUnit: string | null;
+  consumptionPerM2: number | null;
+  consumptionBasis: string | null;
+  supplierPriceAll: number | null;
+  workItem: string | null;
+};
 
 let keySeed = 0;
 const newKey = () => `k${Date.now()}-${keySeed++}`;
+const round2 = (value: number) => Math.round(value * 100) / 100;
 
 function blankItem(kind = "MATERIAL", unit = "kg"): ItemRow {
   return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0 };
@@ -87,6 +105,7 @@ export function OfferEditor({
   const [exchangeRate, setExchangeRate] = useState(initial.exchangeRate);
   const [vatRate, setVatRate] = useState(initial.vatRate);
   const [discountPct, setDiscountPct] = useState(initial.discountPct);
+  const [params, setParams] = useState<OfferParams>(initial.params ?? DEFAULT_OFFER_PARAMS);
   const [sections, setSections] = useState<SectionRow[]>(() =>
     initial.sections.length
       ? initial.sections.map((section) => ({ ...section, key: newKey(), items: section.items.map((item) => ({ ...item, key: newKey() })) }))
@@ -96,12 +115,46 @@ export function OfferEditor({
   const productMap = useMemo(() => new Map(products.map((product) => [product.name.toLowerCase(), product])), [products]);
   const totals = offerTotals({ vatRate, discountPct, sections });
 
+  // The supplier price (ALL) that backs a line, if it can be priced automatically.
+  const supplierPriceForItem = (item: ItemRow): number | null | undefined => {
+    if (item.kind === "LABOUR") return null; // priced from params, not a product
+    return productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
+  };
+  // Lines are auto-priced when they are labour or a catalogue product with a price.
+  const isAutoPriced = (item: ItemRow) =>
+    item.kind === "LABOUR" || productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll != null;
+
+  // Recompute a line's unit price & cost from the engine; manual lines are left as typed.
+  const repriceItem = (item: ItemRow): ItemRow => {
+    const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
+    const unit = priceUnit(kind, supplierPriceForItem(item), params);
+    if (!unit) return item;
+    return {
+      ...item,
+      unitPrice: round2(allToOffer(unit.sellPerUnitAll, currency, exchangeRate)),
+      unitCost: round2(allToOffer(unit.costPerUnitAll, currency, exchangeRate)),
+    };
+  };
+
+  // Keep every auto-priced line in sync with the parameters / currency.
+  useEffect(() => {
+    setSections((rows) => rows.map((section) => ({ ...section, items: section.items.map(repriceItem) })));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params, currency, exchangeRate]);
+
   const updateSection = (key: string, patch: Partial<SectionRow>) =>
     setSections((rows) => rows.map((row) => (row.key === key ? { ...row, ...patch } : row)));
   const updateItem = (sectionKey: string, itemKey: string, patch: Partial<ItemRow>) =>
     setSections((rows) =>
       rows.map((row) =>
         row.key === sectionKey ? { ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, ...patch } : item)) } : row,
+      ),
+    );
+  // Changing kind can flip a line between material and labour pricing.
+  const changeKind = (sectionKey: string, itemKey: string, kind: string) =>
+    setSections((rows) =>
+      rows.map((row) =>
+        row.key === sectionKey ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, kind }) : item)) } : row,
       ),
     );
   const moveSection = (index: number, delta: number) =>
@@ -112,26 +165,44 @@ export function OfferEditor({
       [next[index], next[target]] = [next[target], next[index]];
       return next;
     });
+  const setParam = (key: keyof OfferParams, value: number) =>
+    setParams((prev) => ({ ...prev, [key]: Number.isFinite(value) ? value : prev[key] }));
 
-  // Picking a known product fills unit and internal cost (products are costed in EUR).
-  const pickProduct = (sectionKey: string, itemKey: string, name: string) => {
-    const product = productMap.get(name.trim().toLowerCase());
-    updateItem(sectionKey, itemKey, {
-      productName: name,
-      ...(product
-        ? { unit: product.unit, unitCost: Number((product.defaultCostPerUnit * (currency === "ALL" ? exchangeRate : 1)).toFixed(2)) }
-        : {}),
-    });
-  };
+  // Picking a catalogue product fills the base unit, the TDS consumption/m², the
+  // work-item text (if empty), and the engine-derived selling price & internal cost.
+  const pickProduct = (sectionKey: string, itemKey: string, name: string) =>
+    setSections((rows) =>
+      rows.map((row) => {
+        if (row.key !== sectionKey) return row;
+        return {
+          ...row,
+          items: row.items.map((item) => {
+            if (item.key !== itemKey) return item;
+            const product = productMap.get(name.trim().toLowerCase());
+            let next: ItemRow = { ...item, productName: name };
+            if (product) {
+              next.unit = product.baseUnit || product.unit || item.unit;
+              if (product.consumptionPerM2 != null) next.quantity = product.consumptionPerM2;
+              if (!next.description.trim() && product.workItem) next.description = product.workItem;
+            }
+            next = repriceItem(next);
+            return next;
+          }),
+        };
+      }),
+    );
 
   const payload = JSON.stringify(
     sections.map(({ key: _key, items, ...section }) => ({ ...section, items: items.map(({ key: _itemKey, ...item }) => item) })),
   );
 
+  const pct = (value: number) => round2(value * 100);
+
   return (
     <form action={action} className="grid gap-6">
       {initial.id ? <input type="hidden" name="id" value={initial.id} /> : null}
       <input type="hidden" name="sections" value={payload} />
+      <input type="hidden" name="params" value={JSON.stringify(params)} />
 
       <section className="panel grid gap-4 p-5 md:grid-cols-3">
         <label>
@@ -183,6 +254,47 @@ export function OfferEditor({
           </label>
         </div>
       </section>
+
+      {/* Cost parameters — the shared assumptions that drive every line's price. */}
+      <details className="panel p-5" open>
+        <summary className="cursor-pointer list-none">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.params.title")}</div>
+              <p className="mt-1 text-sm text-muted">{t("off.params.hint")}</p>
+            </div>
+            <span className="btn btn-secondary btn-small">{t("off.params.show")}</span>
+          </div>
+        </summary>
+        <div className="mt-4 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <fieldset className="grid gap-3">
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupLabour")}</legend>
+            <label>{t("off.params.dailyRate")}<input type="number" min="0" step="100" value={params.dailyRateAll} onChange={(e) => setParam("dailyRateAll", Number(e.target.value))} /></label>
+            <label>{t("off.params.teamSize")}<input type="number" min="1" step="1" value={params.teamSize} onChange={(e) => setParam("teamSize", Number(e.target.value))} /></label>
+            <label>{t("off.params.yield")}<input type="number" min="1" step="1" value={params.yieldM2PerDay} onChange={(e) => setParam("yieldM2PerDay", Number(e.target.value))} /></label>
+          </fieldset>
+          <fieldset className="grid gap-3">
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupMaterial")}</legend>
+            <label>{t("off.params.waste")}<input type="number" min="0" step="0.1" value={pct(params.wastePct)} onChange={(e) => setParam("wastePct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.fxBuffer")}<input type="number" min="0" step="0.1" value={pct(params.fxBufferPct)} onChange={(e) => setParam("fxBufferPct", Number(e.target.value) / 100)} /></label>
+          </fieldset>
+          <fieldset className="grid gap-3">
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupOperational")}</legend>
+            <label>{t("off.params.mobilization")}<input type="number" min="0" step="0.1" value={pct(params.mobilizationPct)} onChange={(e) => setParam("mobilizationPct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.equipment")}<input type="number" min="0" step="100" value={params.equipmentPerDayAll} onChange={(e) => setParam("equipmentPerDayAll", Number(e.target.value))} /></label>
+          </fieldset>
+          <fieldset className="grid gap-3">
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupProfit")}</legend>
+            <label>{t("off.params.markup")}<input type="number" min="0" step="0.5" value={pct(params.markupPct)} onChange={(e) => setParam("markupPct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.minMarkup")}<input type="number" min="0" step="0.5" value={pct(params.minMarkupPct)} onChange={(e) => setParam("minMarkupPct", Number(e.target.value) / 100)} /></label>
+          </fieldset>
+          <fieldset className="grid gap-3">
+            <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupReserves")}</legend>
+            <label>{t("off.params.warranty")}<input type="number" min="0" step="0.1" value={pct(params.warrantyPct)} onChange={(e) => setParam("warrantyPct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.contingency")}<input type="number" min="0" step="0.1" value={pct(params.contingencyPct)} onChange={(e) => setParam("contingencyPct", Number(e.target.value) / 100)} /></label>
+          </fieldset>
+        </div>
+      </details>
 
       <datalist id="offer-clients">
         {clients.map((name) => <option key={name} value={name} />)}
@@ -247,29 +359,58 @@ export function OfferEditor({
                   </tr>
                 </thead>
                 <tbody>
-                  {section.items.map((item) => (
-                    <tr key={item.key}>
-                      <td>
-                        <select className="w-28" value={item.kind} onChange={(event) => updateItem(section.key, item.key, { kind: event.target.value })}>
-                          <option value="MATERIAL">{t("off.kindMaterial")}</option>
-                          <option value="LABOUR">{t("off.kindLabour")}</option>
-                          <option value="OTHER">{t("off.kindOther")}</option>
-                        </select>
-                      </td>
-                      <td><input className="min-w-56" value={item.description} onChange={(event) => updateItem(section.key, item.key, { description: event.target.value })} placeholder="Shtresa hidroizoluese" /></td>
-                      <td><input className="min-w-48" list="offer-products" value={item.productName} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" /></td>
-                      <td>
-                        <input className="w-24" list="offer-units" value={item.unit} onChange={(event) => updateItem(section.key, item.key, { unit: event.target.value })} />
-                      </td>
-                      <td><input className="w-28" type="number" min="0" step="0.001" value={item.quantity} onChange={(event) => updateItem(section.key, item.key, { quantity: Number(event.target.value) })} /></td>
-                      <td><input className="w-28" type="number" min="0" step="0.01" value={item.unitPrice} onChange={(event) => updateItem(section.key, item.key, { unitPrice: Number(event.target.value) })} /></td>
-                      <td><input className="w-28" type="number" min="0" step="0.01" value={item.unitCost} onChange={(event) => updateItem(section.key, item.key, { unitCost: Number(event.target.value) })} /></td>
-                      <td className="font-bold">{offerMoney(item.quantity * item.unitPrice, currency)}</td>
-                      <td>
-                        <button className="btn btn-small btn-delete" type="button" onClick={() => updateSection(section.key, { items: section.items.filter((row) => row.key !== item.key) })}>✕</button>
-                      </td>
-                    </tr>
-                  ))}
+                  {section.items.map((item) => {
+                    const auto = isAutoPriced(item);
+                    const product = productMap.get(item.productName.trim().toLowerCase());
+                    const noPrice = item.kind !== "LABOUR" && product != null && product.supplierPriceAll == null;
+                    const marginPct = item.unitPrice > 0 ? ((item.unitPrice - item.unitCost) / item.unitPrice) * 100 : 0;
+                    return (
+                      <tr key={item.key}>
+                        <td>
+                          <select className="w-28" value={item.kind} onChange={(event) => changeKind(section.key, item.key, event.target.value)}>
+                            <option value="MATERIAL">{t("off.kindMaterial")}</option>
+                            <option value="LABOUR">{t("off.kindLabour")}</option>
+                            <option value="OTHER">{t("off.kindOther")}</option>
+                          </select>
+                        </td>
+                        <td><input className="min-w-56" value={item.description} onChange={(event) => updateItem(section.key, item.key, { description: event.target.value })} placeholder="Shtresa hidroizoluese" /></td>
+                        <td>
+                          <input className="min-w-48" list="offer-products" value={item.productName} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" />
+                          {product?.consumptionBasis ? <div className="mt-1 max-w-56 text-[11px] leading-tight text-muted">{product.consumptionBasis}</div> : null}
+                        </td>
+                        <td>
+                          <input className="w-24" list="offer-units" value={item.unit} onChange={(event) => updateItem(section.key, item.key, { unit: event.target.value })} />
+                        </td>
+                        <td><input className="w-28" type="number" min="0" step="0.001" value={item.quantity} onChange={(event) => updateItem(section.key, item.key, { quantity: Number(event.target.value) })} /></td>
+                        <td>
+                          {auto ? (
+                            <div className="w-28 font-semibold text-ink">
+                              {offerMoney(item.unitPrice, currency)}
+                              <div className="text-[11px] font-normal text-muted">{t("off.autoFromCatalogue")}</div>
+                            </div>
+                          ) : noPrice ? (
+                            <div className="w-28 text-[11px] font-semibold text-lab-burgundy">{t("off.noSupplierPrice")}</div>
+                          ) : (
+                            <input className="w-28" type="number" min="0" step="0.01" value={item.unitPrice} onChange={(event) => updateItem(section.key, item.key, { unitPrice: Number(event.target.value) })} />
+                          )}
+                        </td>
+                        <td>
+                          {auto ? (
+                            <div className="w-28 text-muted">
+                              {offerMoney(item.unitCost, currency)}
+                              <div className="text-[11px]">{t("off.lineMargin")} {marginPct.toFixed(0)}%</div>
+                            </div>
+                          ) : (
+                            <input className="w-28" type="number" min="0" step="0.01" value={item.unitCost} onChange={(event) => updateItem(section.key, item.key, { unitCost: Number(event.target.value) })} />
+                          )}
+                        </td>
+                        <td className="font-bold">{offerMoney(item.quantity * item.unitPrice, currency)}</td>
+                        <td>
+                          <button className="btn btn-small btn-delete" type="button" onClick={() => updateSection(section.key, { items: section.items.filter((row) => row.key !== item.key) })}>✕</button>
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
@@ -314,6 +455,7 @@ export function OfferEditor({
           </div>
           <div className="text-muted">
             {t("off.internalLabel")}: {t("off.costWord")} {offerMoney(totals.cost, currency)} · {t("off.margin")} {totals.margin.toFixed(1)}%
+            {totals.margin > 0 && totals.margin < params.minMarkupPct * 100 ? ` — ${t("off.belowMinMarkup")}` : ""}
             {totals.areaM2 ? ` · ${totals.areaM2.toFixed(1)} m²` : ""}
           </div>
         </div>
