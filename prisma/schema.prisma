@@ -95,6 +95,7 @@ model Offer {
   vatRate        Float          @default(20)
   discountPct    Float          @default(0)
   params         Json?
+  techDescription String?
   paymentTerms   String?
   executionTerms String?
   warrantyTerms  String?
@@ -171,6 +172,8 @@ model Product {
   baseUnit           String? // offer base unit the consumption/price refer to (m2, kg, litër…)
   supplierPriceAll   Float? // supplier price per base unit, ALL (the "P" in the costing engine)
   priceEur           Float? // supplier price per base unit, EUR (reference)
+  techDescription    String? // Albanian technical paragraph for offers, from Mapei/Polyglass TDS
+  techSource         String? // source URL (TDS or product page)
   usageItems         ProductUsageItem[]
   createdAt          DateTime           @default(now())
   updatedAt          DateTime           @updatedAt

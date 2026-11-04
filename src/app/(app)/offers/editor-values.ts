@@ -23,6 +23,7 @@ export function blankOfferValues(): OfferEditorValues {
     params: DEFAULT_OFFER_PARAMS,
     ...DEFAULT_TERMS,
     internalNotes: "",
+    techDescription: "",
     sections: [],
   };
 }
@@ -41,6 +42,7 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
     vatRate: offer.vatRate,
     discountPct: offer.discountPct,
     params: resolveOfferParams(offer.params),
+    techDescription: offer.techDescription ?? "",
     paymentTerms: offer.paymentTerms ?? "",
     executionTerms: offer.executionTerms ?? "",
     warrantyTerms: offer.warrantyTerms ?? "",
@@ -76,6 +78,7 @@ export function offerProductOptions() {
       consumptionBasis: true,
       supplierPriceAll: true,
       workItem: true,
+      techDescription: true,
     },
     orderBy: { name: "asc" },
   });

@@ -184,6 +184,13 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         );
       })}
 
+      {offer.techDescription ? (
+        <section className="panel mt-6 p-5">
+          <h2 className="mb-2 text-lg font-bold">{t("off.techHeader")}</h2>
+          <p className="whitespace-pre-line text-sm text-ink">{offer.techDescription}</p>
+        </section>
+      ) : null}
+
       {offer.internalNotes ? (
         <section className="panel mt-6 p-5 text-sm"><strong>{t("off.internalNotesLabel")}:</strong> {offer.internalNotes}</section>
       ) : null}

@@ -50,6 +50,7 @@ export type OfferEditorValues = {
   warrantyTerms: string;
   exclusions: string;
   internalNotes: string;
+  techDescription: string;
   sections: (Omit<SectionRow, "key" | "items"> & { items: Omit<ItemRow, "key">[] })[];
 };
 
@@ -62,6 +63,7 @@ type ProductOption = {
   consumptionBasis: string | null;
   supplierPriceAll: number | null;
   workItem: string | null;
+  techDescription: string | null;
 };
 
 let keySeed = 0;
@@ -106,6 +108,8 @@ export function OfferEditor({
   const [vatRate, setVatRate] = useState(initial.vatRate);
   const [discountPct, setDiscountPct] = useState(initial.discountPct);
   const [params, setParams] = useState<OfferParams>(initial.params ?? DEFAULT_OFFER_PARAMS);
+  const [techDescription, setTechDescription] = useState(initial.techDescription ?? "");
+  const [techMissing, setTechMissing] = useState<string[]>([]);
   const [sections, setSections] = useState<SectionRow[]>(() =>
     initial.sections.length
       ? initial.sections.map((section) => ({ ...section, key: newKey(), items: section.items.map((item) => ({ ...item, key: newKey() })) }))
@@ -167,6 +171,25 @@ export function OfferEditor({
     });
   const setParam = (key: keyof OfferParams, value: number) =>
     setParams((prev) => ({ ...prev, [key]: Number.isFinite(value) ? value : prev[key] }));
+
+  // Assemble the technical-characteristics block from the distinct selected
+  // products that have a stored (Mapei/Polyglass) description.
+  const generateTechDescription = () => {
+    const seen = new Set<string>();
+    const blocks: string[] = [];
+    const missing: string[] = [];
+    for (const section of sections) {
+      for (const item of section.items) {
+        const product = productMap.get(item.productName.trim().toLowerCase());
+        if (!product || seen.has(product.name)) continue;
+        seen.add(product.name);
+        if (product.techDescription) blocks.push(product.techDescription);
+        else missing.push(product.name);
+      }
+    }
+    setTechDescription(blocks.join("\n\n"));
+    setTechMissing(missing);
+  };
 
   // Picking a catalogue product fills the base unit, the TDS consumption/m², the
   // work-item text (if empty), and the engine-derived selling price & internal cost.
@@ -439,6 +462,25 @@ export function OfferEditor({
           {t("off.addSection")}
         </button>
       </div>
+
+      <section className="panel grid gap-3 p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.techHeader")}</div>
+            <p className="mt-1 text-sm text-muted">{t("off.techHint")}</p>
+          </div>
+          <button className="btn btn-secondary btn-small" type="button" onClick={generateTechDescription}>{t("off.generateTech")}</button>
+        </div>
+        <label>
+          {t("off.techFieldLabel")}
+          <textarea name="techDescription" rows={8} value={techDescription} onChange={(event) => setTechDescription(event.target.value)} />
+        </label>
+        {techMissing.length ? (
+          <p className="text-xs font-semibold text-lab-burgundy">
+            {t(techMissing.length === 1 ? "off.techMissingOne" : "off.techMissingMany", { count: techMissing.length, names: techMissing.join(", ") })}
+          </p>
+        ) : null}
+      </section>
 
       <section className="panel grid gap-4 p-5 md:grid-cols-2">
         <label>{t("off.paymentTerms")}<textarea name="paymentTerms" rows={3} defaultValue={initial.paymentTerms} /></label>

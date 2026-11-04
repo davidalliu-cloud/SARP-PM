@@ -120,6 +120,13 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
         <p className="mt-2 text-right text-xs text-muted">{t("off.printAltNote")}</p>
       ) : null}
 
+      {offer.techDescription ? (
+        <section className="avoid-break mt-8">
+          <h2 className="text-base font-bold">{t("off.techHeader")}</h2>
+          <p className="mt-2 whitespace-pre-line">{offer.techDescription}</p>
+        </section>
+      ) : null}
+
       {terms.length ? (
         <section className="avoid-break mt-8">
           <h2 className="text-base font-bold">{t("off.printTermsHeading")}</h2>

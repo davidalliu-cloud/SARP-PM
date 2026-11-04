@@ -643,6 +643,7 @@ function offerFieldsFromForm(formData: FormData) {
     warrantyTerms: text(formData, "warrantyTerms") || null,
     exclusions: text(formData, "exclusions") || null,
     internalNotes: text(formData, "internalNotes") || null,
+    techDescription: text(formData, "techDescription") || null,
   };
 }
 

@@ -33,6 +33,10 @@ export async function GET() {
       `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "supplierPriceAll" DOUBLE PRECISION`,
       `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "priceEur" DOUBLE PRECISION`,
       `ALTER TABLE "Offer" ADD COLUMN IF NOT EXISTS "params" JSONB`,
+      // Offer technical descriptions (from Mapei/Polyglass TDS).
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "techDescription" TEXT`,
+      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "techSource" TEXT`,
+      `ALTER TABLE "Offer" ADD COLUMN IF NOT EXISTS "techDescription" TEXT`,
     ];
     for (const sql of statements) {
       await prisma.$executeRawUnsafe(sql);
@@ -87,6 +91,8 @@ export async function GET() {
     prisma.product.findMany({ select: { consumptionPerM2: true, supplierPriceAll: true, baseUnit: true, workItem: true }, take: 1 }),
   );
   await run("offers.params", () => prisma.offer.findMany({ select: { params: true }, take: 1 }));
+  await run("products.techFields", () => prisma.product.findMany({ select: { techDescription: true, techSource: true }, take: 1 }));
+  await run("offers.techDescription", () => prisma.offer.findMany({ select: { techDescription: true }, take: 1 }));
 
   const allOk = Object.values(checks).every((v) => v === "ok");
   return NextResponse.json({ ok: allOk, applied, checks });
