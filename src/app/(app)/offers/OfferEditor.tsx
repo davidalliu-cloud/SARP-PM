@@ -64,6 +64,8 @@ type ProductOption = {
   supplierPriceAll: number | null;
   workItem: string | null;
   techDescription: string | null;
+  labourManHoursPerM2: number | null;
+  labourWorkers: number | null;
 };
 
 let keySeed = 0;
@@ -118,6 +120,27 @@ export function OfferEditor({
 
   const productMap = useMemo(() => new Map(products.map((product) => [product.name.toLowerCase(), product])), [products]);
   const totals = offerTotals({ vatRate, discountPct, sections });
+
+  // Mapei "Analisi dei Prezzi" labour guidance: total man-hours to apply 1 m² of
+  // the distinct selected products that carry a Mapei time. With the team size it
+  // implies an expected m²/day to sanity-check the Rendimenti value.
+  const mapeiLabour = useMemo(() => {
+    const seen = new Set<string>();
+    let manHours = 0;
+    let withData = 0;
+    for (const section of sections) {
+      for (const item of section.items) {
+        const product = productMap.get(item.productName.trim().toLowerCase());
+        if (!product || seen.has(product.name)) continue;
+        seen.add(product.name);
+        if (product.labourManHoursPerM2 && product.labourManHoursPerM2 > 0) {
+          manHours += product.labourManHoursPerM2;
+          withData += 1;
+        }
+      }
+    }
+    return { manHours: Math.round(manHours * 1000) / 1000, withData };
+  }, [sections, productMap]);
 
   // The supplier price (ALL) that backs a line, if it can be priced automatically.
   const supplierPriceForItem = (item: ItemRow): number | null | undefined => {
@@ -294,7 +317,19 @@ export function OfferEditor({
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupLabour")}</legend>
             <label>{t("off.params.dailyRate")}<input type="number" min="0" step="100" value={params.dailyRateAll} onChange={(e) => setParam("dailyRateAll", Number(e.target.value))} /></label>
             <label>{t("off.params.teamSize")}<input type="number" min="1" step="1" value={params.teamSize} onChange={(e) => setParam("teamSize", Number(e.target.value))} /></label>
-            <label>{t("off.params.yield")}<input type="number" min="1" step="1" value={params.yieldM2PerDay} onChange={(e) => setParam("yieldM2PerDay", Number(e.target.value))} /></label>
+            <label>
+              {t("off.params.yield")}
+              <input type="number" min="1" step="1" value={params.yieldM2PerDay} onChange={(e) => setParam("yieldM2PerDay", Number(e.target.value))} />
+              {mapeiLabour.withData > 0 && mapeiLabour.manHours > 0 ? (
+                <span className="mt-1 block text-[11px] font-normal italic text-muted">
+                  {t("off.params.mapeiYield", {
+                    hours: mapeiLabour.manHours.toFixed(2),
+                    team: params.teamSize,
+                    m2: Math.round((params.teamSize * 8) / mapeiLabour.manHours),
+                  })}
+                </span>
+              ) : null}
+            </label>
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupMaterial")}</legend>

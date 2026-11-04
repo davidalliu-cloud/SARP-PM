@@ -79,6 +79,8 @@ export function offerProductOptions() {
       supplierPriceAll: true,
       workItem: true,
       techDescription: true,
+      labourManHoursPerM2: true,
+      labourWorkers: true,
     },
     orderBy: { name: "asc" },
   });

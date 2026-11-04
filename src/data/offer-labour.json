@@ -1,0 +1,1022 @@
+[
+ {
+  "name": "Adesilex P22 (12kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG1 (1kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG1 (2kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG1 (6kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG4 (1kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG4 (2kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Adesilex PG4 (6kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Antipluviol (25kg)",
+  "labourManHoursPerM2": 0.15,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Antipluviol (5kg)",
+  "labourManHoursPerM2": 0.15,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Antipluviol S (10kg)",
+  "labourManHoursPerM2": 0.15,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Antipluviol W (10kg)",
+  "labourManHoursPerM2": 0.15,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Aquaflex Roof HR (20kg)",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Aquaflex Roof Plus HR (20kg)",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Aquaflex S 1K (15kg)",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Colorite Beton: RAL 9011 (20kg)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilac Matt: RAL 9011 (2.5L)",
+  "labourManHoursPerM2": 0.12,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite Gypsos: Base P (4L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite Igea: White (14L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite Igea: White (4L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite Matt: Base P (4L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite Matt: White (14L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Dursilite: Base P (4L)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Eco Prim Grip Plus (10kg)",
+  "labourManHoursPerM2": 0.08,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Eco Prim Grip Plus (5kg)",
+  "labourManHoursPerM2": 0.08,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Eco Prim PU 1K (10kg)",
+  "labourManHoursPerM2": 0.08,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Elastocolor Waterproof",
+  "labourManHoursPerM2": 0.108,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Eporip (10kg)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Eporip (1kg)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Eporip (2kg)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerabond T: Grey (25kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerabond T: White (25kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 100 White (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 103 Moonlight (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 110 Manhattan 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 111 Silver Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 112 Medium Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 113 Cement Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 114 Anthracite (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 123 Ancient White (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 130 Jasmine (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 131 Vanilla (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 132 Beige 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 133 Sand (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 134 Silk (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 135 Golden Dust (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 137 Caribbean (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 141 Caramel (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 142 Brown (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 144 Chocolate (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 145 Terra di Siena (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor FF: 188 Biscotto (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Keracolor GG: 113 Cement Grey (25kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 111 Silver Grey (10kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 111 Silver Grey (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 113 Cement Grey (10kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 113 Cement Grey (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 132 Beige 2000 (10kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 132 Beige 2000 (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 174 Tornado (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy CQ: 283 Sea Blue (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy Easy Design: 103 Moonlight (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy Easy Design: 110 Manhattan (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy Easy Design: 123 Ancient White (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy Easy Design: 165 Cherry (3kg)",
+  "labourManHoursPerM2": 0.8,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 100 White (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 100 White (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 110 Manhattan 2000 (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 110 Manhattan 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 111 Silver Grey (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 111 Silver Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 112 Medium Grey (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 112 Medium Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (10kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 113 Cement Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 114 Anthracite (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 114 Anthracite (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 120 Black (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 120 Black (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 130 Jasmine (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 130 Jasmine (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 132 Beige 2000 (2kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Kerapoxy: 132 Beige 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Malech (10kg)",
+  "labourManHoursPerM2": 0.054,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapecoat I 600 W",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapecoat I 62 W (Kit A+B 11kg)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapecoat I 620 W (Kit A+B 15kg)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapecoat TNS Fast  RAL 6011 (20kg)",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapecoat TNS Fast Base P (20kg)",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapecoat TNS Fast: 10 Red",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapecoat TNS Line Tex (5kg)",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapecoat TNS Primer  EPW  10kg",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapefloor EP 90",
+  "labourManHoursPerM2": 0.3,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapefloor I 302 SL (Kit A+B 20Kg)",
+  "labourManHoursPerM2": 0.26,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapegrout 430 Zero",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapegrout SV",
+  "labourManHoursPerM2": 0.24,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapegrout SV T: Black",
+  "labourManHoursPerM2": 0.24,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapegrout T60",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeguard UM 35",
+  "labourManHoursPerM2": 0.32,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapegum WPS (10kg)",
+  "labourManHoursPerM2": 0.12,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Mapegum WPS (5kg)",
+  "labourManHoursPerM2": 0.12,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Mapelastic Foundation (Kit A+B 32kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapelastic Smart Grey (Kit A+B 30kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapelastic Smart White (Kit A+B 30kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapelastic Zero (A+B 32kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof AL 1200 AP",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof AL AP",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof AL Tape D10 AP",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof AL Tape S15",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof FBH",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof FBT",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof FBT Tape 600 (20M)",
+  "labourManHoursPerM2": 0.22,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof SA Primer",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapeproof SA Primer (10kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapepur Multi Adhesive foam G",
+  "labourManHoursPerM2": 0.014,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Mapesilent",
+  "labourManHoursPerM2": 0.134,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapethene HT AP",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Mapetherm AR 1",
+  "labourManHoursPerM2": 0.24,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapetherm AR 1 GG: Grey",
+  "labourManHoursPerM2": 0.24,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapetherm EPS Neopor 80 (8cm)",
+  "labourManHoursPerM2": 0.801,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Monolastic (20kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planicrete: IBC 1000L",
+  "labourManHoursPerM2": 0.08,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Planigrout  300 (KIT A+B+C)",
+  "labourManHoursPerM2": 0.05,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planigrout 310 (Kit A+B+C)",
+  "labourManHoursPerM2": 0.05,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planiseal 288 Comp B (3kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planiseal 288 Grey (Kit A+B 25kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planiseal 88: Grey (25kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planiseal 88: White (25kg)",
+  "labourManHoursPerM2": 0.28,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planitop Fast 330",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planitop HDM Maxi (Kit A+B 31.25kg)",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planitop Rasa & Riapara R4",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Planitop Rasa & Ripara R2",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Plastimul",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Poromap Deumidificante (20kg)",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Poromap Finitura Civile (25kg)",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Poromap Rinzaffo Plus (25kg)",
+  "labourManHoursPerM2": 0.228,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Primer 3296 (10kg)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 1
+ },
+ {
+  "name": "Primer G (10kg)",
+  "labourManHoursPerM2": 0.054,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Primer G (25kg)",
+  "labourManHoursPerM2": 0.054,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Purtop Easy T (20kg)",
+  "labourManHoursPerM2": 0.32,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Purtop Easy T Primer (4kg)",
+  "labourManHoursPerM2": 0.32,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Purtop Easy: White (15kg)",
+  "labourManHoursPerM2": 0.32,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Purtop Easy: White (25kg)",
+  "labourManHoursPerM2": 0.32,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Quarzolite Base Coat (20kg)",
+  "labourManHoursPerM2": 0.072,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Quarzolite Pittura: White (20kg)",
+  "labourManHoursPerM2": 0.081,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Quarzolite T 1.2mm: White (25kg)",
+  "labourManHoursPerM2": 0.6,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Silancolor Cleaner + (5l)",
+  "labourManHoursPerM2": 0.114,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Silancolor Primer (10kg)",
+  "labourManHoursPerM2": 0.054,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Silancolor Primer Plus (10kg)",
+  "labourManHoursPerM2": 0.054,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Silancolor T 1.2mm: White (20kg)",
+  "labourManHoursPerM2": 0.3,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Silancolor T 1.5mm white (25kg)",
+  "labourManHoursPerM2": 0.3,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Topcem Pronto",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultrabond Eco Contact 5kg",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultrabond Eco P16",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultrabond Eco V4SP",
+  "labourManHoursPerM2": 0.2,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracare Keranet (5L)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracare Keranet Easy Spray (0.75L)",
+  "labourManHoursPerM2": 0.1,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 100 White (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 103 Moonlight (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 110 Manhattan 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 111 Silver Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 112 Medium Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 113 Cement Grey (22kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 113 Cement Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 114 Anthracite (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 115 River Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 119 London Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 120 Black (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 123 Ancient White (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 125 Castle Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 127 Arctic Grey (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 130 Jasmine (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 131 Vanilla (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 132 Beige 2000 (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 133 Sand (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 134 Silk (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 135 Golden (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 136 Mud (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 137 Caribbean (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 138 Almond (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 141 Caramel (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 142 Brown (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 143 Terracota (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 144 Chocolate (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 145 Terra di Siena (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 149 Volcano (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 150 Yellow (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 152 Liquorice (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 163 Light Lilac (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 167 Avio (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 168 Cerulean (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 169 Steel Blue (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 172 Space Blue (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 174 Tornado (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 176 Green Grey",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 177  Sage (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 187 Linen (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 188 Biscuit (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultracolor Plus: 189 Spelt (5kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultralite S2 Flex (15kg)",
+  "labourManHoursPerM2": 0.534,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultraplan",
+  "labourManHoursPerM2": 0.23,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultraplan Maxi",
+  "labourManHoursPerM2": 0.23,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultratop Loft W White (20kg)",
+  "labourManHoursPerM2": 1.5,
+  "labourWorkers": 2
+ },
+ {
+  "name": "Ultratop Loft W: White (20kg)",
+  "labourManHoursPerM2": 1.5,
+  "labourWorkers": 2
+ }
+]
