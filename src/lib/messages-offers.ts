@@ -193,6 +193,7 @@ export const enOffers: Messages = {
   margin: "margin",
 
   // Costing parameters panel + engine
+  clearProduct: "Clear product",
   noSupplierPrice: "no supplier price",
   autoFromCatalogue: "auto",
   lineMargin: "margin",
@@ -219,7 +220,7 @@ export const enOffers: Messages = {
     dailyRate: "Daily rate / worker (ALL)",
     teamSize: "Team size (workers)",
     yield: "Yield (m²/team/day)",
-    mapeiYield: "Mapei: ~{hours} work-hours/m² → with {team} workers ≈ {m2} m²/day (8 h)",
+    mapeiYield: "Labour: ~{hours} work-hours/m² → with {team} workers ≈ {m2} m²/day (8 h)",
     waste: "Waste / loss (%)",
     fxBuffer: "FX buffer EUR/ALL (%)",
     mobilization: "Mobilization & site buffer (%)",
@@ -453,6 +454,7 @@ export const sqOffers: Messages = {
   net: "Neto",
   vat: "TVSH",
   internalLabel: "E brendshme",
+  clearProduct: "Pastro produktin",
   noSupplierPrice: "pa çmim furnitori",
   autoFromCatalogue: "auto",
   lineMargin: "marzh",
@@ -479,7 +481,7 @@ export const sqOffers: Messages = {
     dailyRate: "Norma ditore / punëtor (ALL)",
     teamSize: "Ekipi (nr. punëtorësh)",
     yield: "Rendimenti (m²/ekip/ditë)",
-    mapeiYield: "Mapei: ~{hours} orë-punë/m² → me {team} punëtorë ≈ {m2} m²/ditë (8 orë)",
+    mapeiYield: "Puna: ~{hours} orë-punë/m² → me {team} punëtorë ≈ {m2} m²/ditë (8 orë)",
     waste: "Skarto / humbje (%)",
     fxBuffer: "Buffer kursi EUR/ALL (%)",
     mobilization: "Buffer mobilizimi & kantieri (%)",

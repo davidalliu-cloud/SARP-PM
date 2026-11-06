@@ -1018,5 +1018,15 @@
   "name": "Ultratop Loft W: White (20kg)",
   "labourManHoursPerM2": 1.5,
   "labourWorkers": 2
+ },
+ {
+  "name": "Mapeplan M 15 Broof T1/T3",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 3
+ },
+ {
+  "name": "Mapeplan UG 15",
+  "labourManHoursPerM2": 0.16,
+  "labourWorkers": 3
  }
 ]

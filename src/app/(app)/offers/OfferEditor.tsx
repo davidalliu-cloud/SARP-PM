@@ -260,7 +260,7 @@ export function OfferEditor({
         </label>
         <label>
           {t("off.client")}
-          <input name="clientName" required list="offer-clients" defaultValue={initial.clientName} placeholder={t("off.clientPlaceholder")} autoComplete="off" />
+          <input name="clientName" required list="offer-clients" defaultValue={initial.clientName} onFocus={(event) => event.currentTarget.select()} placeholder={t("off.clientPlaceholder")} autoComplete="off" />
         </label>
         <label>
           {t("off.projectSite")}
@@ -441,7 +441,20 @@ export function OfferEditor({
                         </td>
                         <td><input className="min-w-56" value={item.description} onChange={(event) => updateItem(section.key, item.key, { description: event.target.value })} placeholder="Shtresa hidroizoluese" /></td>
                         <td>
-                          <input className="min-w-48" list="offer-products" value={item.productName} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" />
+                          <div className="flex items-center gap-1">
+                            <input className="min-w-44" list="offer-products" value={item.productName} onFocus={(event) => event.currentTarget.select()} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" />
+                            {item.productName ? (
+                              <button
+                                type="button"
+                                className="shrink-0 rounded px-1.5 text-lg leading-none text-muted hover:text-lab-burgundy"
+                                title={t("off.clearProduct")}
+                                aria-label={t("off.clearProduct")}
+                                onClick={() => updateItem(section.key, item.key, { productName: "" })}
+                              >
+                                ×
+                              </button>
+                            ) : null}
+                          </div>
                           {product?.consumptionBasis ? <div className="mt-1 max-w-56 text-[11px] leading-tight text-muted">{product.consumptionBasis}</div> : null}
                         </td>
                         <td>
