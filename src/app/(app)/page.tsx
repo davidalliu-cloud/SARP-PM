@@ -272,8 +272,10 @@ export default async function DashboardPage({
 
   const projects = await prisma.project.findMany({
     include: {
-      dailyRecords: { include: { productItems: { include: { product: true } }, labourItems: true, expenseItems: true } },
-      invoices: true,
+      dailyRecords: { include: { productItems: { include: { product: { select: { id: true, name: true, unit: true } } } }, labourItems: true, expenseItems: true } },
+      // Only the fields the dashboard reads — excludes volatile metadata (sourceAmount,
+      // vatRate…) so new Invoice columns don't break the landing page before a migration.
+      invoices: { select: { id: true, amount: true, isPaid: true, invoiceDate: true, dueDate: true, invoiceNo: true, monthCovered: true, paidDate: true } },
     },
     orderBy: { createdAt: "desc" },
   });

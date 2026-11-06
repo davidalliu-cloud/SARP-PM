@@ -110,7 +110,7 @@ export async function GET(
     const records = await prisma.dailyRecord.findMany({
       include: {
         project: true,
-        productItems: { include: { product: true } },
+        productItems: { include: { product: { select: { id: true, name: true, unit: true } } } },
         labourItems: { include: { employee: true } },
         expenseItems: true,
       },

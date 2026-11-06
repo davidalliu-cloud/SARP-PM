@@ -47,7 +47,9 @@ export async function AppShell({ children, user }: { children: ReactNode; user: 
         status: true,
         budgetAmount: true,
         estimatedContractValue: true,
-        invoices: true,
+        // Narrow to the fields the cost/attention maths uses, so new Invoice
+        // columns can't break the shell before a schema migration runs.
+        invoices: { select: { amount: true, isPaid: true, invoiceDate: true, dueDate: true } },
         dailyRecords: { include: { productItems: true, labourItems: true, expenseItems: true } },
       },
       orderBy: { name: "asc" },

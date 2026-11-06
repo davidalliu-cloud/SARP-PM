@@ -1,5 +1,9 @@
-import type { DailyRecord, ExpenseItem, Invoice, LabourEntryItem, ProductUsageItem } from "@prisma/client";
+import type { DailyRecord, ExpenseItem, LabourEntryItem, ProductUsageItem } from "@prisma/client";
 import { daysUntil, invoiceDueDate } from "@/lib/format";
+
+// Only the invoice fields the cost maths needs — so queries can select a narrow
+// set and new Invoice columns never break the dashboard/shell before a migration.
+export type InvoiceForTotals = { amount: number };
 
 export type RecordWithItems = DailyRecord & {
   productItems: ProductUsageItem[];
@@ -23,7 +27,7 @@ export function recordTotal(record: RecordWithItems) {
   return recordProductCost(record) + recordLabourCost(record) + recordExpenseCost(record);
 }
 
-export function projectTotals(records: RecordWithItems[], invoices: Invoice[]) {
+export function projectTotals(records: RecordWithItems[], invoices: InvoiceForTotals[]) {
   const productCost = records.reduce((sum, record) => sum + recordProductCost(record), 0);
   const labourCost = records.reduce((sum, record) => sum + recordLabourCost(record), 0);
   const expenseCost = records.reduce((sum, record) => sum + recordExpenseCost(record), 0);

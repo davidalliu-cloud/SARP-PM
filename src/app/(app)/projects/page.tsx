@@ -17,7 +17,8 @@ export default async function ProjectsPage({
   const projects = await prisma.project.findMany({
     include: {
       dailyRecords: { include: { productItems: true, labourItems: true, expenseItems: true } },
-      invoices: true,
+      // Totals only need the amount; narrow so new Invoice columns stay safe.
+      invoices: { select: { amount: true } },
     },
     orderBy: { startDate: "desc" },
   });

@@ -13,7 +13,7 @@ export async function GET(_: Request, { params }: { params: Promise<{ id: string
     include: {
       dailyRecords: {
         include: {
-          productItems: { include: { product: true } },
+          productItems: { include: { product: { select: { id: true, name: true, unit: true } } } },
           labourItems: { include: { employee: true } },
           expenseItems: true,
         },
