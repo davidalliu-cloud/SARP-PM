@@ -301,13 +301,21 @@ export function OfferEditor({
         </div>
       </section>
 
-      {/* Cost parameters — the shared assumptions that drive every line's price. */}
-      <details className="panel p-5" open>
+      {/* Cost parameters — the shared assumptions that drive every line's price.
+          Collapsed by default: set occasionally, with a live summary when closed. */}
+      <details className="panel p-5">
         <summary className="cursor-pointer list-none">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.params.title")}</div>
-              <p className="mt-1 text-sm text-muted">{t("off.params.hint")}</p>
+              <p className="mt-1 text-sm text-muted">
+                {t("off.params.summary", {
+                  markup: pct(params.markupPct),
+                  team: params.teamSize,
+                  yield: params.yieldM2PerDay,
+                  waste: pct(params.wastePct),
+                })}
+              </p>
             </div>
             <span className="btn btn-secondary btn-small">{t("off.params.show")}</span>
           </div>
@@ -517,13 +525,24 @@ export function OfferEditor({
         ) : null}
       </section>
 
-      <section className="panel grid gap-4 p-5 md:grid-cols-2">
-        <label>{t("off.paymentTerms")}<textarea name="paymentTerms" rows={3} defaultValue={initial.paymentTerms} /></label>
-        <label>{t("off.executionDelivery")}<textarea name="executionTerms" rows={3} defaultValue={initial.executionTerms} /></label>
-        <label>{t("off.warranty")}<textarea name="warrantyTerms" rows={3} defaultValue={initial.warrantyTerms} /></label>
-        <label>{t("off.exclusions")}<textarea name="exclusions" rows={3} defaultValue={initial.exclusions} /></label>
-        <label className="md:col-span-2">{t("off.internalNotesNeverPrinted")}<textarea name="internalNotes" rows={2} defaultValue={initial.internalNotes} /></label>
-      </section>
+      <details className="panel p-5">
+        <summary className="cursor-pointer list-none">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.termsTitle")}</div>
+              <p className="mt-1 text-sm text-muted">{t("off.termsHint")}</p>
+            </div>
+            <span className="btn btn-secondary btn-small">{t("off.params.show")}</span>
+          </div>
+        </summary>
+        <div className="mt-4 grid gap-4 md:grid-cols-2">
+          <label>{t("off.paymentTerms")}<textarea name="paymentTerms" rows={3} defaultValue={initial.paymentTerms} /></label>
+          <label>{t("off.executionDelivery")}<textarea name="executionTerms" rows={3} defaultValue={initial.executionTerms} /></label>
+          <label>{t("off.warranty")}<textarea name="warrantyTerms" rows={3} defaultValue={initial.warrantyTerms} /></label>
+          <label>{t("off.exclusions")}<textarea name="exclusions" rows={3} defaultValue={initial.exclusions} /></label>
+          <label className="md:col-span-2">{t("off.internalNotesNeverPrinted")}<textarea name="internalNotes" rows={2} defaultValue={initial.internalNotes} /></label>
+        </div>
+      </details>
 
       <section className="panel sticky bottom-0 z-10 flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
         <div className="grid gap-1 text-sm">
