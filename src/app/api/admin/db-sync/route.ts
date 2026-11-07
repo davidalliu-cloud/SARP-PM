@@ -40,6 +40,8 @@ export async function GET() {
       // Mapei labour time (man-hours/m²) for the Rendimenti guidance.
       `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "labourManHoursPerM2" DOUBLE PRECISION`,
       `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "labourWorkers" INTEGER`,
+      // Manual price override on an offer line (fixed subcontractor rate etc.).
+      `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "manualPrice" BOOLEAN NOT NULL DEFAULT false`,
     ];
     for (const sql of statements) {
       await prisma.$executeRawUnsafe(sql);
@@ -97,6 +99,7 @@ export async function GET() {
   await run("products.techFields", () => prisma.product.findMany({ select: { techDescription: true, techSource: true }, take: 1 }));
   await run("offers.techDescription", () => prisma.offer.findMany({ select: { techDescription: true }, take: 1 }));
   await run("products.labourFields", () => prisma.product.findMany({ select: { labourManHoursPerM2: true, labourWorkers: true }, take: 1 }));
+  await run("offerItems.manualPrice", () => prisma.offerItem.findMany({ select: { manualPrice: true }, take: 1 }));
 
   const allOk = Object.values(checks).every((v) => v === "ok");
   return NextResponse.json({ ok: allOk, applied, checks });

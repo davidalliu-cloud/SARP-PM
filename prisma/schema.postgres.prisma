@@ -146,6 +146,7 @@ model OfferItem {
   quantity    Float
   unitPrice   Float
   unitCost    Float        @default(0)
+  manualPrice Boolean      @default(false)
 }
 
 model OfferEvent {

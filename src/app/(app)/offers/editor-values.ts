@@ -62,6 +62,7 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
         quantity: item.quantity,
         unitPrice: item.unitPrice,
         unitCost: item.unitCost,
+        manualPrice: item.manualPrice ?? false,
       })),
     })),
   };

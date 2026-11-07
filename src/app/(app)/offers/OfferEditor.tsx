@@ -20,6 +20,7 @@ type ItemRow = {
   quantity: number;
   unitPrice: number;
   unitCost: number;
+  manualPrice: boolean;
 };
 
 type SectionRow = {
@@ -73,7 +74,7 @@ const newKey = () => `k${Date.now()}-${keySeed++}`;
 const round2 = (value: number) => Math.round(value * 100) / 100;
 
 function blankItem(kind = "MATERIAL", unit = "kg"): ItemRow {
-  return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0 };
+  return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0, manualPrice: false };
 }
 
 function blankSection(type: OfferEditorValues["type"]): SectionRow {
@@ -147,12 +148,16 @@ export function OfferEditor({
     if (item.kind === "LABOUR") return null; // priced from params, not a product
     return productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
   };
-  // Lines are auto-priced when they are labour or a catalogue product with a price.
-  const isAutoPriced = (item: ItemRow) =>
+  // A line has an engine price source when it is labour or a catalogue product
+  // with a supplier price. Such a line is auto-priced UNLESS the user has flipped
+  // it to a hand-entered figure (manualPrice).
+  const hasAutoSource = (item: ItemRow) =>
     item.kind === "LABOUR" || productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll != null;
+  const isAutoPriced = (item: ItemRow) => !item.manualPrice && hasAutoSource(item);
 
   // Recompute a line's unit price & cost from the engine; manual lines are left as typed.
   const repriceItem = (item: ItemRow): ItemRow => {
+    if (item.manualPrice) return item;
     const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
     const unit = priceUnit(kind, supplierPriceForItem(item), params);
     if (!unit) return item;
@@ -175,6 +180,22 @@ export function OfferEditor({
     setSections((rows) =>
       rows.map((row) =>
         row.key === sectionKey ? { ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, ...patch } : item)) } : row,
+      ),
+    );
+  // Switch a line between engine pricing and a hand-entered figure. Turning the
+  // override OFF re-applies the engine price; turning it ON keeps the current
+  // numbers as a starting point for the user to edit, and locks the recompute off.
+  const setManual = (sectionKey: string, itemKey: string, manual: boolean) =>
+    setSections((rows) =>
+      rows.map((row) =>
+        row.key === sectionKey
+          ? {
+              ...row,
+              items: row.items.map((item) =>
+                item.key === itemKey ? (manual ? { ...item, manualPrice: true } : repriceItem({ ...item, manualPrice: false })) : item,
+              ),
+            }
+          : row,
       ),
     );
   // Append a line, pricing it immediately (a labour line auto-fills its cost
@@ -472,12 +493,29 @@ export function OfferEditor({
                           {auto ? (
                             <div className="w-28 font-semibold text-ink">
                               {offerMoney(item.unitPrice, currency)}
-                              <div className="text-[11px] font-normal text-muted">{t("off.autoFromCatalogue")}</div>
+                              <button
+                                type="button"
+                                className="mt-0.5 block text-left text-[11px] font-normal text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                onClick={() => setManual(section.key, item.key, true)}
+                              >
+                                {t("off.autoFromCatalogue")} · {t("off.setManual")}
+                              </button>
                             </div>
-                          ) : noPrice ? (
-                            <div className="w-28 text-[11px] font-semibold text-lab-burgundy">{t("off.noSupplierPrice")}</div>
                           ) : (
-                            <input className="w-28" type="number" min="0" step="0.01" value={item.unitPrice} onChange={(event) => updateItem(section.key, item.key, { unitPrice: Number(event.target.value) })} />
+                            <div className="grid w-28 gap-0.5">
+                              <input className="w-28" type="number" min="0" step="0.01" value={item.unitPrice} onChange={(event) => updateItem(section.key, item.key, { unitPrice: Number(event.target.value) })} />
+                              {hasAutoSource(item) ? (
+                                <button
+                                  type="button"
+                                  className="text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  onClick={() => setManual(section.key, item.key, false)}
+                                >
+                                  {t("off.manualPrice")} · {t("off.revertAuto")}
+                                </button>
+                              ) : noPrice ? (
+                                <div className="text-[11px] font-semibold text-lab-burgundy">{t("off.noSupplierPrice")}</div>
+                              ) : null}
+                            </div>
                           )}
                         </td>
                         <td>
