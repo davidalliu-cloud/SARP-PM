@@ -177,6 +177,13 @@ export function OfferEditor({
         row.key === sectionKey ? { ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, ...patch } : item)) } : row,
       ),
     );
+  // Append a line, pricing it immediately (a labour line auto-fills its cost
+  // from the parameters right away instead of staying at 0 until something else
+  // triggers a recompute).
+  const addItem = (sectionKey: string, item: ItemRow) =>
+    setSections((rows) =>
+      rows.map((row) => (row.key === sectionKey ? { ...row, items: [...row.items, repriceItem(item)] } : row)),
+    );
   // Changing kind can flip a line between material and labour pricing.
   const changeKind = (sectionKey: string, itemKey: string, kind: string) =>
     setSections((rows) =>
@@ -496,8 +503,8 @@ export function OfferEditor({
 
             <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
               <div className="flex gap-2">
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, blankItem("MATERIAL", perM2 ? "kg" : "thes")] })}>{t("off.addMaterial")}</button>
-                <button className="btn btn-small btn-secondary" type="button" onClick={() => updateSection(section.key, { items: [...section.items, { ...blankItem("LABOUR", "m2"), description: "Aplikimi" }] })}>{t("off.addLabour")}</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => addItem(section.key, blankItem("MATERIAL", perM2 ? "kg" : "thes"))}>{t("off.addMaterial")}</button>
+                <button className="btn btn-small btn-secondary" type="button" onClick={() => addItem(section.key, { ...blankItem("LABOUR", "m2"), description: "Aplikimi" })}>{t("off.addLabour")}</button>
               </div>
               <div className="text-sm font-semibold text-ink">
                 {perM2 ? <>{t("off.valuePerM2")}: {offerMoney(subtotal.ratePrice, currency)} · </> : null}
