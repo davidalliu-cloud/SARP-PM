@@ -42,6 +42,8 @@ export async function GET() {
       `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "labourWorkers" INTEGER`,
       // Manual price override on an offer line (fixed subcontractor rate etc.).
       `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "manualPrice" BOOLEAN NOT NULL DEFAULT false`,
+      // Labour line cost mode: fixed (subcontractor) cost with engine margin vs day-rate.
+      `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "fixedCost" BOOLEAN NOT NULL DEFAULT false`,
     ];
     for (const sql of statements) {
       await prisma.$executeRawUnsafe(sql);
@@ -100,6 +102,7 @@ export async function GET() {
   await run("offers.techDescription", () => prisma.offer.findMany({ select: { techDescription: true }, take: 1 }));
   await run("products.labourFields", () => prisma.product.findMany({ select: { labourManHoursPerM2: true, labourWorkers: true }, take: 1 }));
   await run("offerItems.manualPrice", () => prisma.offerItem.findMany({ select: { manualPrice: true }, take: 1 }));
+  await run("offerItems.fixedCost", () => prisma.offerItem.findMany({ select: { fixedCost: true }, take: 1 }));
 
   const allOk = Object.values(checks).every((v) => v === "ok");
   return NextResponse.json({ ok: allOk, applied, checks });

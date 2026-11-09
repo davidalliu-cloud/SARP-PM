@@ -22,6 +22,7 @@ type ItemRow = {
   unitPrice: number;
   unitCost: number;
   manualPrice: boolean;
+  fixedCost: boolean;
 };
 
 type SectionRow = {
@@ -75,7 +76,7 @@ const newKey = () => `k${Date.now()}-${keySeed++}`;
 const round2 = (value: number) => Math.round(value * 100) / 100;
 
 function blankItem(kind = "MATERIAL", unit = "kg"): ItemRow {
-  return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0, manualPrice: false };
+  return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0, manualPrice: false, fixedCost: false };
 }
 
 function blankSection(type: OfferEditorValues["type"]): SectionRow {
@@ -102,6 +103,12 @@ function priceLineWith(
   productMap: Map<string, ProductOption>,
 ): ItemRow {
   if (item.manualPrice) return item;
+  // Fixed-cost line (e.g. a subcontractor's agreed rate): the user owns the
+  // cost; only the sell price is derived, by applying the target margin.
+  if (item.fixedCost) {
+    const m = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
+    return { ...item, unitPrice: round2(item.unitCost / (1 - m)) };
+  }
   const supplier = item.kind === "LABOUR" ? null : productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
   const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
   const unit = priceUnit(kind, supplier, params);
@@ -196,11 +203,6 @@ export function OfferEditor({
     return { manHours: Math.round(manHours * 1000) / 1000, withData };
   }, [sections, productMap]);
 
-  // The supplier price (ALL) that backs a line, if it can be priced automatically.
-  const supplierPriceForItem = (item: ItemRow): number | null | undefined => {
-    if (item.kind === "LABOUR") return null; // priced from params, not a product
-    return productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
-  };
   // A line has an engine price source when it is labour or a catalogue product
   // with a supplier price. Such a line is auto-priced UNLESS the user has flipped
   // it to a hand-entered figure (manualPrice).
@@ -208,18 +210,11 @@ export function OfferEditor({
     item.kind === "LABOUR" || productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll != null;
   const isAutoPriced = (item: ItemRow) => !item.manualPrice && hasAutoSource(item);
 
-  // Recompute a line's unit price & cost from the engine; manual lines are left as typed.
-  const repriceItem = (item: ItemRow): ItemRow => {
-    if (item.manualPrice) return item;
-    const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
-    const unit = priceUnit(kind, supplierPriceForItem(item), params);
-    if (!unit) return item;
-    return {
-      ...item,
-      unitPrice: round2(allToOffer(unit.sellPerUnitAll, currency, exchangeRate)),
-      unitCost: round2(allToOffer(unit.costPerUnitAll, currency, exchangeRate)),
-    };
-  };
+  // Recompute a line's unit price & cost from the engine. Manual lines are left
+  // as typed; fixed-cost lines keep their cost and only re-derive the price.
+  const repriceItem = (item: ItemRow): ItemRow => priceLineWith(item, params, currency, exchangeRate, productMap);
+  // The line's cost is user-entered (editable) unless the engine computes it.
+  const costIsComputed = (item: ItemRow) => isAutoPriced(item) && !item.fixedCost;
 
   // Keep every auto-priced line in sync with the parameters / currency.
   useEffect(() => {
@@ -248,6 +243,27 @@ export function OfferEditor({
                 item.key === itemKey ? (manual ? { ...item, manualPrice: true } : repriceItem({ ...item, manualPrice: false })) : item,
               ),
             }
+          : row,
+      ),
+    );
+  // Set a line's cost from the editable cost input, re-deriving the price where
+  // the engine owns it (fixed-cost lines re-apply the margin; manual lines keep
+  // their own price).
+  const setCost = (sectionKey: string, itemKey: string, unitCost: number) =>
+    setSections((rows) =>
+      rows.map((row) =>
+        row.key === sectionKey
+          ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, unitCost }) : item)) }
+          : row,
+      ),
+    );
+  // Labour cost source: day-rate × team (fixed=false) vs a fixed subcontractor
+  // rate the user types (fixed=true, with the margin still applied on top).
+  const setLabourFixed = (sectionKey: string, itemKey: string, fixed: boolean) =>
+    setSections((rows) =>
+      rows.map((row) =>
+        row.key === sectionKey
+          ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, fixedCost: fixed }) : item)) }
           : row,
       ),
     );
@@ -691,13 +707,33 @@ export function OfferEditor({
                           )}
                         </td>
                         <td>
-                          {auto ? (
+                          {costIsComputed(item) ? (
                             <div className="w-28 text-muted">
                               {offerMoney(item.unitCost, currency)}
                               <div className="text-[11px]">{t("off.lineMargin")} {marginPct.toFixed(0)}%</div>
+                              {item.kind === "LABOUR" ? (
+                                <button
+                                  type="button"
+                                  className="mt-0.5 block text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  onClick={() => setLabourFixed(section.key, item.key, true)}
+                                >
+                                  {t("off.subcontractorRate")}
+                                </button>
+                              ) : null}
                             </div>
                           ) : (
-                            <input className="w-28" type="number" min="0" step="0.01" value={item.unitCost} onChange={(event) => updateItem(section.key, item.key, { unitCost: Number(event.target.value) })} />
+                            <div className="grid w-28 gap-0.5">
+                              <input className="w-28" type="number" min="0" step="0.01" value={item.unitCost} onChange={(event) => setCost(section.key, item.key, Number(event.target.value))} />
+                              {item.kind === "LABOUR" && item.fixedCost ? (
+                                <button
+                                  type="button"
+                                  className="text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  onClick={() => setLabourFixed(section.key, item.key, false)}
+                                >
+                                  {t("off.subcontractor")} · {t("off.backToDayRate")}
+                                </button>
+                              ) : null}
+                            </div>
                           )}
                         </td>
                         <td className="font-bold">{offerMoney(item.quantity * item.unitPrice, currency)}</td>

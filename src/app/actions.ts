@@ -580,6 +580,7 @@ type OfferSectionInput = {
     unitPrice: number;
     unitCost?: number;
     manualPrice?: boolean;
+    fixedCost?: boolean;
   }[];
 };
 
@@ -611,6 +612,7 @@ function offerSectionsFromForm(formData: FormData) {
             unitPrice: finiteNumber(item.unitPrice),
             unitCost: finiteNumber(item.unitCost),
             manualPrice: Boolean(item.manualPrice),
+            fixedCost: Boolean(item.fixedCost),
           }))
           .filter((item) => item.description || item.productName),
       },
@@ -761,8 +763,8 @@ export async function duplicateOffer(formData: FormData) {
           areaM2,
           isOption,
           items: {
-            create: items.map(({ sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice }) => ({
-              sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice,
+            create: items.map(({ sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice, fixedCost }) => ({
+              sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice, fixedCost,
             })),
           },
         })),

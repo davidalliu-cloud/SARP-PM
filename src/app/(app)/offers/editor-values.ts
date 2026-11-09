@@ -63,6 +63,7 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
         unitPrice: item.unitPrice,
         unitCost: item.unitCost,
         manualPrice: item.manualPrice ?? false,
+        fixedCost: item.fixedCost ?? false,
       })),
     })),
   };
