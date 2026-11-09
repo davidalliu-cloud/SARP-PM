@@ -92,6 +92,46 @@ function blankSection(type: OfferEditorValues["type"]): SectionRow {
     : { key: newKey(), title: "Produkte", zone: "", description: "", areaM2: null, isOption: false, items: [blankItem("MATERIAL", "thes")] };
 }
 
+// Price one line from a given parameter set, respecting a manual override.
+// Shared by the live editor recompute and the what-if analysis so both agree.
+function priceLineWith(
+  item: ItemRow,
+  params: OfferParams,
+  currency: "EUR" | "ALL",
+  exchangeRate: number,
+  productMap: Map<string, ProductOption>,
+): ItemRow {
+  if (item.manualPrice) return item;
+  const supplier = item.kind === "LABOUR" ? null : productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
+  const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
+  const unit = priceUnit(kind, supplier, params);
+  if (!unit) return item;
+  return {
+    ...item,
+    unitPrice: round2(allToOffer(unit.sellPerUnitAll, currency, exchangeRate)),
+    unitCost: round2(allToOffer(unit.costPerUnitAll, currency, exchangeRate)),
+  };
+}
+
+type OfferEconomics = ReturnType<typeof offerTotals>;
+// Re-price every line under a hypothetical parameter/scalar set and roll it up
+// to the offer-level economics (offered value, cost, net profit, margin).
+function offerEconomics(args: {
+  sections: SectionRow[];
+  params: OfferParams;
+  currency: "EUR" | "ALL";
+  exchangeRate: number;
+  vatRate: number;
+  discountPct: number;
+  productMap: Map<string, ProductOption>;
+}): OfferEconomics {
+  const priced = args.sections.map((section) => ({
+    ...section,
+    items: section.items.map((item) => priceLineWith(item, args.params, args.currency, args.exchangeRate, args.productMap)),
+  }));
+  return offerTotals({ vatRate: args.vatRate, discountPct: args.discountPct, sections: priced });
+}
+
 export function OfferEditor({
   action,
   initial,
@@ -114,13 +154,25 @@ export function OfferEditor({
   const [params, setParams] = useState<OfferParams>(initial.params ?? DEFAULT_OFFER_PARAMS);
   const [techDescription, setTechDescription] = useState(initial.techDescription ?? "");
   const [techMissing, setTechMissing] = useState<string[]>([]);
-  const [sections, setSections] = useState<SectionRow[]>(() =>
-    initial.sections.length
-      ? initial.sections.map((section) => ({ ...section, key: newKey(), items: section.items.map((item) => ({ ...item, key: newKey() })) }))
-      : [blankSection(initial.type)],
-  );
-
   const productMap = useMemo(() => new Map(products.map((product) => [product.name.toLowerCase(), product])), [products]);
+  const [sections, setSections] = useState<SectionRow[]>(() => {
+    const base = initial.sections.length
+      ? initial.sections.map((section) => ({ ...section, key: newKey(), items: section.items.map((item) => ({ ...item, key: newKey() })) }))
+      : [blankSection(initial.type)];
+    // Price any still-unpriced auto line up front, so a fresh offer shows real
+    // figures right away instead of staying at 0 until the first edit. Saved
+    // lines (already priced) and manual lines are left exactly as stored.
+    const ip = initial.params ?? DEFAULT_OFFER_PARAMS;
+    return base.map((section) => ({
+      ...section,
+      items: section.items.map((item) =>
+        !item.manualPrice && item.unitPrice === 0 && item.unitCost === 0
+          ? priceLineWith(item, ip, initial.currency, initial.exchangeRate, productMap)
+          : item,
+      ),
+    }));
+  });
+
   const totals = offerTotals({ vatRate, discountPct, sections });
 
   // Mapei "Analisi dei Prezzi" labour guidance: total man-hours to apply 1 m² of
@@ -300,6 +352,38 @@ export function OfferEditor({
 
   const pct = (value: number) => round2(value * 100);
 
+  // Live what-if analysis: the offer's economics now, and how the offered price
+  // and net profit move when each driver is nudged by one step. Manual-price
+  // lines are frozen (priceLineWith leaves them), so they don't react.
+  const signed = (delta: number) => `${delta >= 0 ? "+" : "−"}${offerMoney(Math.abs(delta), currency)}`;
+  const analysis = useMemo(() => {
+    const baseArgs = { sections, params, currency, exchangeRate, vatRate, discountPct, productMap };
+    const base = offerEconomics(baseArgs);
+    const withParams = (patch: Partial<OfferParams>) => offerEconomics({ ...baseArgs, params: { ...params, ...patch } });
+    const withScalars = (patch: { exchangeRate?: number; discountPct?: number }) =>
+      offerEconomics({ ...baseArgs, exchangeRate: patch.exchangeRate ?? exchangeRate, discountPct: patch.discountPct ?? discountPct });
+    const row = (label: string, current: string, change: string, econ: OfferEconomics) => ({
+      label,
+      current,
+      change,
+      dPrice: econ.net - base.net,
+      dProfit: econ.profit - base.profit,
+    });
+    const rows = [
+      row(t("off.analysis.drMargin"), `${pct(params.targetMarginPct)}%`, "+5 pp", withParams({ targetMarginPct: params.targetMarginPct + 0.05 })),
+      row(t("off.analysis.drDailyRate"), `${params.dailyRateAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ dailyRateAll: params.dailyRateAll + 500 })),
+      row(t("off.analysis.drTeam"), String(params.teamSize), "+1", withParams({ teamSize: params.teamSize + 1 })),
+      row(t("off.analysis.drYield"), `${params.yieldM2PerDay}`, "+5", withParams({ yieldM2PerDay: params.yieldM2PerDay + 5 })),
+      row(t("off.analysis.drWaste"), `${pct(params.wastePct)}%`, "+1 pp", withParams({ wastePct: params.wastePct + 0.01 })),
+      row(t("off.analysis.drMobilization"), `${pct(params.mobilizationPct)}%`, "+1 pp", withParams({ mobilizationPct: params.mobilizationPct + 0.01 })),
+      row(t("off.analysis.drEquipment"), `${params.equipmentPerDayAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ equipmentPerDayAll: params.equipmentPerDayAll + 500 })),
+      ...(currency === "EUR" ? [row(t("off.analysis.drFx"), `${exchangeRate}`, "+1", withScalars({ exchangeRate: exchangeRate + 1 }))] : []),
+      row(t("off.analysis.drDiscount"), `${discountPct}%`, "+1 pp", withScalars({ discountPct: discountPct + 1 })),
+    ];
+    return { base, rows };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sections, params, currency, exchangeRate, vatRate, discountPct, productMap, t]);
+
   return (
     <form action={action} className="grid gap-6">
       {initial.id ? <input type="hidden" name="id" value={initial.id} /> : null}
@@ -366,7 +450,7 @@ export function OfferEditor({
               <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.params.title")}</div>
               <p className="mt-1 text-sm text-muted">
                 {t("off.params.summary", {
-                  markup: pct(params.markupPct),
+                  margin: pct(params.targetMarginPct),
                   team: params.teamSize,
                   yield: params.yieldM2PerDay,
                   waste: pct(params.wastePct),
@@ -407,8 +491,8 @@ export function OfferEditor({
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupProfit")}</legend>
-            <label>{t("off.params.markup")}<input type="number" min="0" step="0.5" value={pct(params.markupPct)} onChange={(e) => setParam("markupPct", Number(e.target.value) / 100)} /></label>
-            <label>{t("off.params.minMarkup")}<input type="number" min="0" step="0.5" value={pct(params.minMarkupPct)} onChange={(e) => setParam("minMarkupPct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.margin")}<input type="number" min="0" max="95" step="0.5" value={pct(params.targetMarginPct)} onChange={(e) => setParam("targetMarginPct", Number(e.target.value) / 100)} /></label>
+            <label>{t("off.params.minMargin")}<input type="number" min="0" max="95" step="0.5" value={pct(params.minMarginPct)} onChange={(e) => setParam("minMarginPct", Number(e.target.value) / 100)} /></label>
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupReserves")}</legend>
@@ -645,6 +729,55 @@ export function OfferEditor({
         </div>
       </details>
 
+      <section className="panel grid gap-4 p-5">
+        <div>
+          <div className="text-[11px] font-semibold uppercase tracking-[0.2em] text-lab-burgundy">{t("off.analysis.title")}</div>
+          <p className="mt-1 text-sm text-muted">{t("off.analysis.hint")}</p>
+        </div>
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+          {[
+            { label: t("off.analysis.offered"), value: offerMoney(analysis.base.net, currency) },
+            { label: t("off.analysis.total"), value: offerMoney(analysis.base.total, currency) },
+            { label: t("off.analysis.cost"), value: offerMoney(analysis.base.cost, currency) },
+            { label: t("off.analysis.profit"), value: offerMoney(analysis.base.profit, currency) },
+            { label: t("off.analysis.margin"), value: `${analysis.base.margin.toFixed(1)}%` },
+          ].map((card) => (
+            <div key={card.label} className="rounded-lg border border-line bg-white p-3">
+              <div className="text-[11px] uppercase tracking-wide text-muted">{card.label}</div>
+              <div className="mt-1 text-lg font-bold leading-tight text-ink">{card.value}</div>
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">{t("off.analysis.sensTitle")}</div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{t("off.analysis.colVariable")}</th>
+                  <th>{t("off.analysis.colCurrent")}</th>
+                  <th>{t("off.analysis.colChange")}</th>
+                  <th>{t("off.analysis.colDeltaPrice")}</th>
+                  <th>{t("off.analysis.colDeltaProfit")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {analysis.rows.map((r) => (
+                  <tr key={r.label}>
+                    <td className="font-semibold text-ink">{r.label}</td>
+                    <td className="text-muted">{r.current}</td>
+                    <td className="text-muted">{r.change}</td>
+                    <td className={r.dPrice >= 0 ? "font-semibold text-lab-green" : "font-semibold text-lab-burgundy"}>{signed(r.dPrice)}</td>
+                    <td className={r.dProfit >= 0 ? "font-semibold text-lab-green" : "font-semibold text-lab-burgundy"}>{signed(r.dProfit)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="mt-2 text-[11px] text-muted">{t("off.analysis.note")}</p>
+        </div>
+      </section>
+
       <section className="panel sticky bottom-0 z-10 flex flex-col gap-3 p-4 md:flex-row md:items-center md:justify-between">
         <div className="grid gap-1 text-sm">
           <div className="font-bold text-ink">
@@ -652,7 +785,7 @@ export function OfferEditor({
           </div>
           <div className="text-muted">
             {t("off.internalLabel")}: {t("off.costWord")} {offerMoney(totals.cost, currency)} · {t("off.margin")} {totals.margin.toFixed(1)}%
-            {totals.margin > 0 && totals.margin < params.minMarkupPct * 100 ? ` — ${t("off.belowMinMarkup")}` : ""}
+            {totals.margin > 0 && totals.margin < params.minMarginPct * 100 ? ` — ${t("off.belowMinMargin")}` : ""}
             {totals.areaM2 ? ` · ${totals.areaM2.toFixed(1)} m²` : ""}
           </div>
         </div>
