@@ -273,6 +273,19 @@ export function OfferEditor({
       [next[index], next[target]] = [next[target], next[index]];
       return next;
     });
+  // Reorder a line within its section (up = −1, down = +1). The array order is
+  // what gets saved as each item's sortOrder, so this persists on save.
+  const moveItem = (sectionKey: string, index: number, delta: number) =>
+    setSections((rows) =>
+      rows.map((row) => {
+        if (row.key !== sectionKey) return row;
+        const target = index + delta;
+        if (target < 0 || target >= row.items.length) return row;
+        const items = [...row.items];
+        [items[index], items[target]] = [items[target], items[index]];
+        return { ...row, items };
+      }),
+    );
   const setParam = (key: keyof OfferParams, value: number) =>
     setParams((prev) => ({ ...prev, [key]: Number.isFinite(value) ? value : prev[key] }));
 
@@ -630,7 +643,7 @@ export function OfferEditor({
                   </tr>
                 </thead>
                 <tbody>
-                  {section.items.map((item) => {
+                  {section.items.map((item, itemIndex) => {
                     const auto = isAutoPriced(item);
                     const product = productMap.get(item.productName.trim().toLowerCase());
                     const noPrice = item.kind !== "LABOUR" && product != null && product.supplierPriceAll == null;
@@ -722,7 +735,11 @@ export function OfferEditor({
                         </td>
                         <td className="font-bold">{offerMoney(item.quantity * item.unitPrice, currency)}</td>
                         <td>
-                          <button className="btn btn-small btn-delete" type="button" onClick={() => updateSection(section.key, { items: section.items.filter((row) => row.key !== item.key) })}>✕</button>
+                          <div className="flex items-center gap-1">
+                            <button className="btn btn-small btn-secondary" type="button" disabled={itemIndex === 0} aria-label={t("off.moveRowUp")} title={t("off.moveRowUp")} onClick={() => moveItem(section.key, itemIndex, -1)}>↑</button>
+                            <button className="btn btn-small btn-secondary" type="button" disabled={itemIndex === section.items.length - 1} aria-label={t("off.moveRowDown")} title={t("off.moveRowDown")} onClick={() => moveItem(section.key, itemIndex, 1)}>↓</button>
+                            <button className="btn btn-small btn-delete" type="button" onClick={() => updateSection(section.key, { items: section.items.filter((row) => row.key !== item.key) })}>✕</button>
+                          </div>
                         </td>
                       </tr>
                     );
