@@ -384,6 +384,71 @@ export function OfferEditor({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sections, params, currency, exchangeRate, vatRate, discountPct, productMap, t]);
 
+  // Cost → margin → price build-up for the whole job: decompose the total cost
+  // into its components (materials, waste, labour, equipment, mobilization, and
+  // any manual/other cost), then add the net profit to reach the offered price.
+  // Components are scaled to the headline cost so they sum to it exactly.
+  const breakdown = useMemo(() => {
+    const conv = (valueAll: number) => allToOffer(valueAll, currency, exchangeRate);
+    let materials = 0, waste = 0, labour = 0, equipment = 0, mobilization = 0, other = 0;
+    for (const section of sections) {
+      if (section.isOption) continue;
+      const mult = section.areaM2 && section.areaM2 > 0 ? section.areaM2 : 1;
+      for (const item of section.items) {
+        const q = item.quantity * mult;
+        if (item.manualPrice) {
+          other += item.unitCost * q;
+        } else if (item.kind === "LABOUR") {
+          const yld = params.yieldM2PerDay > 0 ? params.yieldM2PerDay : 1;
+          const lab = conv((params.dailyRateAll * params.teamSize) / yld) * q;
+          const eq = conv(params.equipmentPerDayAll / yld) * q;
+          labour += lab;
+          equipment += eq;
+          mobilization += (lab + eq) * params.mobilizationPct;
+        } else {
+          const p = productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
+          if (p == null) {
+            other += item.unitCost * q;
+          } else {
+            const matBase = conv(p) * q;
+            const w = matBase * params.wastePct;
+            materials += matBase;
+            waste += w;
+            mobilization += (matBase + w) * params.mobilizationPct;
+          }
+        }
+      }
+    }
+    const base = analysis.base;
+    const raw = materials + waste + labour + equipment + mobilization + other;
+    const scale = raw > 0 ? base.cost / raw : 1;
+    return {
+      materials: materials * scale,
+      waste: waste * scale,
+      labour: labour * scale,
+      equipment: equipment * scale,
+      mobilization: mobilization * scale,
+      other: other * scale,
+      cost: base.cost,
+      profit: base.profit,
+      net: base.net,
+      vat: base.vat,
+      total: base.total,
+      discount: base.discount,
+      margin: base.margin,
+    };
+  }, [sections, params, currency, exchangeRate, productMap, analysis]);
+
+  const buildRows = [
+    { label: t("off.analysis.bMaterials"), v: breakdown.materials },
+    { label: t("off.analysis.bWaste"), v: breakdown.waste },
+    { label: t("off.analysis.bLabour"), v: breakdown.labour },
+    { label: t("off.analysis.bEquipment"), v: breakdown.equipment },
+    { label: t("off.analysis.bMobilization"), v: breakdown.mobilization },
+    { label: t("off.analysis.bOther"), v: breakdown.other },
+  ].filter((r) => Math.abs(r.v) > 0.005);
+  const share = (v: number) => (breakdown.net > 0 ? (v / breakdown.net) * 100 : 0);
+
   return (
     <form action={action} className="grid gap-6">
       {initial.id ? <input type="hidden" name="id" value={initial.id} /> : null}
@@ -747,6 +812,60 @@ export function OfferEditor({
               <div className="mt-1 text-lg font-bold leading-tight text-ink">{card.value}</div>
             </div>
           ))}
+        </div>
+        <div>
+          <div className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">{t("off.analysis.buildTitle")}</div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>{t("off.analysis.colVariable")}</th>
+                  <th>{t("off.analysis.colAmount")}</th>
+                  <th>{t("off.analysis.colShare")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {buildRows.map((r) => (
+                  <tr key={r.label}>
+                    <td className="pl-4 text-ink">{r.label}</td>
+                    <td>{offerMoney(r.v, currency)}</td>
+                    <td className="text-muted">{share(r.v).toFixed(1)}%</td>
+                  </tr>
+                ))}
+                <tr className="border-t border-line font-semibold">
+                  <td className="text-ink">{t("off.analysis.bCost")}</td>
+                  <td className="text-ink">{offerMoney(breakdown.cost, currency)}</td>
+                  <td className="text-muted">{share(breakdown.cost).toFixed(1)}%</td>
+                </tr>
+                <tr className="font-semibold text-lab-green">
+                  <td>
+                    + {t("off.analysis.bProfit")}{" "}
+                    <span className="font-normal text-muted">
+                      ({t("off.margin")} {breakdown.margin.toFixed(1)}%
+                      {breakdown.discount > 0 ? `, ${t("off.analysis.bProfitAfterDiscount", { discount: round2(discountPct) })}` : ""})
+                    </span>
+                  </td>
+                  <td>{offerMoney(breakdown.profit, currency)}</td>
+                  <td className="text-muted">{share(breakdown.profit).toFixed(1)}%</td>
+                </tr>
+                <tr className="border-t border-line text-base font-bold">
+                  <td className="text-ink">= {t("off.analysis.bOffered")}</td>
+                  <td className="text-ink">{offerMoney(breakdown.net, currency)}</td>
+                  <td className="text-muted">100%</td>
+                </tr>
+                <tr>
+                  <td className="text-muted">{t("off.analysis.bVat")}</td>
+                  <td className="text-muted">{offerMoney(breakdown.vat, currency)}</td>
+                  <td />
+                </tr>
+                <tr className="font-semibold">
+                  <td className="text-ink">{t("off.analysis.bTotal")}</td>
+                  <td className="text-ink">{offerMoney(breakdown.total, currency)}</td>
+                  <td />
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div>
           <div className="mb-2 text-xs font-bold uppercase tracking-wide text-muted">{t("off.analysis.sensTitle")}</div>
