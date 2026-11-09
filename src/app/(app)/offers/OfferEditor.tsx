@@ -10,6 +10,7 @@ import {
   type LineKind,
   type OfferParams,
 } from "@/lib/offer-costing";
+import { LABOUR_CATEGORIES, labourCategoryForDescription } from "@/lib/labour-categories";
 
 type ItemRow = {
   key: string;
@@ -242,6 +243,33 @@ export function OfferEditor({
     setTechMissing(missing);
   };
 
+  // Picking a work category on a labour line fills the unit (m²) and the
+  // client-facing line description, and adds the category's technical paragraph
+  // to the offer's Technical Description. Pricing is left to the parameters /
+  // manual override, exactly as before.
+  const pickLabourCategory = (sectionKey: string, itemKey: string, categoryKey: string) => {
+    const category = LABOUR_CATEGORIES.find((entry) => entry.key === categoryKey);
+    setSections((rows) =>
+      rows.map((row) =>
+        row.key === sectionKey
+          ? {
+              ...row,
+              items: row.items.map((item) =>
+                item.key === itemKey && category
+                  ? { ...item, unit: category.unit, description: category.clientDescription }
+                  : item,
+              ),
+            }
+          : row,
+      ),
+    );
+    if (category?.techDescription) {
+      setTechDescription((prev) =>
+        prev.includes(category.techDescription) ? prev : [prev.trim(), category.techDescription].filter(Boolean).join("\n\n"),
+      );
+    }
+  };
+
   // Picking a catalogue product fills the base unit, the TDS consumption/m², the
   // work-item text (if empty), and the engine-derived selling price & internal cost.
   const pickProduct = (sectionKey: string, itemKey: string, name: string) =>
@@ -469,21 +497,36 @@ export function OfferEditor({
                         </td>
                         <td><input className="min-w-56" value={item.description} onChange={(event) => updateItem(section.key, item.key, { description: event.target.value })} placeholder="Shtresa hidroizoluese" /></td>
                         <td>
-                          <div className="flex items-center gap-1">
-                            <input className="min-w-44" list="offer-products" value={item.productName} onFocus={(event) => event.currentTarget.select()} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" />
-                            {item.productName ? (
-                              <button
-                                type="button"
-                                className="shrink-0 rounded px-1.5 text-lg leading-none text-muted hover:text-lab-burgundy"
-                                title={t("off.clearProduct")}
-                                aria-label={t("off.clearProduct")}
-                                onClick={() => updateItem(section.key, item.key, { productName: "" })}
-                              >
-                                ×
-                              </button>
-                            ) : null}
-                          </div>
-                          {product?.consumptionBasis ? <div className="mt-1 max-w-56 text-[11px] leading-tight text-muted">{product.consumptionBasis}</div> : null}
+                          {item.kind === "LABOUR" ? (
+                            <select
+                              className="min-w-56"
+                              value={labourCategoryForDescription(item.description)?.key ?? ""}
+                              onChange={(event) => pickLabourCategory(section.key, item.key, event.target.value)}
+                            >
+                              <option value="">{t("off.puneCategoryPlaceholder")}</option>
+                              {LABOUR_CATEGORIES.map((category) => (
+                                <option key={category.key} value={category.key}>{category.label}</option>
+                              ))}
+                            </select>
+                          ) : (
+                            <>
+                              <div className="flex items-center gap-1">
+                                <input className="min-w-44" list="offer-products" value={item.productName} onFocus={(event) => event.currentTarget.select()} onChange={(event) => pickProduct(section.key, item.key, event.target.value)} placeholder="Mapelastic" />
+                                {item.productName ? (
+                                  <button
+                                    type="button"
+                                    className="shrink-0 rounded px-1.5 text-lg leading-none text-muted hover:text-lab-burgundy"
+                                    title={t("off.clearProduct")}
+                                    aria-label={t("off.clearProduct")}
+                                    onClick={() => updateItem(section.key, item.key, { productName: "" })}
+                                  >
+                                    ×
+                                  </button>
+                                ) : null}
+                              </div>
+                              {product?.consumptionBasis ? <div className="mt-1 max-w-56 text-[11px] leading-tight text-muted">{product.consumptionBasis}</div> : null}
+                            </>
+                          )}
                         </td>
                         <td>
                           <input className="w-24" list="offer-units" value={item.unit} onChange={(event) => updateItem(section.key, item.key, { unit: event.target.value })} />
