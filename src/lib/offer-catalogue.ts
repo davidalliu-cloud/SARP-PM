@@ -1,5 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import catalogue from "../data/offer-catalogue.json";
+import { importOfferPrices } from "@/lib/offer-prices";
 
 // The waterproofing product catalogue extracted from the SARP offer template
 // ("Katalogu i Produkteve"). Each entry carries the Mapei-TDS consumption per m²
@@ -22,6 +23,8 @@ export type ImportResult = {
   processed: number;
   created: number;
   updated: number;
+  /** True on the final pass, when the price overrides were re-applied. */
+  pricesReapplied?: boolean;
   /** Index to resume from, or null when the whole catalogue is done. */
   nextStart: number | null;
 };
@@ -70,12 +73,20 @@ export async function importOfferCatalogue(
   }
 
   const end = start + slice.length;
+  // The catalogue carries supplierPriceAll for each product, so importing it
+  // overwrites the manual price overrides (offer-prices.json). Re-apply those
+  // overrides once the catalogue pass finishes, so a catalogue re-import can no
+  // longer wipe a hand-set supplier price (e.g. Primer SN, Purtop Easy White).
+  const done = end >= offerCatalogue.length;
+  if (done) await importOfferPrices(prisma);
+
   return {
     total: offerCatalogue.length,
     start,
     processed: slice.length,
     created,
     updated,
-    nextStart: end < offerCatalogue.length ? end : null,
+    pricesReapplied: done,
+    nextStart: done ? null : end,
   };
 }
