@@ -11,6 +11,7 @@ import {
   type OfferParams,
 } from "@/lib/offer-costing";
 import { LABOUR_CATEGORIES, labourCategoryForDescription } from "@/lib/labour-categories";
+import { OFFER_SYSTEMS, OFFER_ZONES, systemForLabel } from "@/lib/offer-systems";
 
 type ItemRow = {
   key: string;
@@ -224,6 +225,17 @@ export function OfferEditor({
 
   const updateSection = (key: string, patch: Partial<SectionRow>) =>
     setSections((rows) => rows.map((row) => (row.key === key ? { ...row, ...patch } : row)));
+  // Set the section title; if it matches a known system (i.e. picked from the
+  // dropdown), also fill the client-facing description. Custom titles are left
+  // alone, so typing a one-off system never overwrites a hand-written blurb.
+  const pickSystem = (sectionKey: string, title: string) =>
+    setSections((rows) =>
+      rows.map((row) => {
+        if (row.key !== sectionKey) return row;
+        const system = systemForLabel(title);
+        return system ? { ...row, title, description: system.clientDescription } : { ...row, title };
+      }),
+    );
   const updateItem = (sectionKey: string, itemKey: string, patch: Partial<ItemRow>) =>
     setSections((rows) =>
       rows.map((row) =>
@@ -569,6 +581,12 @@ export function OfferEditor({
       <datalist id="offer-products">
         {products.map((product) => <option key={product.name} value={product.name} />)}
       </datalist>
+      <datalist id="offer-systems">
+        {OFFER_SYSTEMS.map((system) => <option key={system.key} value={system.label} />)}
+      </datalist>
+      <datalist id="offer-zones">
+        {OFFER_ZONES.map((zone) => <option key={zone} value={zone} />)}
+      </datalist>
 
       {sections.map((section, sectionIndex) => {
         const subtotal = sectionTotals(section);
@@ -578,11 +596,11 @@ export function OfferEditor({
             <div className="grid gap-3 md:grid-cols-[1.4fr_1fr_0.7fr_auto]">
               <label>
                 {type === "WORKS" ? t("off.systemSection") : t("off.sectionFallback")}
-                <input value={section.title} onChange={(event) => updateSection(section.key, { title: event.target.value })} placeholder="Hidroizolimi i tarracës me Mapeplan T M 15" />
+                <input list="offer-systems" value={section.title} onChange={(event) => pickSystem(section.key, event.target.value)} placeholder="Hidroizolimi i tarracës me Mapeplan T M 15" />
               </label>
               <label>
                 {t("off.zone")}
-                <input value={section.zone} onChange={(event) => updateSection(section.key, { zone: event.target.value })} placeholder="Tarraca, Themele, Tualete…" />
+                <input list="offer-zones" value={section.zone} onChange={(event) => updateSection(section.key, { zone: event.target.value })} placeholder="Tarraca, Themele, Tualete…" />
               </label>
               <label>
                 {perM2 ? t("off.areaM2") : t("off.pricing")}
