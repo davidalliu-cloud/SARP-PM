@@ -679,14 +679,14 @@ export function OfferEditor({
                         <td><input className="w-28" type="number" min="0" step="0.001" value={item.quantity} onChange={(event) => updateItem(section.key, item.key, { quantity: Number(event.target.value) })} /></td>
                         <td>
                           {auto ? (
-                            <div className="w-28 font-semibold text-ink">
-                              {offerMoney(item.unitPrice, currency)}
+                            <div className="w-28">
+                              <div className="font-semibold text-ink">{offerMoney(item.unitPrice, currency)}</div>
                               <button
                                 type="button"
-                                className="mt-0.5 block text-left text-[11px] font-normal text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                className="mt-0.5 block w-full text-left text-[11px] font-normal leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
                                 onClick={() => setManual(section.key, item.key, true)}
                               >
-                                {t("off.autoFromCatalogue")} · {t("off.setManual")}
+                                {t("off.setManual")}
                               </button>
                             </div>
                           ) : (
@@ -695,13 +695,13 @@ export function OfferEditor({
                               {hasAutoSource(item) ? (
                                 <button
                                   type="button"
-                                  className="text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  className="block w-full text-left text-[11px] leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
                                   onClick={() => setManual(section.key, item.key, false)}
                                 >
-                                  {t("off.manualPrice")} · {t("off.revertAuto")}
+                                  {t("off.revertAuto")}
                                 </button>
                               ) : noPrice ? (
-                                <div className="text-[11px] font-semibold text-lab-burgundy">{t("off.noSupplierPrice")}</div>
+                                <div className="w-full text-[11px] font-semibold leading-tight text-lab-burgundy">{t("off.noSupplierPrice")}</div>
                               ) : null}
                             </div>
                           )}
@@ -709,15 +709,15 @@ export function OfferEditor({
                         <td>
                           {costIsComputed(item) ? (
                             <div className="w-28 text-muted">
-                              {offerMoney(item.unitCost, currency)}
-                              <div className="text-[11px]">{t("off.lineMargin")} {marginPct.toFixed(0)}%</div>
+                              <div>{offerMoney(item.unitCost, currency)}</div>
+                              <div className="text-[11px] leading-tight">{t("off.lineMargin")} {marginPct.toFixed(0)}%</div>
                               {item.kind === "LABOUR" ? (
                                 <button
                                   type="button"
-                                  className="mt-0.5 block text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  className="mt-0.5 block w-full text-left text-[11px] leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
                                   onClick={() => setLabourFixed(section.key, item.key, true)}
                                 >
-                                  {t("off.subcontractorRate")}
+                                  {t("off.subcontractor")}
                                 </button>
                               ) : null}
                             </div>
@@ -727,10 +727,10 @@ export function OfferEditor({
                               {item.kind === "LABOUR" && item.fixedCost ? (
                                 <button
                                   type="button"
-                                  className="text-left text-[11px] text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                  className="block w-full text-left text-[11px] leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
                                   onClick={() => setLabourFixed(section.key, item.key, false)}
                                 >
-                                  {t("off.subcontractor")} · {t("off.backToDayRate")}
+                                  {t("off.backToDayRate")}
                                 </button>
                               ) : null}
                             </div>
