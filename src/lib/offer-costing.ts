@@ -6,7 +6,8 @@
 // offer.exchangeRate / offer.vatRate), so they are deliberately NOT in params.
 //
 // Line pricing (material):
-//   cost/unit U = supplierPrice P × (1 + waste) × (1 + mobilization)
+//   cost/unit U = supplierPrice P × (1 + mobilization)   (waste lives in the m²
+//                 consumption, so it is NOT re-applied to the unit price)
 //   sell/unit W = U / (1 − targetMargin)
 // Application (labour) line:
 //   cost/unit = (dailyRate × teamSize + equipmentPerDay) / yieldM2PerDay × (1 + mobilization)
@@ -99,7 +100,10 @@ export function priceUnit(kind: LineKind, supplierPriceAll: number | null | unde
   if (kind === "LABOUR") {
     baseCostAll = labourCostPerUnit(params);
   } else if (supplierPriceAll != null && Number.isFinite(supplierPriceAll)) {
-    baseCostAll = supplierPriceAll * (1 + params.wastePct);
+    // Material cost is the pure supplier price. Waste/skarto is NOT added here:
+    // it is already carried in the per-m² consumption, so loading it onto the
+    // unit price too would double-count it.
+    baseCostAll = supplierPriceAll;
   } else {
     return null;
   }

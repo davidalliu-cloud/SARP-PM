@@ -415,7 +415,6 @@ export function OfferEditor({
       row(t("off.analysis.drDailyRate"), `${params.dailyRateAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ dailyRateAll: params.dailyRateAll + 500 })),
       row(t("off.analysis.drTeam"), String(params.teamSize), "+1", withParams({ teamSize: params.teamSize + 1 })),
       row(t("off.analysis.drYield"), `${params.yieldM2PerDay}`, "+5", withParams({ yieldM2PerDay: params.yieldM2PerDay + 5 })),
-      row(t("off.analysis.drWaste"), `${pct(params.wastePct)}%`, "+1 pp", withParams({ wastePct: params.wastePct + 0.01 })),
       row(t("off.analysis.drMobilization"), `${pct(params.mobilizationPct)}%`, "+1 pp", withParams({ mobilizationPct: params.mobilizationPct + 0.01 })),
       row(t("off.analysis.drEquipment"), `${params.equipmentPerDayAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ equipmentPerDayAll: params.equipmentPerDayAll + 500 })),
       ...(currency === "EUR" ? [row(t("off.analysis.drFx"), `${exchangeRate}`, "+1", withScalars({ exchangeRate: exchangeRate + 1 }))] : []),
@@ -526,7 +525,6 @@ export function OfferEditor({
                   margin: pct(params.targetMarginPct),
                   team: params.teamSize,
                   yield: params.yieldM2PerDay,
-                  waste: pct(params.wastePct),
                 })}
               </p>
             </div>
@@ -554,8 +552,8 @@ export function OfferEditor({
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupMaterial")}</legend>
-            <label>{t("off.params.waste")}<input type="number" min="0" step="0.1" value={pct(params.wastePct)} onChange={(e) => setParam("wastePct", Number(e.target.value) / 100)} /></label>
             <label>{t("off.params.fxBuffer")}<input type="number" min="0" step="0.1" value={pct(params.fxBufferPct)} onChange={(e) => setParam("fxBufferPct", Number(e.target.value) / 100)} /></label>
+            <p className="text-[11px] italic text-muted">{t("off.params.wasteNote")}</p>
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupOperational")}</legend>
@@ -852,7 +850,6 @@ export function OfferEditor({
                   <th>{t("common.unit")}</th>
                   <th>{t("off.analysis.cSupplierPrice")}</th>
                   <th>{t("off.analysis.cConsumption")}</th>
-                  <th>{t("off.analysis.bWaste")} %</th>
                   <th>{t("off.analysis.cMatCost")}</th>
                   <th>{t("off.analysis.cLabourCost")}</th>
                   <th>{t("off.analysis.cTotalCost")}</th>
@@ -871,7 +868,6 @@ export function OfferEditor({
                     <td>{r.unit}</td>
                     <td>{r.supplierUnit != null ? offerMoney(r.supplierUnit, currency) : "—"}</td>
                     <td>{r.consumption}</td>
-                    <td className="text-muted">{r.isLabour ? "—" : `${(params.wastePct * 100).toFixed(1)}%`}</td>
                     <td>{offerMoney(r.materialCost, currency)}</td>
                     <td>{offerMoney(r.labourCost, currency)}</td>
                     <td className="font-semibold text-ink">{offerMoney(r.totalCost, currency)}</td>
