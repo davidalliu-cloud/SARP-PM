@@ -45,8 +45,10 @@ export const DEFAULT_OFFER_PARAMS: OfferParams = {
   yieldM2PerDay: 60,
   mobilizationPct: 0.02,
   equipmentPerDayAll: 2500,
-  warrantyPct: 0.02,
-  contingencyPct: 0.04,
+  // Reserves default to 0 — opt in per offer when you want a warranty /
+  // contingency buffer (they are loaded onto the cost when set).
+  warrantyPct: 0,
+  contingencyPct: 0,
   targetMarginPct: 0.3,
   minMarginPct: 0.09,
 };
