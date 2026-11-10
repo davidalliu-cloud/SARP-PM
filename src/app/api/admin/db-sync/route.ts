@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getCurrentUser } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { createOfferTables } from "@/lib/offer-setup";
+import { SCHEMA_STATEMENTS } from "@/lib/ensure-schema";
 
 // One-off, idempotent, ADDITIVE schema sync applied through the app's own
 // (working) database connection. Vercel builds can't reach Prisma Postgres
@@ -19,33 +20,10 @@ export async function GET() {
   const applied: string[] = [];
   const checks: Record<string, string> = {};
 
-  // 1) Additive schema fixes (idempotent).
+  // 1) Additive schema fixes (idempotent). Statements live in ensure-schema.ts,
+  //    the single source of truth also applied automatically before queries.
   try {
-    const statements = [
-      `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "sourceAmount" DOUBLE PRECISION`,
-      `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "sourceCurrency" TEXT`,
-      `ALTER TABLE "Invoice" ADD COLUMN IF NOT EXISTS "vatRate" DOUBLE PRECISION`,
-      // Offer costing engine — product consumption/TDS + supplier price, and per-offer params.
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "consumptionPerM2" DOUBLE PRECISION`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "consumptionBasis" TEXT`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "workItem" TEXT`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "baseUnit" TEXT`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "supplierPriceAll" DOUBLE PRECISION`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "priceEur" DOUBLE PRECISION`,
-      `ALTER TABLE "Offer" ADD COLUMN IF NOT EXISTS "params" JSONB`,
-      // Offer technical descriptions (from Mapei/Polyglass TDS).
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "techDescription" TEXT`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "techSource" TEXT`,
-      `ALTER TABLE "Offer" ADD COLUMN IF NOT EXISTS "techDescription" TEXT`,
-      // Mapei labour time (man-hours/m²) for the Rendimenti guidance.
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "labourManHoursPerM2" DOUBLE PRECISION`,
-      `ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "labourWorkers" INTEGER`,
-      // Manual price override on an offer line (fixed subcontractor rate etc.).
-      `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "manualPrice" BOOLEAN NOT NULL DEFAULT false`,
-      // Labour line cost mode: fixed (subcontractor) cost with engine margin vs day-rate.
-      `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "fixedCost" BOOLEAN NOT NULL DEFAULT false`,
-    ];
-    for (const sql of statements) {
+    for (const sql of SCHEMA_STATEMENTS) {
       await prisma.$executeRawUnsafe(sql);
       applied.push(sql);
     }
