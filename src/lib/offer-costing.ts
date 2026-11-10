@@ -1,50 +1,48 @@
 // Offer costing engine — a web port of the SARP waterproofing offer template's
 // "Parametrat" assumptions and the per-line pricing formulas on each system tab.
 //
-// All figures here are in ALL (the catalogue's base currency). Currency
-// conversion and VAT are handled by the offer itself (offer.currency /
-// offer.exchangeRate / offer.vatRate), so they are deliberately NOT in params.
+// Everything is computed directly in the OFFER's currency:
+//  • A material's cost is its real supplier price. Products are priced in EUR
+//    (priceEur); on a EUR offer that EUR figure is used as-is (no exchange rate
+//    needed), and on a Lek offer it is converted with the offer's exchange rate.
+//  • Labour (day-rate, equipment) is entered in the offer's currency, so a EUR
+//    offer needs no exchange rate at all.
 //
 // Line pricing (material):
-//   cost/unit U = supplierPrice P × (1 + mobilization)   (waste lives in the m²
-//                 consumption, so it is NOT re-applied to the unit price)
+//   cost/unit U = supplierPrice (offer currency) × (1 + mobilization)
+//                 (waste lives in the m² consumption, so it is NOT re-applied here)
 //   sell/unit W = U / (1 − targetMargin)
 // Application (labour) line:
 //   cost/unit = (dailyRate × teamSize + equipmentPerDay) / yieldM2PerDay × (1 + mobilization)
 //   sell/unit = cost / (1 − targetMargin)
 // The price is driven by the PROFIT MARGIN (profit as a share of the selling
 // price), not a cost markup: margin = (sell − cost) / sell, so sell = cost /
-// (1 − margin). Mobilization is a real operational cost, so it is folded into
-// the cost base — which makes the realised margin equal the target exactly and
-// the reported net profit truthful. The caller multiplies by consumption
-// (units/m²) and measured area, and converts ALL→offer currency.
+// (1 − margin). Mobilization is folded into the cost base, so the realised
+// margin equals the target exactly. The caller multiplies by consumption
+// (units/m²) and measured area.
 
 export type OfferParams = {
-  // Labour & productivity
-  dailyRateAll: number; // ALL / worker / day      (Parametrat C6)
-  teamSize: number; //                             (C7)
-  yieldM2PerDay: number; // m² / team / day         (C8)
-  // Material
-  wastePct: number; // fraction, e.g. 0.1          (C11)
-  fxBufferPct: number; // reference only            (C12)
+  // Labour & productivity (day-rate / equipment are in the OFFER currency)
+  dailyRateAll: number; //  / worker / day           (Parametrat C6)
+  teamSize: number; //                               (C7)
+  yieldM2PerDay: number; // m² / team / day           (C8)
   // Operational
-  mobilizationPct: number; // over sell value       (C15)
-  equipmentPerDayAll: number; // ALL / work day     (C16)
+  mobilizationPct: number; // over the cost base      (C15)
+  equipmentPerDayAll: number; //  / work day          (C16)
   // Reserves & risk (reference — not auto-added to the per-line price, matching the sheet)
-  warrantyPct: number; //                           (C19)
-  contingencyPct: number; //                        (C20)
+  warrantyPct: number; //                             (C19)
+  contingencyPct: number; //                          (C20)
   // Profit — margin on the selling price (profit ÷ price), NOT a markup on cost.
-  targetMarginPct: number; // fraction, e.g. 0.30   (C23)
-  minMarginPct: number; // suggested floor          (C29)
+  targetMarginPct: number; // fraction, e.g. 0.30     (C23)
+  minMarginPct: number; // suggested floor            (C29)
 };
 
-// Defaults straight from the template's Parametrat sheet.
+// Defaults from the template's Parametrat sheet (day-rate shown here in Lek;
+// blankOfferValues scales it down for a EUR offer).
 export const DEFAULT_OFFER_PARAMS: OfferParams = {
   dailyRateAll: 7000,
   teamSize: 3,
   yieldM2PerDay: 60,
-  wastePct: 0.1,
-  fxBufferPct: 0.03,
   mobilizationPct: 0.02,
   equipmentPerDayAll: 2500,
   warrantyPct: 0.02,
@@ -69,8 +67,6 @@ export function resolveOfferParams(value: unknown): OfferParams {
     dailyRateAll: n(v.dailyRateAll, DEFAULT_OFFER_PARAMS.dailyRateAll),
     teamSize: n(v.teamSize, DEFAULT_OFFER_PARAMS.teamSize),
     yieldM2PerDay: n(v.yieldM2PerDay, DEFAULT_OFFER_PARAMS.yieldM2PerDay),
-    wastePct: n(v.wastePct, DEFAULT_OFFER_PARAMS.wastePct),
-    fxBufferPct: n(v.fxBufferPct, DEFAULT_OFFER_PARAMS.fxBufferPct),
     mobilizationPct: n(v.mobilizationPct, DEFAULT_OFFER_PARAMS.mobilizationPct),
     equipmentPerDayAll: n(v.equipmentPerDayAll, DEFAULT_OFFER_PARAMS.equipmentPerDayAll),
     warrantyPct: n(v.warrantyPct, DEFAULT_OFFER_PARAMS.warrantyPct),
@@ -81,43 +77,62 @@ export function resolveOfferParams(value: unknown): OfferParams {
 }
 
 export type LineKind = "MATERIAL" | "LABOUR" | "OTHER";
+export type OfferCurrency = "EUR" | "ALL";
 
-/** Labour cost per m² for an application line, from the productivity assumptions (ALL). */
+/** Labour cost per m² for an application line, in the offer currency. */
 export function labourCostPerUnit(params: OfferParams): number {
   if (params.yieldM2PerDay <= 0) return 0;
   return (params.dailyRateAll * params.teamSize + params.equipmentPerDayAll) / params.yieldM2PerDay;
 }
 
-export type UnitPricing = { costPerUnitAll: number; sellPerUnitAll: number; marginPct: number };
+export type MaterialPrice = { priceEur?: number | null; supplierPriceAll?: number | null };
 
-/**
- * Per-base-unit cost & selling price, in ALL. For MATERIAL pass the supplier
- * price; for LABOUR it is derived from the productivity params. Returns null
- * when there is nothing to price from (manual line with no supplier price).
- */
-export function priceUnit(kind: LineKind, supplierPriceAll: number | null | undefined, params: OfferParams): UnitPricing | null {
-  let baseCostAll: number;
-  if (kind === "LABOUR") {
-    baseCostAll = labourCostPerUnit(params);
-  } else if (supplierPriceAll != null && Number.isFinite(supplierPriceAll)) {
-    // Material cost is the pure supplier price. Waste/skarto is NOT added here:
-    // it is already carried in the per-m² consumption, so loading it onto the
-    // unit price too would double-count it.
-    baseCostAll = supplierPriceAll;
-  } else {
+/** A material's supplier cost per base unit, in the offer currency. */
+export function materialUnitCost(material: MaterialPrice | null | undefined, currency: OfferCurrency, exchangeRate: number): number | null {
+  if (!material) return null;
+  const eur = material.priceEur;
+  const all = material.supplierPriceAll;
+  if (currency === "ALL") {
+    // Lek offer: convert the EUR supplier price at the offer's rate; fall back
+    // to a Lek-native price if that is all the product has.
+    if (eur != null && Number.isFinite(eur)) return eur * exchangeRate;
+    if (all != null && Number.isFinite(all)) return all;
     return null;
   }
+  // EUR offer: use the EUR supplier price directly — no exchange rate.
+  if (eur != null && Number.isFinite(eur)) return eur;
+  if (all != null && Number.isFinite(all) && exchangeRate > 0) return all / exchangeRate;
+  return null;
+}
+
+export type UnitPricing = { costPerUnit: number; sellPerUnit: number; marginPct: number };
+
+/**
+ * Per-base-unit cost & selling price, in the OFFER currency. For MATERIAL pass
+ * the product's price; for LABOUR it is derived from the productivity params.
+ * Returns null when there is nothing to price from.
+ */
+export function priceUnit(
+  kind: LineKind,
+  material: MaterialPrice | null | undefined,
+  params: OfferParams,
+  currency: OfferCurrency,
+  exchangeRate: number,
+): UnitPricing | null {
+  let baseCost: number;
+  if (kind === "LABOUR") {
+    baseCost = labourCostPerUnit(params);
+  } else {
+    const resolved = materialUnitCost(material, currency, exchangeRate);
+    if (resolved == null) return null;
+    baseCost = resolved;
+  }
   // Mobilization is a real operational cost, so it is part of the cost base.
-  const costPerUnitAll = baseCostAll * (1 + params.mobilizationPct);
+  const costPerUnit = baseCost * (1 + params.mobilizationPct);
   // Margin-driven selling price: sell = cost / (1 − margin). Clamp the margin so
   // the divisor can never reach zero or go negative.
   const margin = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
-  const sellPerUnitAll = costPerUnitAll / (1 - margin);
-  const marginPct = sellPerUnitAll > 0 ? (sellPerUnitAll - costPerUnitAll) / sellPerUnitAll : 0;
-  return { costPerUnitAll, sellPerUnitAll, marginPct };
-}
-
-/** Convert an ALL figure into the offer's currency. */
-export function allToOffer(valueAll: number, currency: string, exchangeRate: number): number {
-  return currency === "ALL" || exchangeRate <= 0 ? valueAll : valueAll / exchangeRate;
+  const sellPerUnit = costPerUnit / (1 - margin);
+  const marginPct = sellPerUnit > 0 ? (sellPerUnit - costPerUnit) / sellPerUnit : 0;
+  return { costPerUnit, sellPerUnit, marginPct };
 }

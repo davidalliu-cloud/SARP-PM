@@ -4,8 +4,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useT } from "@/components/LanguageProvider";
 import { ITEM_UNITS, offerMoney, offerTotals, sectionTotals } from "@/lib/offer-calc";
 import {
-  allToOffer,
   DEFAULT_OFFER_PARAMS,
+  materialUnitCost,
   priceUnit,
   type LineKind,
   type OfferParams,
@@ -66,6 +66,7 @@ type ProductOption = {
   consumptionPerM2: number | null;
   consumptionBasis: string | null;
   supplierPriceAll: number | null;
+  priceEur: number | null;
   workItem: string | null;
   techDescription: string | null;
   labourManHoursPerM2: number | null;
@@ -110,15 +111,17 @@ function priceLineWith(
     const m = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
     return { ...item, unitPrice: round2(item.unitCost / (1 - m)) };
   }
-  const supplier = item.kind === "LABOUR" ? null : productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
+  const product = item.kind === "LABOUR" ? null : productMap.get(item.productName.trim().toLowerCase());
   const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
-  const unit = priceUnit(kind, supplier, params);
+  const unit = priceUnit(
+    kind,
+    product ? { priceEur: product.priceEur, supplierPriceAll: product.supplierPriceAll } : null,
+    params,
+    currency,
+    exchangeRate,
+  );
   if (!unit) return item;
-  return {
-    ...item,
-    unitPrice: round2(allToOffer(unit.sellPerUnitAll, currency, exchangeRate)),
-    unitCost: round2(allToOffer(unit.costPerUnitAll, currency, exchangeRate)),
-  };
+  return { ...item, unitPrice: round2(unit.sellPerUnit), unitCost: round2(unit.costPerUnit) };
 }
 
 type OfferEconomics = ReturnType<typeof offerTotals>;
@@ -205,10 +208,13 @@ export function OfferEditor({
   }, [sections, productMap]);
 
   // A line has an engine price source when it is labour or a catalogue product
-  // with a supplier price. Such a line is auto-priced UNLESS the user has flipped
-  // it to a hand-entered figure (manualPrice).
-  const hasAutoSource = (item: ItemRow) =>
-    item.kind === "LABOUR" || productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll != null;
+  // with a price usable in the offer's currency. Such a line is auto-priced
+  // UNLESS the user has flipped it to a hand-entered figure (manualPrice).
+  const productPriced = (item: ItemRow) => {
+    const product = productMap.get(item.productName.trim().toLowerCase());
+    return product != null && materialUnitCost({ priceEur: product.priceEur, supplierPriceAll: product.supplierPriceAll }, currency, exchangeRate) != null;
+  };
+  const hasAutoSource = (item: ItemRow) => item.kind === "LABOUR" || productPriced(item);
   const isAutoPriced = (item: ItemRow) => !item.manualPrice && hasAutoSource(item);
 
   // Recompute a line's unit price & cost from the engine. Manual lines are left
@@ -316,6 +322,30 @@ export function OfferEditor({
     );
   const setParam = (key: keyof OfferParams, value: number) =>
     setParams((prev) => ({ ...prev, [key]: Number.isFinite(value) ? value : prev[key] }));
+  // Switching the offer currency converts the figures that are kept in the
+  // offer currency (day-rate, equipment, and any hand-entered/subcontractor line
+  // amounts) by the exchange rate, so the offer stays economically the same.
+  // Catalogue-priced lines re-derive themselves in the new currency.
+  const changeCurrency = (next: "EUR" | "ALL") => {
+    if (next === currency) return;
+    const factor = next === "ALL" ? exchangeRate : exchangeRate > 0 ? 1 / exchangeRate : 1;
+    setParams((prev) => ({
+      ...prev,
+      dailyRateAll: round2(prev.dailyRateAll * factor),
+      equipmentPerDayAll: round2(prev.equipmentPerDayAll * factor),
+    }));
+    setSections((rows) =>
+      rows.map((row) => ({
+        ...row,
+        items: row.items.map((item) =>
+          item.manualPrice || item.fixedCost
+            ? { ...item, unitPrice: round2(item.unitPrice * factor), unitCost: round2(item.unitCost * factor) }
+            : item,
+        ),
+      })),
+    );
+    setCurrency(next);
+  };
 
   // Assemble the technical-characteristics block from the distinct selected
   // products that have a stored (Mapei/Polyglass) description.
@@ -410,14 +440,15 @@ export function OfferEditor({
       dPrice: econ.net - base.net,
       dProfit: econ.profit - base.profit,
     });
+    const cashStep = currency === "EUR" ? 5 : 500;
     const rows = [
       row(t("off.analysis.drMargin"), `${pct(params.targetMarginPct)}%`, "+5 pp", withParams({ targetMarginPct: params.targetMarginPct + 0.05 })),
-      row(t("off.analysis.drDailyRate"), `${params.dailyRateAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ dailyRateAll: params.dailyRateAll + 500 })),
+      row(t("off.analysis.drDailyRate"), offerMoney(params.dailyRateAll, currency), `+${cashStep}`, withParams({ dailyRateAll: params.dailyRateAll + cashStep })),
       row(t("off.analysis.drTeam"), String(params.teamSize), "+1", withParams({ teamSize: params.teamSize + 1 })),
       row(t("off.analysis.drYield"), `${params.yieldM2PerDay}`, "+5", withParams({ yieldM2PerDay: params.yieldM2PerDay + 5 })),
       row(t("off.analysis.drMobilization"), `${pct(params.mobilizationPct)}%`, "+1 pp", withParams({ mobilizationPct: params.mobilizationPct + 0.01 })),
-      row(t("off.analysis.drEquipment"), `${params.equipmentPerDayAll.toLocaleString("en-GB")} ALL`, "+500 ALL", withParams({ equipmentPerDayAll: params.equipmentPerDayAll + 500 })),
-      ...(currency === "EUR" ? [row(t("off.analysis.drFx"), `${exchangeRate}`, "+1", withScalars({ exchangeRate: exchangeRate + 1 }))] : []),
+      row(t("off.analysis.drEquipment"), offerMoney(params.equipmentPerDayAll, currency), `+${cashStep}`, withParams({ equipmentPerDayAll: params.equipmentPerDayAll + cashStep })),
+      ...(currency === "ALL" ? [row(t("off.analysis.drFx"), `${exchangeRate}`, "+1", withScalars({ exchangeRate: exchangeRate + 1 }))] : []),
       row(t("off.analysis.drDiscount"), `${discountPct}%`, "+1 pp", withScalars({ discountPct: discountPct + 1 })),
     ];
     return { base, rows };
@@ -429,13 +460,15 @@ export function OfferEditor({
   // price, profit and real margin. Job totals are taken from analysis.base so
   // they match the sticky bar. Internal only — never shown to the client.
   const lineAnalysis = useMemo(() => {
-    const conv = (valueAll: number) => allToOffer(valueAll, currency, exchangeRate);
     return sections
       .filter((section) => !section.isOption)
       .flatMap((section) =>
         section.items.map((item) => {
           const isLabour = item.kind === "LABOUR";
-          const supplierAll = isLabour ? null : productMap.get(item.productName.trim().toLowerCase())?.supplierPriceAll;
+          const product = isLabour ? undefined : productMap.get(item.productName.trim().toLowerCase());
+          const supplierUnit = product
+            ? materialUnitCost({ priceEur: product.priceEur, supplierPriceAll: product.supplierPriceAll }, currency, exchangeRate)
+            : null;
           return {
             key: item.key,
             desc: item.description,
@@ -443,7 +476,7 @@ export function OfferEditor({
             unit: item.unit,
             isLabour,
             manual: item.manualPrice,
-            supplierUnit: supplierAll != null ? conv(supplierAll) : null,
+            supplierUnit,
             consumption: item.quantity,
             materialCost: isLabour ? 0 : item.unitCost,
             labourCost: isLabour ? item.unitCost : 0,
@@ -492,15 +525,19 @@ export function OfferEditor({
         </label>
         <label>
           {t("off.currency")}
-          <select name="currency" value={currency} onChange={(event) => setCurrency(event.target.value as OfferEditorValues["currency"])}>
+          <select name="currency" value={currency} onChange={(event) => changeCurrency(event.target.value as OfferEditorValues["currency"])}>
             <option value="EUR">EUR</option>
             <option value="ALL">ALL (Lek)</option>
           </select>
         </label>
-        <label>
-          {t("off.allPerEur")}
-          <input name="exchangeRate" type="number" min="1" step="0.01" value={exchangeRate} onChange={(event) => setExchangeRate(Number(event.target.value))} />
-        </label>
+        {currency === "ALL" ? (
+          <label>
+            {t("off.allPerEur")}
+            <input name="exchangeRate" type="number" min="1" step="0.01" value={exchangeRate} onChange={(event) => setExchangeRate(Number(event.target.value))} />
+          </label>
+        ) : (
+          <input type="hidden" name="exchangeRate" value={exchangeRate} />
+        )}
         <div className="grid grid-cols-2 gap-3">
           <label>
             {t("off.vatPct")}
@@ -552,7 +589,6 @@ export function OfferEditor({
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupMaterial")}</legend>
-            <label>{t("off.params.fxBuffer")}<input type="number" min="0" step="0.1" value={pct(params.fxBufferPct)} onChange={(e) => setParam("fxBufferPct", Number(e.target.value) / 100)} /></label>
             <p className="text-[11px] italic text-muted">{t("off.params.wasteNote")}</p>
           </fieldset>
           <fieldset className="grid gap-3">
@@ -645,7 +681,7 @@ export function OfferEditor({
                   {section.items.map((item, itemIndex) => {
                     const auto = isAutoPriced(item);
                     const product = productMap.get(item.productName.trim().toLowerCase());
-                    const noPrice = item.kind !== "LABOUR" && product != null && product.supplierPriceAll == null;
+                    const noPrice = item.kind !== "LABOUR" && product != null && !productPriced(item);
                     const marginPct = item.unitPrice > 0 ? ((item.unitPrice - item.unitCost) / item.unitPrice) * 100 : 0;
                     return (
                       <tr key={item.key}>

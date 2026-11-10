@@ -20,7 +20,9 @@ export function blankOfferValues(): OfferEditorValues {
     exchangeRate: 100,
     vatRate: 20,
     discountPct: 0,
-    params: DEFAULT_OFFER_PARAMS,
+    // New offers default to EUR, so the day-rate/equipment defaults (kept in Lek
+    // on DEFAULT_OFFER_PARAMS) are scaled to euros at the default 100 rate.
+    params: { ...DEFAULT_OFFER_PARAMS, dailyRateAll: 70, equipmentPerDayAll: 25 },
     ...DEFAULT_TERMS,
     internalNotes: "",
     techDescription: "",
@@ -29,6 +31,17 @@ export function blankOfferValues(): OfferEditorValues {
 }
 
 export function offerToEditorValues(offer: Offer & { sections: (OfferSection & { items: OfferItem[] })[] }): OfferEditorValues {
+  const currency = offer.currency === "ALL" ? "ALL" : "EUR";
+  const params = resolveOfferParams(offer.params);
+  // Back-compat: the day-rate/equipment used to be stored in Lek regardless of
+  // offer currency. They are now in the offer currency, so a EUR offer saved
+  // under the old model carries a Lek-scale figure (e.g. 7000). Detect that by
+  // magnitude (a real EUR day-rate is small) and convert it down to euros.
+  if (currency === "EUR" && params.dailyRateAll > 1000) {
+    const rate = offer.exchangeRate > 0 ? offer.exchangeRate : 100;
+    params.dailyRateAll = Math.round((params.dailyRateAll / rate) * 100) / 100;
+    params.equipmentPerDayAll = Math.round((params.equipmentPerDayAll / rate) * 100) / 100;
+  }
   return {
     id: offer.id,
     type: offer.type,
@@ -37,11 +50,11 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
     siteAddress: offer.siteAddress ?? "",
     issueDate: dateInputValue(offer.issueDate),
     validUntil: dateInputValue(offer.validUntil),
-    currency: offer.currency === "ALL" ? "ALL" : "EUR",
+    currency,
     exchangeRate: offer.exchangeRate,
     vatRate: offer.vatRate,
     discountPct: offer.discountPct,
-    params: resolveOfferParams(offer.params),
+    params,
     techDescription: offer.techDescription ?? "",
     paymentTerms: offer.paymentTerms ?? "",
     executionTerms: offer.executionTerms ?? "",
@@ -79,6 +92,7 @@ export function offerProductOptions() {
       consumptionPerM2: true,
       consumptionBasis: true,
       supplierPriceAll: true,
+      priceEur: true,
       workItem: true,
       techDescription: true,
       labourManHoursPerM2: true,
