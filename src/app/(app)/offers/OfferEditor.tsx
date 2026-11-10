@@ -539,17 +539,10 @@ export function OfferEditor({
         ) : (
           <input type="hidden" name="exchangeRate" value={exchangeRate} />
         )}
-        <div className="grid grid-cols-2 gap-3">
-          <label>
-            {t("off.vatPct")}
-            <input name="vatRate" type="number" min="0" step="0.1" value={vatRate} onChange={(event) => setVatRate(Number(event.target.value))} />
-          </label>
-          <label>
-            {t("off.discountPct")}
-            <input name="discountPct" type="number" min="0" max="100" step="0.1" value={discountPct} onChange={(event) => setDiscountPct(Number(event.target.value))} />
-            <span className={paramHelp}>{t("off.discountHelp")}</span>
-          </label>
-        </div>
+        <label>
+          {t("off.vatPct")}
+          <input name="vatRate" type="number" min="0" step="0.1" value={vatRate} onChange={(event) => setVatRate(Number(event.target.value))} />
+        </label>
       </section>
 
       {/* Cost parameters — the shared assumptions that drive every line's price.
@@ -573,7 +566,7 @@ export function OfferEditor({
         <div className="mt-4 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupLabour")}</legend>
-            <label>{t("off.params.dailyRate")}<input type="number" min="0" step="100" value={params.dailyRateAll} onChange={(e) => setParam("dailyRateAll", Number(e.target.value))} /><span className={paramHelp}>{t("off.params.dailyRateHelp")}</span></label>
+            <label>{t("off.params.dailyRate")}<input type="number" min="0" step="any" value={params.dailyRateAll} onChange={(e) => setParam("dailyRateAll", Number(e.target.value))} /><span className={paramHelp}>{t("off.params.dailyRateHelp")}</span></label>
             <label>{t("off.params.teamSize")}<input type="number" min="1" step="1" value={params.teamSize} onChange={(e) => setParam("teamSize", Number(e.target.value))} /><span className={paramHelp}>{t("off.params.teamSizeHelp")}</span></label>
             <label>
               {t("off.params.yield")}
@@ -593,12 +586,13 @@ export function OfferEditor({
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupOperational")}</legend>
             <label>{t("off.params.mobilization")}<input type="number" min="0" step="0.1" value={pct(params.mobilizationPct)} onChange={(e) => setParam("mobilizationPct", Number(e.target.value) / 100)} /><span className={paramHelp}>{t("off.params.mobilizationHelp")}</span></label>
-            <label>{t("off.params.equipment")}<input type="number" min="0" step="100" value={params.equipmentPerDayAll} onChange={(e) => setParam("equipmentPerDayAll", Number(e.target.value))} /><span className={paramHelp}>{t("off.params.equipmentHelp")}</span></label>
+            <label>{t("off.params.equipment")}<input type="number" min="0" step="any" value={params.equipmentPerDayAll} onChange={(e) => setParam("equipmentPerDayAll", Number(e.target.value))} /><span className={paramHelp}>{t("off.params.equipmentHelp")}</span></label>
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupProfit")}</legend>
             <label>{t("off.params.margin")}<input type="number" min="0" max="95" step="0.5" value={pct(params.targetMarginPct)} onChange={(e) => setParam("targetMarginPct", Number(e.target.value) / 100)} /><span className={paramHelp}>{t("off.params.marginHelp")}</span></label>
             <label>{t("off.params.minMargin")}<input type="number" min="0" max="95" step="0.5" value={pct(params.minMarginPct)} onChange={(e) => setParam("minMarginPct", Number(e.target.value) / 100)} /><span className={paramHelp}>{t("off.params.minMarginHelp")}</span></label>
+            <label>{t("off.discountPct")}<input name="discountPct" type="number" min="0" max="100" step="0.5" value={discountPct} onChange={(e) => setDiscountPct(Number(e.target.value))} /><span className={paramHelp}>{t("off.discountHelp")}</span></label>
           </fieldset>
           <fieldset className="grid gap-3">
             <legend className="text-xs font-bold uppercase tracking-wide text-muted">{t("off.params.groupReserves")}</legend>
