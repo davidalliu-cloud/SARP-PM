@@ -29,7 +29,7 @@ export type OfferParams = {
   // Operational
   mobilizationPct: number; // over the cost base      (C15)
   equipmentPerDayAll: number; //  / work day          (C16)
-  // Reserves & risk (reference — not auto-added to the per-line price, matching the sheet)
+  // Reserves & risk — loaded onto the cost base (0 → no effect).
   warrantyPct: number; //                             (C19)
   contingencyPct: number; //                          (C20)
   // Profit — margin on the selling price (profit ÷ price), NOT a markup on cost.
@@ -127,8 +127,10 @@ export function priceUnit(
     if (resolved == null) return null;
     baseCost = resolved;
   }
-  // Mobilization is a real operational cost, so it is part of the cost base.
-  const costPerUnit = baseCost * (1 + params.mobilizationPct);
+  // Operational + risk loadings on the cost base (each 0 → no effect):
+  //  mobilization (site setup), warranty reserve, contingency reserve.
+  const costPerUnit =
+    baseCost * (1 + params.mobilizationPct) * (1 + params.warrantyPct) * (1 + params.contingencyPct);
   // Margin-driven selling price: sell = cost / (1 − margin). Clamp the margin so
   // the divisor can never reach zero or go negative.
   const margin = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
