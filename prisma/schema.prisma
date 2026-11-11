@@ -131,6 +131,9 @@ model OfferSection {
   description String?
   areaM2      Float?
   isOption    Boolean     @default(false)
+  // Optional per-section labour overrides (null = use the offer-level params).
+  yieldM2PerDay Float?
+  teamSize      Int?
   items       OfferItem[]
 }
 

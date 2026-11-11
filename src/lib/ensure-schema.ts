@@ -34,6 +34,9 @@ export const SCHEMA_STATEMENTS: string[] = [
   `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "manualPrice" BOOLEAN NOT NULL DEFAULT false`,
   // Labour line cost mode: fixed (subcontractor) cost with engine margin vs day-rate.
   `ALTER TABLE "OfferItem" ADD COLUMN IF NOT EXISTS "fixedCost" BOOLEAN NOT NULL DEFAULT false`,
+  // Per-section labour overrides (null = use the offer-level params).
+  `ALTER TABLE "OfferSection" ADD COLUMN IF NOT EXISTS "yieldM2PerDay" DOUBLE PRECISION`,
+  `ALTER TABLE "OfferSection" ADD COLUMN IF NOT EXISTS "teamSize" INTEGER`,
 ];
 
 /** Apply every additive column statement through the runtime connection. Raw

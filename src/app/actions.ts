@@ -571,6 +571,8 @@ type OfferSectionInput = {
   description?: string;
   areaM2?: number | null;
   isOption?: boolean;
+  yieldM2PerDay?: number | null;
+  teamSize?: number | null;
   items: {
     kind?: string;
     description: string;
@@ -600,6 +602,8 @@ function offerSectionsFromForm(formData: FormData) {
       description: String(section.description ?? "").trim() || null,
       areaM2: finiteNumber(section.areaM2) > 0 ? finiteNumber(section.areaM2) : null,
       isOption: Boolean(section.isOption),
+      yieldM2PerDay: finiteNumber(section.yieldM2PerDay) > 0 ? finiteNumber(section.yieldM2PerDay) : null,
+      teamSize: finiteNumber(section.teamSize) > 0 ? Math.trunc(finiteNumber(section.teamSize)) : null,
       items: {
         create: (section.items ?? [])
           .map((item, itemIndex) => ({
@@ -755,13 +759,15 @@ export async function duplicateOffer(formData: FormData) {
       internalNotes: source.internalNotes,
       createdById: user.id,
       sections: {
-        create: source.sections.map(({ sortOrder, title, zone, description, areaM2, isOption, items }) => ({
+        create: source.sections.map(({ sortOrder, title, zone, description, areaM2, isOption, yieldM2PerDay, teamSize, items }) => ({
           sortOrder,
           title,
           zone,
           description,
           areaM2,
           isOption,
+          yieldM2PerDay,
+          teamSize,
           items: {
             create: items.map(({ sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice, fixedCost }) => ({
               sortOrder, kind, description, productName, unit, quantity, unitPrice, unitCost, manualPrice, fixedCost,

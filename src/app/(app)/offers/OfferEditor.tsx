@@ -33,6 +33,8 @@ type SectionRow = {
   description: string;
   areaM2: number | null;
   isOption: boolean;
+  yieldM2PerDay: number | null;
+  teamSize: number | null;
   items: ItemRow[];
 };
 
@@ -90,9 +92,11 @@ function blankSection(type: OfferEditorValues["type"]): SectionRow {
         description: "",
         areaM2: 0,
         isOption: false,
+        yieldM2PerDay: null,
+        teamSize: null,
         items: [blankItem("MATERIAL", "kg"), { ...blankItem("LABOUR", "m2"), description: "Aplikimi" }],
       }
-    : { key: newKey(), title: "Produkte", zone: "", description: "", areaM2: null, isOption: false, items: [blankItem("MATERIAL", "thes")] };
+    : { key: newKey(), title: "Produkte", zone: "", description: "", areaM2: null, isOption: false, yieldM2PerDay: null, teamSize: null, items: [blankItem("MATERIAL", "thes")] };
 }
 
 // Price one line from a given parameter set, respecting a manual override.
@@ -124,9 +128,20 @@ function priceLineWith(
   return { ...item, unitPrice: round2(unit.sellPerUnit), unitCost: round2(unit.costPerUnit) };
 }
 
+// Effective labour params for a section: its own yield / crew override the
+// offer-level ones (a blank/≤0 override falls back to the offer default).
+function sectionParams(section: { yieldM2PerDay: number | null; teamSize: number | null }, base: OfferParams): OfferParams {
+  return {
+    ...base,
+    yieldM2PerDay: section.yieldM2PerDay != null && section.yieldM2PerDay > 0 ? section.yieldM2PerDay : base.yieldM2PerDay,
+    teamSize: section.teamSize != null && section.teamSize > 0 ? section.teamSize : base.teamSize,
+  };
+}
+
 type OfferEconomics = ReturnType<typeof offerTotals>;
 // Re-price every line under a hypothetical parameter/scalar set and roll it up
-// to the offer-level economics (offered value, cost, net profit, margin).
+// to the offer-level economics (offered value, cost, net profit, margin). Each
+// section is priced with its own effective labour params.
 function offerEconomics(args: {
   sections: SectionRow[];
   params: OfferParams;
@@ -136,10 +151,10 @@ function offerEconomics(args: {
   discountPct: number;
   productMap: Map<string, ProductOption>;
 }): OfferEconomics {
-  const priced = args.sections.map((section) => ({
-    ...section,
-    items: section.items.map((item) => priceLineWith(item, args.params, args.currency, args.exchangeRate, args.productMap)),
-  }));
+  const priced = args.sections.map((section) => {
+    const sp = sectionParams(section, args.params);
+    return { ...section, items: section.items.map((item) => priceLineWith(item, sp, args.currency, args.exchangeRate, args.productMap)) };
+  });
   return offerTotals({ vatRate: args.vatRate, discountPct: args.discountPct, sections: priced });
 }
 
@@ -174,14 +189,17 @@ export function OfferEditor({
     // figures right away instead of staying at 0 until the first edit. Saved
     // lines (already priced) and manual lines are left exactly as stored.
     const ip = initial.params ?? DEFAULT_OFFER_PARAMS;
-    return base.map((section) => ({
-      ...section,
-      items: section.items.map((item) =>
-        !item.manualPrice && item.unitPrice === 0 && item.unitCost === 0
-          ? priceLineWith(item, ip, initial.currency, initial.exchangeRate, productMap)
-          : item,
-      ),
-    }));
+    return base.map((section) => {
+      const sp = sectionParams(section, ip);
+      return {
+        ...section,
+        items: section.items.map((item) =>
+          !item.manualPrice && item.unitPrice === 0 && item.unitCost === 0
+            ? priceLineWith(item, sp, initial.currency, initial.exchangeRate, productMap)
+            : item,
+        ),
+      };
+    });
   });
 
   const totals = offerTotals({ vatRate, discountPct, sections });
@@ -217,20 +235,28 @@ export function OfferEditor({
   const hasAutoSource = (item: ItemRow) => item.kind === "LABOUR" || productPriced(item);
   const isAutoPriced = (item: ItemRow) => !item.manualPrice && hasAutoSource(item);
 
-  // Recompute a line's unit price & cost from the engine. Manual lines are left
-  // as typed; fixed-cost lines keep their cost and only re-derive the price.
-  const repriceItem = (item: ItemRow): ItemRow => priceLineWith(item, params, currency, exchangeRate, productMap);
+  // Re-price a whole section from the engine, using that section's effective
+  // labour params (its own yield / crew override the offer defaults). Manual
+  // lines are left as typed; fixed-cost lines keep their cost, only the price.
+  const repriceSection = (section: SectionRow): SectionRow => {
+    const sp = sectionParams(section, params);
+    return { ...section, items: section.items.map((it) => priceLineWith(it, sp, currency, exchangeRate, productMap)) };
+  };
   // The line's cost is user-entered (editable) unless the engine computes it.
   const costIsComputed = (item: ItemRow) => isAutoPriced(item) && !item.fixedCost;
 
   // Keep every auto-priced line in sync with the parameters / currency.
   useEffect(() => {
-    setSections((rows) => rows.map((section) => ({ ...section, items: section.items.map(repriceItem) })));
+    setSections((rows) => rows.map(repriceSection));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params, currency, exchangeRate]);
 
   const updateSection = (key: string, patch: Partial<SectionRow>) =>
     setSections((rows) => rows.map((row) => (row.key === key ? { ...row, ...patch } : row)));
+  // Set a section's labour override (yield / crew) and re-price its labour lines
+  // immediately from the section's effective params.
+  const setSectionLabour = (key: string, patch: Partial<Pick<SectionRow, "yieldM2PerDay" | "teamSize">>) =>
+    setSections((rows) => rows.map((row) => (row.key === key ? repriceSection({ ...row, ...patch }) : row)));
   // Set the section title; if it matches a known system (i.e. picked from the
   // dropdown), also fill the client-facing description. Custom titles are left
   // alone, so typing a one-off system never overwrites a hand-written blurb.
@@ -255,12 +281,7 @@ export function OfferEditor({
     setSections((rows) =>
       rows.map((row) =>
         row.key === sectionKey
-          ? {
-              ...row,
-              items: row.items.map((item) =>
-                item.key === itemKey ? (manual ? { ...item, manualPrice: true } : repriceItem({ ...item, manualPrice: false })) : item,
-              ),
-            }
+          ? repriceSection({ ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, manualPrice: manual } : item)) })
           : row,
       ),
     );
@@ -271,7 +292,7 @@ export function OfferEditor({
     setSections((rows) =>
       rows.map((row) =>
         row.key === sectionKey
-          ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, unitCost }) : item)) }
+          ? repriceSection({ ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, unitCost } : item)) })
           : row,
       ),
     );
@@ -281,7 +302,7 @@ export function OfferEditor({
     setSections((rows) =>
       rows.map((row) =>
         row.key === sectionKey
-          ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, fixedCost: fixed }) : item)) }
+          ? repriceSection({ ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, fixedCost: fixed } : item)) })
           : row,
       ),
     );
@@ -289,14 +310,12 @@ export function OfferEditor({
   // from the parameters right away instead of staying at 0 until something else
   // triggers a recompute).
   const addItem = (sectionKey: string, item: ItemRow) =>
-    setSections((rows) =>
-      rows.map((row) => (row.key === sectionKey ? { ...row, items: [...row.items, repriceItem(item)] } : row)),
-    );
+    setSections((rows) => rows.map((row) => (row.key === sectionKey ? repriceSection({ ...row, items: [...row.items, item] }) : row)));
   // Changing kind can flip a line between material and labour pricing.
   const changeKind = (sectionKey: string, itemKey: string, kind: string) =>
     setSections((rows) =>
       rows.map((row) =>
-        row.key === sectionKey ? { ...row, items: row.items.map((item) => (item.key === itemKey ? repriceItem({ ...item, kind }) : item)) } : row,
+        row.key === sectionKey ? repriceSection({ ...row, items: row.items.map((item) => (item.key === itemKey ? { ...item, kind } : item)) }) : row,
       ),
     );
   const moveSection = (index: number, delta: number) =>
@@ -399,21 +418,20 @@ export function OfferEditor({
     setSections((rows) =>
       rows.map((row) => {
         if (row.key !== sectionKey) return row;
-        return {
+        return repriceSection({
           ...row,
           items: row.items.map((item) => {
             if (item.key !== itemKey) return item;
             const product = productMap.get(name.trim().toLowerCase());
-            let next: ItemRow = { ...item, productName: name };
+            const next: ItemRow = { ...item, productName: name };
             if (product) {
               next.unit = product.baseUnit || product.unit || item.unit;
               if (product.consumptionPerM2 != null) next.quantity = product.consumptionPerM2;
               if (!next.description.trim() && product.workItem) next.description = product.workItem;
             }
-            next = repriceItem(next);
             return next;
           }),
-        };
+        });
       }),
     );
 
@@ -654,6 +672,36 @@ export function OfferEditor({
               {t("off.descriptionShown")}
               <textarea rows={2} value={section.description} onChange={(event) => updateSection(section.key, { description: event.target.value })} placeholder="Përshkrimi teknik i sistemit" />
             </label>
+            {perM2 ? (
+              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg border border-line bg-white/60 p-3 text-sm">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-muted">{t("off.sectionLabour")}</span>
+                <label className="flex items-center gap-2 font-normal">
+                  {t("off.params.yield")}
+                  <input
+                    className="w-24"
+                    type="number"
+                    min="0"
+                    step="any"
+                    value={section.yieldM2PerDay ?? ""}
+                    placeholder={`${params.yieldM2PerDay}`}
+                    onChange={(e) => setSectionLabour(section.key, { yieldM2PerDay: e.target.value === "" ? null : Number(e.target.value) })}
+                  />
+                </label>
+                <label className="flex items-center gap-2 font-normal">
+                  {t("off.params.teamSize")}
+                  <input
+                    className="w-20"
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={section.teamSize ?? ""}
+                    placeholder={`${params.teamSize}`}
+                    onChange={(e) => setSectionLabour(section.key, { teamSize: e.target.value === "" ? null : Number(e.target.value) })}
+                  />
+                </label>
+                <span className="text-[11px] italic text-muted">{t("off.sectionLabourHelp")}</span>
+              </div>
+            ) : null}
             <label className="mt-3 flex items-center gap-2 text-sm">
               <input className="w-auto" type="checkbox" checked={section.isOption} onChange={(event) => updateSection(section.key, { isOption: event.target.checked })} />
               {t("off.altOptionLabel")}

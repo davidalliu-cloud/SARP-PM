@@ -81,6 +81,7 @@ export async function GET() {
   await run("products.labourFields", () => prisma.product.findMany({ select: { labourManHoursPerM2: true, labourWorkers: true }, take: 1 }));
   await run("offerItems.manualPrice", () => prisma.offerItem.findMany({ select: { manualPrice: true }, take: 1 }));
   await run("offerItems.fixedCost", () => prisma.offerItem.findMany({ select: { fixedCost: true }, take: 1 }));
+  await run("offerSections.labourOverrides", () => prisma.offerSection.findMany({ select: { yieldM2PerDay: true, teamSize: true }, take: 1 }));
 
   const allOk = Object.values(checks).every((v) => v === "ok");
   return NextResponse.json({ ok: allOk, applied, checks });
