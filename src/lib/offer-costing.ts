@@ -94,16 +94,21 @@ export function materialUnitCost(material: MaterialPrice | null | undefined, cur
   if (!material) return null;
   const eur = material.priceEur;
   const all = material.supplierPriceAll;
+  // A supplier cost is only real when it is a positive number. Treat 0, null or
+  // NaN as "no price on file" (many catalogue rows carry 0/null until a price is
+  // set) so the offer never silently shows a €0 line — the editor then prompts
+  // for a manual cost instead of pretending the product is free.
+  const pos = (n: number | null | undefined): n is number => n != null && Number.isFinite(n) && n > 0;
   if (currency === "ALL") {
     // Lek offer: convert the EUR supplier price at the offer's rate; fall back
     // to a Lek-native price if that is all the product has.
-    if (eur != null && Number.isFinite(eur)) return eur * exchangeRate;
-    if (all != null && Number.isFinite(all)) return all;
+    if (pos(eur)) return eur * exchangeRate;
+    if (pos(all)) return all;
     return null;
   }
   // EUR offer: use the EUR supplier price directly — no exchange rate.
-  if (eur != null && Number.isFinite(eur)) return eur;
-  if (all != null && Number.isFinite(all) && exchangeRate > 0) return all / exchangeRate;
+  if (pos(eur)) return eur;
+  if (pos(all) && exchangeRate > 0) return all / exchangeRate;
   return null;
 }
 
