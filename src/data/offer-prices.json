@@ -1,5 +1,242 @@
 [
- { "name": "Planitop Fast 330", "supplierPriceAll": 48.44, "priceEur": 0.4844 },
- { "name": "Primer SN (Kit A+B 20kg)", "supplierPriceAll": 611, "priceEur": 6.11 },
- { "name": "Purtop Easy: White (25kg)", "supplierPriceAll": 355, "priceEur": 3.55 }
+ {
+  "name": "Planitop Fast 330",
+  "supplierPriceAll": 48.44,
+  "priceEur": 0.4844
+ },
+ {
+  "name": "Primer SN (Kit A+B 20kg)",
+  "supplierPriceAll": 611,
+  "priceEur": 6.11
+ },
+ {
+  "name": "Purtop Easy: White (25kg)",
+  "supplierPriceAll": 355,
+  "priceEur": 3.55
+ },
+ {
+  "name": "Expanfluid",
+  "supplierPriceAll": 255,
+  "priceEur": 2.55
+ },
+ {
+  "name": "Idrostop Soft",
+  "supplierPriceAll": 641,
+  "priceEur": 6.41
+ },
+ {
+  "name": "Keracolor FF: 100 White (5kg)",
+  "supplierPriceAll": 121,
+  "priceEur": 1.21
+ },
+ {
+  "name": "Keracolor FF: 103 Moonlight (5kg)",
+  "supplierPriceAll": 121,
+  "priceEur": 1.21
+ },
+ {
+  "name": "Keracolor FF: 113 Cement Grey (5kg)",
+  "supplierPriceAll": 118,
+  "priceEur": 1.18
+ },
+ {
+  "name": "Keracolor FF: 110 Manhattan 2000 (5kg)",
+  "supplierPriceAll": 145,
+  "priceEur": 1.45
+ },
+ {
+  "name": "Keracolor FF: 111 Silver Grey (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 112 Medium Grey (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 114 Anthracite (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 123 Ancient White (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 130 Jasmine (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 131 Vanilla (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 132 Beige 2000 (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 133 Sand (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 134 Silk (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 135 Golden Dust (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 137 Caribbean (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 141 Caramel (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 142 Brown (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 144 Chocolate (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Keracolor FF: 145 Terra di Siena (5kg)",
+  "supplierPriceAll": 149,
+  "priceEur": 1.49
+ },
+ {
+  "name": "Mapeband TPE 170",
+  "supplierPriceAll": 832,
+  "priceEur": 8.32
+ },
+ {
+  "name": "Mapeband TPE 325",
+  "supplierPriceAll": 1478,
+  "priceEur": 14.78
+ },
+ {
+  "name": "Mapecoat I 62 W (Kit A+B 11kg)",
+  "supplierPriceAll": 1331,
+  "priceEur": 13.31
+ },
+ {
+  "name": "Mapecoat I 620 W (Kit A+B 15kg)",
+  "supplierPriceAll": 1312,
+  "priceEur": 13.12
+ },
+ {
+  "name": "Mapeband H12",
+  "supplierPriceAll": 296,
+  "priceEur": 2.96
+ },
+ {
+  "name": "Intomap Finish W1",
+  "supplierPriceAll": 19,
+  "priceEur": 0.19
+ },
+ {
+  "name": "Intomap Mono",
+  "supplierPriceAll": 19,
+  "priceEur": 0.19
+ },
+ {
+  "name": "Mapeproof FBT",
+  "supplierPriceAll": 1166,
+  "priceEur": 11.66
+ },
+ {
+  "name": "Mapeproof FBH",
+  "supplierPriceAll": 1034,
+  "priceEur": 10.34
+ },
+ {
+  "name": "Mapeproof SA Primer",
+  "supplierPriceAll": 847,
+  "priceEur": 8.47
+ },
+ {
+  "name": "Mapeproof AL 1200 AP",
+  "supplierPriceAll": 904,
+  "priceEur": 9.04
+ },
+ {
+  "name": "Mapeproof AL Tape D10 AP",
+  "supplierPriceAll": 162,
+  "priceEur": 1.62
+ },
+ {
+  "name": "Mapeproof AL Tape S15",
+  "supplierPriceAll": 430,
+  "priceEur": 4.3
+ },
+ {
+  "name": "Ultraplan",
+  "supplierPriceAll": 71,
+  "priceEur": 0.71
+ },
+ {
+  "name": "Ultraplan Maxi",
+  "supplierPriceAll": 63,
+  "priceEur": 0.63
+ },
+ {
+  "name": "Mapefill",
+  "supplierPriceAll": 38,
+  "priceEur": 0.38
+ },
+ {
+  "name": "Planitop Rasa & Ripara R2",
+  "supplierPriceAll": 51,
+  "priceEur": 0.51
+ },
+ {
+  "name": "Mapegrout Thixotropic",
+  "supplierPriceAll": 44,
+  "priceEur": 0.44
+ },
+ {
+  "name": "Crystal PW 25",
+  "supplierPriceAll": 205,
+  "priceEur": 2.05
+ },
+ {
+  "name": "SL Band 120 (Hydroflex 120)",
+  "supplierPriceAll": 23,
+  "priceEur": 0.23
+ },
+ {
+  "name": "SL Band 121 (Hydroflex 121)",
+  "supplierPriceAll": 23,
+  "priceEur": 0.23
+ },
+ {
+  "name": "Mapeform ECO 31",
+  "supplierPriceAll": 300,
+  "priceEur": 3
+ },
+ {
+  "name": "Idrocrete HP",
+  "supplierPriceAll": 103,
+  "priceEur": 1.03
+ },
+ {
+  "name": "Polystuoia 20",
+  "supplierPriceAll": 565,
+  "priceEur": 5.65
+ }
 ]
