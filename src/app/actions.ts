@@ -724,7 +724,13 @@ export async function changeOfferStatus(formData: FormData) {
   const user = await requireUser();
 
   const id = text(formData, "id");
-  const offer = await transitionOffer(user, id, text(formData, "action") as OfferAction, text(formData, "comment") || null);
+  const offer = await transitionOffer(
+    user,
+    id,
+    text(formData, "action") as OfferAction,
+    text(formData, "comment") || null,
+    text(formData, "targetProjectId") || null,
+  );
 
   revalidateOffers(id);
   if (offer.projectId) {

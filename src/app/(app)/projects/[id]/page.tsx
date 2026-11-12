@@ -104,7 +104,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) notFound();
 
   // Looked up separately so the page still works before the offer tables exist.
-  const offer = await prisma.offer.findUnique({ where: { projectId: id }, select: { id: true, code: true } }).catch(() => null);
+  // A project can now have grown from more than one won offer (a change
+  // order / added scope), so this is a list, not a single lookup.
+  const offers = await prisma.offer
+    .findMany({ where: { projectId: id }, select: { id: true, code: true }, orderBy: { code: "asc" } })
+    .catch(() => []);
 
   const totals = projectTotals(project.dailyRecords, project.invoices);
   const budget = budgetTotals(project.budgetAmount, totals.totalCost);
@@ -376,7 +380,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
             <button className="btn btn-small btn-save mb-0.5" type="submit">{t("pd.saveStatus")}</button>
           </form>
           <Link href={`/projects/${project.id}/monthly`} className="btn btn-secondary">{t("pd.monthlyReport")}</Link>
-          {offer ? <Link href={`/offers/${offer.id}`} className="btn btn-secondary">{t("pd.offer", { code: offer.code })}</Link> : null}
+          {offers.map((offer) => (
+            <Link key={offer.id} href={`/offers/${offer.id}`} className="btn btn-secondary">{t("pd.offer", { code: offer.code })}</Link>
+          ))}
         </div>
       </PageTitle>
 

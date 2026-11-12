@@ -69,7 +69,7 @@ export function offerActionLabel(action: OfferAction) {
     approve: "Approve",
     request_changes: "Request changes",
     mark_sent: "Mark sent to client",
-    mark_won: "Client approved → create project",
+    mark_won: "Client approved → create/attach project",
     mark_lost: "Mark lost",
     cancel: "Cancel offer",
     reopen: "Reopen as draft",
@@ -88,7 +88,15 @@ export async function nextOfferCode(date = new Date()) {
   return `${prefix}${String(lastNumber + 1).padStart(4, "0")}`;
 }
 
-export async function transitionOffer(user: User, offerId: string, action: OfferAction, comment?: string | null) {
+// targetProjectId (mark_won only): attach to an existing project instead of
+// creating a new one — e.g. a change order / added scope on a running job.
+export async function transitionOffer(
+  user: User,
+  offerId: string,
+  action: OfferAction,
+  comment?: string | null,
+  targetProjectId?: string | null,
+) {
   const offer = await prisma.offer.findUnique({
     where: { id: offerId },
     include: { sections: { include: { items: true } } },
@@ -120,19 +128,39 @@ export async function transitionOffer(user: User, offerId: string, action: Offer
       const totals = offerTotals(offer);
       const contractValue = toEur(totals.net, offer);
       const budget = toEur(totals.cost, offer);
-      const project = await tx.project.create({
-        data: {
-          name: offer.projectName,
-          clientName: offer.clientName,
-          startDate: now,
-          status: ProjectStatus.NOT_STARTED,
-          budgetAmount: budget,
-          estimatedContractValue: contractValue,
-          estimatedProfitMargin: contractValue > 0 ? ((contractValue - budget) / contractValue) * 100 : 0,
-          contractAreaM2: totals.areaM2,
-        },
-      });
-      projectId = project.id;
+
+      if (targetProjectId) {
+        // Change order / added scope: fold this offer's value onto the
+        // project it belongs to, rather than spinning up a duplicate project.
+        const target = await tx.project.findUnique({ where: { id: targetProjectId } });
+        if (!target) throw new Error("Selected project not found.");
+        const newContractValue = target.estimatedContractValue + contractValue;
+        const newBudget = target.budgetAmount + budget;
+        await tx.project.update({
+          where: { id: target.id },
+          data: {
+            budgetAmount: newBudget,
+            estimatedContractValue: newContractValue,
+            estimatedProfitMargin: newContractValue > 0 ? ((newContractValue - newBudget) / newContractValue) * 100 : 0,
+            contractAreaM2: target.contractAreaM2 + totals.areaM2,
+          },
+        });
+        projectId = target.id;
+      } else {
+        const project = await tx.project.create({
+          data: {
+            name: offer.projectName,
+            clientName: offer.clientName,
+            startDate: now,
+            status: ProjectStatus.NOT_STARTED,
+            budgetAmount: budget,
+            estimatedContractValue: contractValue,
+            estimatedProfitMargin: contractValue > 0 ? ((contractValue - budget) / contractValue) * 100 : 0,
+            contractAreaM2: totals.areaM2,
+          },
+        });
+        projectId = project.id;
+      }
     }
 
     const updated = await tx.offer.update({

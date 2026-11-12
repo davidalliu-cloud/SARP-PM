@@ -74,7 +74,9 @@ model Project {
   dailyRecords DailyRecord[]
   invoices     Invoice[]
   attachments  Attachment[]
-  offer        Offer?
+  // A project can have grown from more than one won offer (a change order /
+  // scope addition after the first), so this is one-to-many, not one-to-one.
+  offers       Offer[]
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 }
@@ -110,7 +112,7 @@ model Offer {
   approvedAt     DateTime?
   sentAt         DateTime?
   decidedAt      DateTime?
-  projectId      String?        @unique
+  projectId      String?
   project        Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
   sections       OfferSection[]
   events         OfferEvent[]

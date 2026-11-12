@@ -350,6 +350,7 @@ export const enOffers: Messages = {
   printNameSignatureDate: "Name, signature, date",
   printSavePdf: "Print / Save PDF",
   printPageLabel: "Page",
+  createNewProjectOption: "— Create a new project —",
 };
 
 export const sqOffers: Messages = {
@@ -695,4 +696,5 @@ export const sqOffers: Messages = {
   printNameSignatureDate: "Emri, firma, data",
   printSavePdf: "Printo / Ruaj PDF",
   printPageLabel: "Faqe",
+  createNewProjectOption: "— Krijo projekt të ri —",
 };

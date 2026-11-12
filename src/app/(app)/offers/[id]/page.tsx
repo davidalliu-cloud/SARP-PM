@@ -39,7 +39,7 @@ const commentPromptKey: Partial<Record<OfferAction, string>> = {
 export default async function OfferDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   const t = await getT();
-  const [user, offer] = await Promise.all([
+  const [user, offer, projects] = await Promise.all([
     requireUser(),
     prisma.offer.findUnique({
       where: { id },
@@ -51,8 +51,18 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
         events: { orderBy: { createdAt: "desc" }, include: { user: { select: { name: true } } } },
       },
     }),
+    // For "client approved" → attach to an existing project instead of
+    // always creating a new one (a change order / added scope).
+    prisma.project.findMany({ select: { id: true, name: true, clientName: true }, orderBy: { name: "asc" } }),
   ]);
   if (!offer) notFound();
+
+  // Same-client projects first, so the likely target is easy to find.
+  const projectOptions = [...projects].sort((a, b) => {
+    const aMatch = a.clientName === offer.clientName ? 0 : 1;
+    const bMatch = b.clientName === offer.clientName ? 0 : 1;
+    return aMatch - bMatch || a.name.localeCompare(b.name);
+  });
 
   const totals = offerTotals(offer);
   const actions = availableOfferActions(user, offer);
@@ -105,6 +115,16 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
               <input type="hidden" name="action" value={action} />
               {commentPromptKey[action] ? (
                 <textarea name="comment" rows={2} placeholder={t(commentPromptKey[action]!)} required={action !== "approve"} />
+              ) : null}
+              {action === "mark_won" && !offer.projectId ? (
+                <select name="targetProjectId" defaultValue="">
+                  <option value="">{t("off.createNewProjectOption")}</option>
+                  {projectOptions.map((project) => (
+                    <option key={project.id} value={project.id}>
+                      {project.name}{project.clientName ? ` — ${project.clientName}` : ""}
+                    </option>
+                  ))}
+                </select>
               ) : null}
               <button className={`btn ${actionStyle[action]}`} type="submit">{t(`off.action.${action}`)}</button>
             </form>
