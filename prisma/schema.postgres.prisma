@@ -132,6 +132,9 @@ model OfferSection {
   zone        String?
   description String?
   areaM2      Float?
+  // Measurement basis for areaM2 and per-unit consumption: "m2" (default), "m3"
+  // or "ml". Only the labels change; areaM2 is the multiplier in every case.
+  basisUnit   String?
   isOption    Boolean     @default(false)
   // Optional per-section labour overrides (null = use the offer-level params).
   yieldM2PerDay Float?

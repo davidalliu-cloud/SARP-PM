@@ -574,6 +574,7 @@ type OfferSectionInput = {
   zone?: string;
   description?: string;
   areaM2?: number | null;
+  basisUnit?: string | null;
   isOption?: boolean;
   yieldM2PerDay?: number | null;
   teamSize?: number | null;
@@ -605,6 +606,9 @@ function offerSectionsFromForm(formData: FormData) {
       zone: String(section.zone ?? "").trim() || null,
       description: String(section.description ?? "").trim() || null,
       areaM2: finiteNumber(section.areaM2) > 0 ? finiteNumber(section.areaM2) : null,
+      basisUnit: (["m2", "m3", "ml"] as const).includes(String(section.basisUnit) as "m2" | "m3" | "ml")
+        ? String(section.basisUnit)
+        : "m2",
       isOption: Boolean(section.isOption),
       yieldM2PerDay: finiteNumber(section.yieldM2PerDay) > 0 ? finiteNumber(section.yieldM2PerDay) : null,
       teamSize: finiteNumber(section.teamSize) > 0 ? Math.trunc(finiteNumber(section.teamSize)) : null,
@@ -771,12 +775,13 @@ export async function duplicateOffer(formData: FormData) {
       internalNotes: source.internalNotes,
       createdById: user.id,
       sections: {
-        create: source.sections.map(({ sortOrder, title, zone, description, areaM2, isOption, yieldM2PerDay, teamSize, items }) => ({
+        create: source.sections.map(({ sortOrder, title, zone, description, areaM2, basisUnit, isOption, yieldM2PerDay, teamSize, items }) => ({
           sortOrder,
           title,
           zone,
           description,
           areaM2,
+          basisUnit,
           isOption,
           yieldM2PerDay,
           teamSize,

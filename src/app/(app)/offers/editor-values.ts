@@ -67,6 +67,7 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
       zone: section.zone ?? "",
       description: section.description ?? "",
       areaM2: section.areaM2,
+      basisUnit: section.basisUnit ?? "m2",
       isOption: section.isOption,
       yieldM2PerDay: section.yieldM2PerDay ?? null,
       teamSize: section.teamSize ?? null,

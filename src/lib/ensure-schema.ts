@@ -37,6 +37,7 @@ export const SCHEMA_STATEMENTS: string[] = [
   // Per-section labour overrides (null = use the offer-level params).
   `ALTER TABLE "OfferSection" ADD COLUMN IF NOT EXISTS "yieldM2PerDay" DOUBLE PRECISION`,
   `ALTER TABLE "OfferSection" ADD COLUMN IF NOT EXISTS "teamSize" INTEGER`,
+  `ALTER TABLE "OfferSection" ADD COLUMN IF NOT EXISTS "basisUnit" TEXT`,
 ];
 
 /** Apply every additive column statement through the runtime connection. Raw

@@ -32,6 +32,7 @@ type SectionRow = {
   zone: string;
   description: string;
   areaM2: number | null;
+  basisUnit: string;
   isOption: boolean;
   yieldM2PerDay: number | null;
   teamSize: number | null;
@@ -78,6 +79,9 @@ type ProductOption = {
 let keySeed = 0;
 const newKey = () => `k${Date.now()}-${keySeed++}`;
 const round2 = (value: number) => Math.round(value * 100) / 100;
+// Display symbol for a section's measurement basis (m2 / m3 / ml).
+const basisSym = (b: string | null | undefined) => (b === "m3" ? "m³" : b === "ml" ? "ml" : "m²");
+const BASIS_OPTIONS = ["m2", "m3", "ml"] as const;
 
 function blankItem(kind = "MATERIAL", unit = "kg"): ItemRow {
   return { key: newKey(), kind, description: "", productName: "", unit, quantity: 1, unitPrice: 0, unitCost: 0, manualPrice: false, fixedCost: false };
@@ -91,12 +95,13 @@ function blankSection(type: OfferEditorValues["type"]): SectionRow {
         zone: "",
         description: "",
         areaM2: 0,
+        basisUnit: "m2",
         isOption: false,
         yieldM2PerDay: null,
         teamSize: null,
         items: [blankItem("MATERIAL", "kg"), { ...blankItem("LABOUR", "m2"), description: "Aplikimi" }],
       }
-    : { key: newKey(), title: "Produkte", zone: "", description: "", areaM2: null, isOption: false, yieldM2PerDay: null, teamSize: null, items: [blankItem("MATERIAL", "thes")] };
+    : { key: newKey(), title: "Produkte", zone: "", description: "", areaM2: null, basisUnit: "m2", isOption: false, yieldM2PerDay: null, teamSize: null, items: [blankItem("MATERIAL", "thes")] };
 }
 
 // Price one line from a given parameter set, respecting a manual override.
@@ -436,7 +441,9 @@ export function OfferEditor({
             const next: ItemRow = { ...item, productName: name };
             if (product) {
               next.unit = product.baseUnit || product.unit || item.unit;
-              if (product.consumptionPerM2 != null) next.quantity = product.consumptionPerM2;
+              // consumptionPerM2 is a per-m² figure, so only prefill it when the
+              // section is measured in m²; for m³/ml the user enters the dose.
+              if (product.consumptionPerM2 != null && row.basisUnit === "m2") next.quantity = product.consumptionPerM2;
               if (!next.description.trim() && product.workItem) next.description = product.workItem;
             }
             return next;
@@ -662,9 +669,19 @@ export function OfferEditor({
                 <input list="offer-zones" value={section.zone} onChange={(event) => updateSection(section.key, { zone: event.target.value })} placeholder="Tarraca, Themele, Tualete…" />
               </label>
               <label>
-                {perM2 ? t("off.areaM2") : t("off.pricing")}
+                {perM2 ? t("off.baseQuantity") : t("off.pricing")}
                 {perM2 ? (
-                  <input type="number" min="0" step="0.01" value={section.areaM2 ?? 0} onChange={(event) => updateSection(section.key, { areaM2: Number(event.target.value) })} />
+                  <div className="flex items-center gap-1">
+                    <select
+                      className="w-20 shrink-0"
+                      value={section.basisUnit}
+                      title={t("off.basisUnitHelp")}
+                      onChange={(event) => updateSection(section.key, { basisUnit: event.target.value })}
+                    >
+                      {BASIS_OPTIONS.map((b) => <option key={b} value={b}>{basisSym(b)}</option>)}
+                    </select>
+                    <input type="number" min="0" step="0.01" value={section.areaM2 ?? 0} onChange={(event) => updateSection(section.key, { areaM2: Number(event.target.value) })} />
+                  </div>
                 ) : (
                   <input disabled value={t("off.absoluteQuantities")} />
                 )}
@@ -725,10 +742,10 @@ export function OfferEditor({
                     <th>{t("off.colWorkItem")}</th>
                     <th>{t("off.colProduct")}</th>
                     <th>{t("common.unit")}</th>
-                    <th>{perM2 ? t("off.colConsumptionPerM2") : t("common.quantity")}</th>
+                    <th>{perM2 ? `${t("off.consumptionPer")} ${basisSym(section.basisUnit)}` : t("common.quantity")}</th>
                     <th>{t("off.colPricePerUnit")}</th>
                     <th>{t("off.colCostPerUnitInternal")}</th>
-                    <th>{perM2 ? t("off.colValuePerM2") : t("off.colLineTotal")}</th>
+                    <th>{perM2 ? `${t("off.valuePer")} ${basisSym(section.basisUnit)}` : t("off.colLineTotal")}</th>
                     <th />
                   </tr>
                 </thead>
@@ -861,7 +878,7 @@ export function OfferEditor({
                 <button className="btn btn-small btn-secondary" type="button" onClick={() => addItem(section.key, { ...blankItem("LABOUR", "m2"), description: "Aplikimi" })}>{t("off.addLabour")}</button>
               </div>
               <div className="text-sm font-semibold text-ink">
-                {perM2 ? <>{t("off.valuePerM2")}: {offerMoney(subtotal.ratePrice, currency)} · </> : null}
+                {perM2 ? <>{t("off.valuePer")} {basisSym(section.basisUnit)}: {offerMoney(subtotal.ratePrice, currency)} · </> : null}
                 {t("off.sectionTotal")}: {offerMoney(subtotal.total, currency)}
                 <span className="text-muted"> · {t("off.costWord")} {offerMoney(subtotal.cost, currency)}</span>
               </div>

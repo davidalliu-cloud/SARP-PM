@@ -153,6 +153,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
       {offer.sections.map((section) => {
         const subtotal = sectionTotals(section);
         const perM2 = section.areaM2 !== null;
+        const sym = section.basisUnit === "m3" ? "m³" : section.basisUnit === "ml" ? "ml" : "m²";
         return (
           <section key={section.id} className={`panel mt-6 overflow-hidden ${section.isOption ? "border-dashed" : ""}`}>
             <div className="flex flex-col gap-1 border-b border-line p-4 md:flex-row md:items-end md:justify-between">
@@ -164,7 +165,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
                 {section.description ? <p className="mt-1 max-w-3xl text-sm text-muted">{section.description}</p> : null}
               </div>
               <div className="text-sm font-semibold">
-                {perM2 ? <>{money(subtotal.ratePrice)} / m² × {section.areaM2} m² = </> : null}
+                {perM2 ? <>{money(subtotal.ratePrice)} / {sym} × {section.areaM2} {sym} = </> : null}
                 {money(subtotal.total)}
               </div>
             </div>
@@ -175,9 +176,9 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
                     <th>{t("off.colWorkItem")}</th>
                     <th>{t("off.colProduct")}</th>
                     <th>{t("common.unit")}</th>
-                    <th>{perM2 ? t("off.colConsPerM2") : t("off.colQty")}</th>
+                    <th>{perM2 ? `${t("off.consumptionPer")} ${sym}` : t("off.colQty")}</th>
                     <th>{t("off.colPricePerUnit")}</th>
-                    <th>{perM2 ? t("off.colValuePerM2") : t("common.total")}</th>
+                    <th>{perM2 ? `${t("off.valuePer")} ${sym}` : t("common.total")}</th>
                     <th>{t("off.colCostPerUnit")}</th>
                     <th>{t("off.colMargin")}</th>
                   </tr>

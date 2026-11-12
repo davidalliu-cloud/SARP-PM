@@ -17,7 +17,7 @@ export const ITEM_KINDS = ["MATERIAL", "LABOUR", "OTHER"] as const;
 export const ITEM_UNITS = ["m2", "ml", "kg", "lt", "m3", "cope", "thes", "kove", "sallam", "rul", "njesi"];
 
 type ItemLike = { quantity: number; unitPrice: number; unitCost: number };
-type SectionLike = { areaM2: number | null; isOption: boolean; items: ItemLike[] };
+type SectionLike = { areaM2: number | null; basisUnit?: string | null; isOption: boolean; items: ItemLike[] };
 type OfferLike = { vatRate: number; discountPct: number; sections: SectionLike[] };
 
 function sectionMultiplier(section: { areaM2: number | null }) {
@@ -54,7 +54,9 @@ export function offerTotals(offer: OfferLike) {
     cost,
     profit: net - cost,
     margin: net > 0 ? ((net - cost) / net) * 100 : 0,
-    areaM2: included.reduce((sum, section) => sum + (section.areaM2 ?? 0), 0),
+    // Only m² sections contribute to the headline m² figure; m³/ml sections are
+    // measured on a different basis and must not be summed into an area total.
+    areaM2: included.reduce((sum, section) => sum + ((section.basisUnit ?? "m2") === "m2" ? (section.areaM2 ?? 0) : 0), 0),
   };
 }
 
