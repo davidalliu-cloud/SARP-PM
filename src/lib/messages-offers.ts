@@ -349,6 +349,7 @@ export const enOffers: Messages = {
   printAcceptedByClient: "Accepted by the client",
   printNameSignatureDate: "Name, signature, date",
   printSavePdf: "Print / Save PDF",
+  printPageLabel: "Page",
 };
 
 export const sqOffers: Messages = {
@@ -693,4 +694,5 @@ export const sqOffers: Messages = {
   printAcceptedByClient: "Pranuar nga klienti",
   printNameSignatureDate: "Emri, firma, data",
   printSavePdf: "Printo / Ruaj PDF",
+  printPageLabel: "Faqe",
 };

@@ -15,6 +15,7 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
     where: { id },
     include: {
       sections: { orderBy: { sortOrder: "asc" }, include: { items: { orderBy: { sortOrder: "asc" } } } },
+      createdBy: { select: { name: true } },
       approvedBy: { select: { name: true } },
     },
   });
@@ -23,6 +24,12 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
   const totals = offerTotals(offer);
   const money = (value: number) => offerMoney(value, offer.currency);
   const isDraft = offer.status === "DRAFT" || offer.status === "PENDING_APPROVAL";
+  // Whoever approved it signs; before approval, fall back to whoever drafted it.
+  const signerName = offer.approvedBy?.name ?? offer.createdBy.name;
+  // Running header/footer so pages carry the offer's identity if separated, and
+  // are numbered — the only thing this escapes is the CSS string literal below.
+  const cssString = (value: string) => `"${value.replace(/\\/g, "\\\\").replace(/"/g, '\\"')}"`;
+  const headerText = `${offer.code} — ${offer.projectName}`;
   const terms = [
     [t("off.printPaymentTerms"), offer.paymentTerms],
     [offer.type === "WORKS" ? t("off.printExecutionDeadline") : t("off.printDeliveryTime"), offer.executionTerms],
@@ -32,6 +39,12 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
 
   return (
     <div className="offer-doc mx-auto max-w-[210mm] bg-white p-10 text-[13px] leading-relaxed text-ink">
+      <style>{`@media print {
+        @page {
+          @top-right { content: ${cssString(headerText)}; font-size: 8px; color: #6b7280; }
+          @bottom-right { content: ${cssString(t("off.printPageLabel"))} " " counter(page) " / " counter(pages); font-size: 8px; color: #6b7280; }
+        }
+      }`}</style>
       <div className="no-print mb-6 flex items-center justify-between rounded-lg border border-line bg-lab-porcelain p-3 text-sm">
         <span>{isDraft ? t("off.printDraftNotice") : t("off.printHint")}</span>
         <PrintButton />
@@ -144,7 +157,7 @@ export default async function PrintOfferPage({ params }: { params: Promise<{ id:
       <footer className="avoid-break mt-12 flex justify-between text-sm">
         <div>
           <div className="text-muted">{t("off.printForCompany")}</div>
-          <div className="mt-10 border-t border-ink pt-1">{t("off.printAdminTitle")} · David Alliu</div>
+          <div className="mt-10 border-t border-ink pt-1">{t("off.printAdminTitle")} · {signerName}</div>
         </div>
         <div>
           <div className="text-muted">{t("off.printAcceptedByClient")}</div>
