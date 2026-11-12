@@ -2,6 +2,7 @@ import type { Offer, OfferItem, OfferSection } from "@prisma/client";
 import { dateInputValue } from "@/lib/format";
 import { DEFAULT_TERMS, OFFER_VALIDITY_DAYS } from "@/lib/offer-calc";
 import { DEFAULT_OFFER_PARAMS, resolveOfferParams } from "@/lib/offer-costing";
+import { offerPrices } from "@/lib/offer-prices";
 import { prisma } from "@/lib/prisma";
 import type { OfferEditorValues } from "./OfferEditor";
 
@@ -84,8 +85,15 @@ export function offerToEditorValues(offer: Offer & { sections: (OfferSection & {
   };
 }
 
-export function offerProductOptions() {
-  return prisma.product.findMany({
+// src/data/offer-prices.json is applied to the database by the admin
+// import-prices route, but that's a manual step someone has to remember to
+// run after every edit to the file. Fall back to it live here too, so a
+// product with a price override shows a price in the offer editor the
+// moment this file deploys — never stuck waiting on that extra click.
+const priceOverrideByName = new Map(offerPrices.map((entry) => [entry.name, entry]));
+
+export async function offerProductOptions() {
+  const products = await prisma.product.findMany({
     select: {
       name: true,
       unit: true,
@@ -101,6 +109,11 @@ export function offerProductOptions() {
       labourWorkers: true,
     },
     orderBy: { name: "asc" },
+  });
+  return products.map((product) => {
+    const hasPrice = (product.priceEur != null && product.priceEur > 0) || (product.supplierPriceAll != null && product.supplierPriceAll > 0);
+    const override = hasPrice ? null : priceOverrideByName.get(product.name);
+    return override ? { ...product, supplierPriceAll: override.supplierPriceAll, priceEur: override.priceEur ?? product.priceEur } : product;
   });
 }
 
