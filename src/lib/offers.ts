@@ -109,6 +109,17 @@ export async function transitionOffer(
     throw new Error("Add at least one line item first.");
   }
   if (action === "approve" || action === "mark_sent") {
+    // A line's cost is engine-computed only for ordinary (non-fixed-cost)
+    // labour; everything else — a material with no catalogue price, a
+    // subcontractor's fixed rate — depends on someone having typed a cost.
+    const uncosted = offer.sections
+      .flatMap((section) => section.items)
+      .filter((item) => (item.kind !== "LABOUR" || item.fixedCost) && !item.manualPrice && item.unitCost <= 0);
+    if (uncosted.length) {
+      throw new Error(
+        `${uncosted.length} line item(s) have no cost entered (e.g. "${uncosted[0].description || uncosted[0].productName || "untitled line"}"). Enter a cost, pick a priced catalogue product, or mark the line as a manual price before ${action === "approve" ? "approving" : "sending"} it.`,
+      );
+    }
     const totals = offerTotals(offer);
     const minMarginPct = resolveOfferParams(offer.params).minMarginPct * 100;
     if (totals.net > 0 && totals.margin < minMarginPct) {

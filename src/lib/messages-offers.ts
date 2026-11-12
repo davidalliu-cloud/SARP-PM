@@ -201,7 +201,7 @@ export const enOffers: Messages = {
 
   // Costing parameters panel + engine
   clearProduct: "Clear product",
-  noSupplierPrice: "no supplier price",
+  noSupplierPrice: "no catalogue price — enter a cost",
   autoFromCatalogue: "auto",
   setManual: "✎ by hand",
   revertAuto: "↩ auto",
@@ -546,7 +546,7 @@ export const sqOffers: Messages = {
   vat: "TVSH",
   internalLabel: "E brendshme",
   clearProduct: "Pastro produktin",
-  noSupplierPrice: "pa çmim furnitori",
+  noSupplierPrice: "pa çmim furnitori — shkruaj koston",
   autoFromCatalogue: "auto",
   setManual: "✎ me dorë",
   revertAuto: "↩ auto",

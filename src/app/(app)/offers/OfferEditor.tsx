@@ -109,12 +109,15 @@ function priceLineWith(
   productMap: Map<string, ProductOption>,
 ): ItemRow {
   if (item.manualPrice) return item;
+  // Apply the target margin on top of a cost the user owns (not derived by the
+  // engine): sell = cost / (1 − margin), clamped so the divisor never reaches 0.
+  const sellFromCost = (cost: number) => {
+    const m = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
+    return round2(cost / (1 - m));
+  };
   // Fixed-cost line (e.g. a subcontractor's agreed rate): the user owns the
   // cost; only the sell price is derived, by applying the target margin.
-  if (item.fixedCost) {
-    const m = Math.min(Math.max(params.targetMarginPct, 0), 0.95);
-    return { ...item, unitPrice: round2(item.unitCost / (1 - m)) };
-  }
+  if (item.fixedCost) return { ...item, unitPrice: sellFromCost(item.unitCost) };
   const product = item.kind === "LABOUR" ? null : productMap.get(item.productName.trim().toLowerCase());
   const kind = (["MATERIAL", "LABOUR", "OTHER"].includes(item.kind) ? item.kind : "MATERIAL") as LineKind;
   const unit = priceUnit(
@@ -124,7 +127,11 @@ function priceLineWith(
     currency,
     exchangeRate,
   );
-  if (!unit) return item;
+  // No catalogue price to price from (no product picked yet, or the one
+  // picked has none on file): price off whatever cost is typed, with the
+  // same margin formula, so a cost always yields a price instead of the
+  // line silently sitting at €0 until someone also types a price by hand.
+  if (!unit) return { ...item, unitPrice: sellFromCost(item.unitCost) };
   return { ...item, unitPrice: round2(unit.sellPerUnit), unitCost: round2(unit.costPerUnit) };
 }
 
@@ -225,15 +232,18 @@ export function OfferEditor({
     return { manHours: Math.round(manHours * 1000) / 1000, withData };
   }, [sections, productMap]);
 
-  // A line has an engine price source when it is labour or a catalogue product
-  // with a price usable in the offer's currency. Such a line is auto-priced
-  // UNLESS the user has flipped it to a hand-entered figure (manualPrice).
+  // A line has an engine-computed COST when it is labour or a catalogue
+  // product with a price usable in the offer's currency.
   const productPriced = (item: ItemRow) => {
     const product = productMap.get(item.productName.trim().toLowerCase());
     return product != null && materialUnitCost({ priceEur: product.priceEur, supplierPriceAll: product.supplierPriceAll }, currency, exchangeRate) != null;
   };
-  const hasAutoSource = (item: ItemRow) => item.kind === "LABOUR" || productPriced(item);
-  const isAutoPriced = (item: ItemRow) => !item.manualPrice && hasAutoSource(item);
+  const hasCostSource = (item: ItemRow) => item.kind === "LABOUR" || productPriced(item);
+  // Every line's PRICE is derived from a cost (engine-computed, fixed-cost
+  // override, or simply typed when there's no catalogue price) unless the
+  // user has frozen it to a hand-entered figure (manualPrice) — see
+  // priceLineWith. So "auto-priced" only ever depends on that one flag.
+  const isAutoPriced = (item: ItemRow) => !item.manualPrice;
 
   // Re-price a whole section from the engine, using that section's effective
   // labour params (its own yield / crew override the offer defaults). Manual
@@ -243,7 +253,7 @@ export function OfferEditor({
     return { ...section, items: section.items.map((it) => priceLineWith(it, sp, currency, exchangeRate, productMap)) };
   };
   // The line's cost is user-entered (editable) unless the engine computes it.
-  const costIsComputed = (item: ItemRow) => isAutoPriced(item) && !item.fixedCost;
+  const costIsComputed = (item: ItemRow) => isAutoPriced(item) && hasCostSource(item) && !item.fixedCost;
 
   // Keep every auto-priced line in sync with the parameters / currency.
   useEffect(() => {
@@ -726,7 +736,6 @@ export function OfferEditor({
                   {section.items.map((item, itemIndex) => {
                     const auto = isAutoPriced(item);
                     const product = productMap.get(item.productName.trim().toLowerCase());
-                    const noPrice = item.kind !== "LABOUR" && product != null && !productPriced(item);
                     const marginPct = item.unitPrice > 0 ? ((item.unitPrice - item.unitCost) / item.unitPrice) * 100 : 0;
                     return (
                       <tr key={item.key}>
@@ -789,17 +798,13 @@ export function OfferEditor({
                           ) : (
                             <div className="grid w-28 gap-0.5">
                               <input className="w-28" type="number" min="0" step="0.01" value={item.unitPrice} onChange={(event) => updateItem(section.key, item.key, { unitPrice: Number(event.target.value) })} />
-                              {hasAutoSource(item) ? (
-                                <button
-                                  type="button"
-                                  className="block w-full text-left text-[11px] leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
-                                  onClick={() => setManual(section.key, item.key, false)}
-                                >
-                                  {t("off.revertAuto")}
-                                </button>
-                              ) : noPrice ? (
-                                <div className="w-full text-[11px] font-semibold leading-tight text-lab-burgundy">{t("off.noSupplierPrice")}</div>
-                              ) : null}
+                              <button
+                                type="button"
+                                className="block w-full text-left text-[11px] leading-tight text-muted underline decoration-dotted hover:text-lab-burgundy"
+                                onClick={() => setManual(section.key, item.key, false)}
+                              >
+                                {t("off.revertAuto")}
+                              </button>
                             </div>
                           )}
                         </td>
@@ -829,6 +834,8 @@ export function OfferEditor({
                                 >
                                   {t("off.backToDayRate")}
                                 </button>
+                              ) : item.kind !== "LABOUR" && item.unitCost === 0 ? (
+                                <div className="text-[11px] font-semibold leading-tight text-lab-burgundy">{t("off.noSupplierPrice")}</div>
                               ) : null}
                             </div>
                           )}
