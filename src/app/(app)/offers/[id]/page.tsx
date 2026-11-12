@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { changeOfferStatus, deleteOffer, duplicateOffer } from "@/app/actions";
+import { changeOfferStatus, duplicateOffer } from "@/app/actions";
+import { DeleteOfferButton } from "@/components/DeleteOfferButton";
 import { PageTitle } from "@/components/PageTitle";
 import { StatCard } from "@/components/StatCard";
 import { requireUser } from "@/lib/auth";
@@ -112,10 +113,7 @@ export default async function OfferDetailPage({ params }: { params: Promise<{ id
             <div className="text-sm font-semibold text-muted">{t("off.waitingAdminApprove")}</div>
           ) : null}
           {(offer.status === "DRAFT" && offer.createdById === user.id) || canApproveOffers(user) ? (
-            <form action={deleteOffer}>
-              <input type="hidden" name="id" value={offer.id} />
-              <button className="btn btn-small btn-delete" type="submit">{t("off.deleteOffer")}</button>
-            </form>
+            <DeleteOfferButton id={offer.id} code={offer.code} label={t("off.deleteOffer")} />
           ) : null}
         </div>
       </section>
