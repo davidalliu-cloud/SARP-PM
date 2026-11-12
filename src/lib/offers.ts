@@ -1,5 +1,6 @@
 import { OfferStatus, ProjectStatus, UserRole, type User } from "@prisma/client";
 import { offerTotals, toEur } from "@/lib/offer-calc";
+import { resolveOfferParams } from "@/lib/offer-costing";
 import { prisma } from "@/lib/prisma";
 
 export const offerStatusMeta: Record<OfferStatus, { label: string; albanian: string; className: string }> = {
@@ -98,6 +99,15 @@ export async function transitionOffer(user: User, offerId: string, action: Offer
   }
   if ((action === "submit" || action === "approve") && !offer.sections.some((section) => section.items.length)) {
     throw new Error("Add at least one line item first.");
+  }
+  if (action === "approve" || action === "mark_sent") {
+    const totals = offerTotals(offer);
+    const minMarginPct = resolveOfferParams(offer.params).minMarginPct * 100;
+    if (totals.net > 0 && totals.margin < minMarginPct) {
+      throw new Error(
+        `Margin is ${totals.margin.toFixed(1)}%, below the ${minMarginPct.toFixed(1)}% minimum set for this offer. Adjust pricing, the discount, or the minimum before ${action === "approve" ? "approving" : "sending"} it.`,
+      );
+    }
   }
 
   const { to, label } = transitions[action];

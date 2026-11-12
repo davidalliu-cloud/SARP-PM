@@ -988,7 +988,7 @@ export function OfferEditor({
             </div>
             <div className="flex justify-between text-[12px]">
               <span className="text-muted">{t("off.analysis.tMinMargin")}</span>
-              <span className={analysis.base.margin > 0 && analysis.base.margin < params.minMarginPct * 100 ? "font-semibold text-lab-burgundy" : "text-muted"}>
+              <span className={analysis.base.net > 0 && analysis.base.margin < params.minMarginPct * 100 ? "font-semibold text-lab-burgundy" : "text-muted"}>
                 {(params.minMarginPct * 100).toFixed(1)}%
               </span>
             </div>
@@ -1035,7 +1035,7 @@ export function OfferEditor({
           </div>
           <div className="text-muted">
             {t("off.internalLabel")}: {t("off.costWord")} {offerMoney(totals.cost, currency)} · {t("off.margin")} {totals.margin.toFixed(1)}%
-            {totals.margin > 0 && totals.margin < params.minMarginPct * 100 ? ` — ${t("off.belowMinMargin")}` : ""}
+            {totals.net > 0 && totals.margin < params.minMarginPct * 100 ? ` — ${t("off.belowMinMargin")}` : ""}
             {totals.areaM2 ? ` · ${totals.areaM2.toFixed(1)} m²` : ""}
           </div>
         </div>
