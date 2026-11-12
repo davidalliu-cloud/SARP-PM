@@ -23,6 +23,10 @@ function numberValue(value: FormDataEntryValue | null) {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
 function targetMarginFromBudget(budgetAmount: number, estimatedContractValue: number) {
   return estimatedContractValue > 0 ? ((estimatedContractValue - budgetAmount) / estimatedContractValue) * 100 : 0;
 }
@@ -612,9 +616,9 @@ function offerSectionsFromForm(formData: FormData) {
             description: String(item.description ?? "").trim(),
             productName: String(item.productName ?? "").trim() || null,
             unit: String(item.unit ?? "").trim() || "njesi",
-            quantity: finiteNumber(item.quantity),
-            unitPrice: finiteNumber(item.unitPrice),
-            unitCost: finiteNumber(item.unitCost),
+            quantity: Math.max(0, finiteNumber(item.quantity)),
+            unitPrice: Math.max(0, finiteNumber(item.unitPrice)),
+            unitCost: Math.max(0, finiteNumber(item.unitCost)),
             manualPrice: Boolean(item.manualPrice),
             fixedCost: Boolean(item.fixedCost),
           }))
@@ -633,18 +637,20 @@ function offerParamsFromForm(formData: FormData) {
 
 function offerFieldsFromForm(formData: FormData) {
   const issueDate = new Date(text(formData, "issueDate") || new Date());
-  const validUntil = text(formData, "validUntil");
+  const validUntilText = text(formData, "validUntil");
+  const validUntil = validUntilText ? new Date(validUntilText) : addDays(issueDate, OFFER_VALIDITY_DAYS);
+  if (validUntil <= issueDate) throw new Error("Valid until must be after the issue date.");
   return {
     type: text(formData, "type") === OfferType.PRODUCTS ? OfferType.PRODUCTS : OfferType.WORKS,
     clientName: text(formData, "clientName"),
     projectName: text(formData, "projectName"),
     siteAddress: text(formData, "siteAddress") || null,
     issueDate,
-    validUntil: validUntil ? new Date(validUntil) : addDays(issueDate, OFFER_VALIDITY_DAYS),
+    validUntil,
     currency: text(formData, "currency") === "ALL" ? "ALL" : "EUR",
-    exchangeRate: numberValue(formData.get("exchangeRate")) || 100,
-    vatRate: numberValue(formData.get("vatRate")),
-    discountPct: numberValue(formData.get("discountPct")),
+    exchangeRate: clamp(numberValue(formData.get("exchangeRate")) || 100, 0.01, 1_000_000),
+    vatRate: clamp(numberValue(formData.get("vatRate")), 0, 100),
+    discountPct: clamp(numberValue(formData.get("discountPct")), 0, 100),
     params: offerParamsFromForm(formData),
     paymentTerms: text(formData, "paymentTerms") || null,
     executionTerms: text(formData, "executionTerms") || null,
